@@ -38,19 +38,18 @@
 #     652
 # =============================================================================
 
-def kajDelam(n):
+def najTromestno(n):
        '''Pozor, n je obvezno tromestno naravno število
           Spremenljivke imajo namenoma čudna imena.
        '''
-       a = n - n % 10
-       desetice = a // 10  % 10
-       enice = n - a
+       enice = n % 10
+       desetice = (n // 10)  % 10
        stotice = n // 100
-       e = max(b, c, d)
-       f = min(b, c, d)
-       g = b + c + d - e - f
-       najTromestno = str(e+ g + f)
-       return najTromestno
+       naj_stev = max(enice, desetice, stotice)
+       manj_stev = min(enice, desetice, stotice)
+       sred_vred = enice + desetice + stotice - naj_stev - manj_stev
+       niz = int(str(naj_stev) + str(sred_vred) + str(manj_stev))
+       return niz
 
 # =====================================================================@017290=
 # 2. podnaloga
@@ -68,6 +67,16 @@ def kajDelam(n):
 # in stotinkah se mora Mirko skloniti, če Slavko opazi metek `kolikoM` metrov proč in ima hitrost
 # `hitrostMeta` m/s. Pazi, da bodo stotinke ustrezno zaokrožene!
 # =============================================================================
+
+def skloniSe(kolikoM,hitrostMetka):
+    '''
+    Funkcija bo izracunala koliko hitro se mora Mirko skloniti
+    '''
+    cas = int(round(100 * (kolikoM / hitrostMetka)))
+    enice = cas % 10
+    desetice = (cas // 10)  % 10
+    stotice = cas // 100      
+    return (stotice, desetice, enice)
 
 # =====================================================================@017291=
 # 3. podnaloga
@@ -89,6 +98,16 @@ def kajDelam(n):
 #     >>>Slavko, pazi metak!
 #     Slavko je reagiral v 2.503019332885742 s.
 # =============================================================================
+import time
+
+print("Slavko, pazi metak!")
+pazi = time.time()
+enter = input()
+metek = time.time()
+refleks = metek - pazi
+
+
+print("Slavko je reagiral v", float(refleks), "s.")
 
 # =====================================================================@017292=
 # 4. podnaloga
@@ -124,6 +143,16 @@ def kajDelam(n):
 #        Napeči je potrebno 87 palačink.
 # =============================================================================
 
+def kolikoPalacink(steviloOdraslih, steviloOtrok):
+    '''Vrne število paslačink potrebnih, da nasiti vse povabljene'''
+    odrasel = 5
+    otrok = 2
+    palacinkeOdrasli = steviloOdraslih * odrasel
+    palacinkeOtroci = steviloOtrok * otrok
+    palacinkeSkupaj = palacinkeOdrasli + palacinkeOtroci + 7 # še malo za rezervo
+    return palacinkeSkupaj
+
+
 # =====================================================================@017293=
 # 5. podnaloga
 # **Slavko peče torte**
@@ -140,6 +169,17 @@ def kajDelam(n):
 # Slavku sestavi funkcijo `kolikoTort(margarina, moka, sladkor)`, ki glede na dani recept
 # določi največje možno število tort.
 # =============================================================================
+
+def kolikoTort(margarina, moka, sladkor):
+    '''
+    Funkcija bo izracunala koliko tort lahko naredimo glede na kolicino surovin.
+    '''
+    marg = margarina // 0.8
+    mok = moka // 2
+    slad = sladkor // 1.5
+    st_tort = min(marg, mok, slad)
+    return st_tort
+
 
 # =====================================================================@017294=
 # 6. podnaloga
@@ -164,8 +204,14 @@ def kajDelam(n):
 # _Namig_: Poleg funkcije `min` Python pozna tudi funkcijo `max`, ki se obnaša podobno!
 # =============================================================================
 
-
-
+def tockeSlog(oc1,oc2,oc3,oc4,oc5):
+    '''
+    Funkcija bo izracunala slogovne tocke za smucarski skok.
+    '''
+    naj_S = min(oc1,oc2,oc3,oc4,oc5)
+    naj_B = max(oc1,oc2,oc3,oc4,oc5)
+    vsota = oc1 + oc2 + oc3 + oc4 + oc5 - naj_S - naj_B
+    return vsota
 
 
 
