@@ -1,151 +1,34 @@
 # =============================================================================
-# Ednina, dvojina, množina
-# =====================================================================@017296=
+# Okulist Tone
+# =====================================================================@017319=
 # 1. podnaloga
-# Napiši funkcijo `finStanje(n)`, ki kot argument sprejme količino denarja
-# na bančnem računu, podano v evrih (celih) in slovničnemu številu
-# ustrezno vrne opis finančnega stanja.
+# Okulist Tone želi svojim strankam poslati program za kontrolo vida.
+# Napiši mu program, ki bo izpisal med 10 in 20 znakov *, ločenih s presledki.
+# Na koncu naj ne bo presledka!
+# Uporabnik jih mora prešteti in vnesti odgovor. Na podlagi odgovora naj
+# program izpiše, ali mora uporabnik k okulistu Tonetu ali ne.
 # 
-#      >>>finStanje(1)
-#      Stanje: 1 evro.
-#      >>>finStanje(1002)
-#      Stanje: 1002 evra.
-#      >>>finStanje(-203)
-#      Stanje: -203 evri.
-#      >>>finStanje(215)
-#      Stanje: 215 evrov.
+#         >>>* * * * * * * * * *
+#         Koliko * vidite: 11
+#         Prosim, zglasite se pri okulistu Tonetu.
 # 
-# Primer, če je vneseno stanje večje ali enako 1000000 evrov:
-# 
-#      >>>finStanje(1000002)
-#      Tajkun!
-# 
-# Primer, če je vneseno stanje nižje od -300 evrov: 
-# 
-#      >>>finStanje(-302)
-#      Ti si navadna zguba!
+#         >>>* * * * * * * * * * * * *
+#         Koliko * vidite: 13
+#         Vaš vid je še dober.
 # =============================================================================
+import random
 
-def finStanje(n):
-    '''
-    Funkcija bo povedala finančno stanje glede na vnešeno količino
-    '''
-    if n >= 1000000:
-        return ("Tajkun!")
-    if n < -300:
-        return ("Ti si navadna zguba!")
+st_znakov = random.randint(10,20)
 
-        
-            
-    if n >= 0:
-        if n == 0:
-            return ("Stanje: {} evrov." .format(n))
-        if n % 100 == 1:
-            return ("Stanje: {} evro." .format(n))
-        if n % 100 == 2:
-            return ("Stanje: {} evra." .format(n))
-        if n % 100 == 3 or n % 100 == 4:
-            return ("Stanje: {} evri." .format(n))
-        else:
-            return ("Stanje: {} evrov." .format(n))
-   
-   
-    if n < 0:
-        if n == -1 or (n * (-1)) % 10 == 1:
-            return ("Stanje: {} evro." .format(n))
-        if n == -2:
-            return ("Stanje: {} evra." .format(n))
-        if n == -3 or n == -4:
-            return ("Stanje: {} evri." .format(n))
-        else:
-            return ("Stanje: {} evrov." .format(n))
-        
-        
-# =====================================================================@017297=
-# 2. podnaloga
-# Sestavi funkcijo `stLjudi(n)`, ki kot argument sprejme poljubno naravno
-# število in nato v slovnično pravilni obliki vrne opis števila ljudi
-# v dvorani kulturnega doma (glej zglede). Dvorana sprejme največ 500 ljudi. Podatki so smiselni, torej
-# celo število, večje ali enako 0.
-# Primer za n=0:
-# 
-#      Dvorana je prazna.
-# 
-# Primer za n=1:
-# 
-#      V dvorani je 1 človek.
-# 
-# Primer za n=303:
-# 
-#      V dvorani so 303 ljudje.
-# 
-# Primer za n=500:
-# 
-#      Dvorana je polna.
-# 
-# Primer za n=502:
-# 
-#      Dvorana je polna. Zunaj sta ostala 2 človeka.
-# =============================================================================
+print("* " * st_znakov, end = "\n")
 
-def stLjudi(n):
-    '''
-    Funkcija bo povedala stanje okupiranosti dvorane.
-    '''
-    if n <= 500:
-        if n == 0:
-            return ("Dvorana je prazna.")
-        if n == 500:
-            return ("Dvorana je polna.")
-        if n % 10 == 1:
-            return ("V dvorani je {} človek." .format(n))
-        if n == 2 or n % 10 == 2:
-            return ("V dvorani sta {} človeka." .format(n))
-        if (n == 3 or n == 4) or (n % 10 == 3 or n % 10 == 4):
-            return ("V dvorani so {} ljudje." .format(n))
-        else:
-            return ("V dvorani je {} ljudi." .format(n))
-    elif n > 500:
-        ostanek = n - 500
-        if ostanek == 1 or ostanek % 10 == 1:
-            return ("Dvorana je polna. Zunaj je ostal {} človek." .format(ostanek))
-        if ostanek == 2 or ostanek % 10 == 2:
-            return ("Dvorana je polna. Zunaj sta ostala {} človeka." .format(ostanek))
-        if (ostanek == 3 or ostanek == 4) or (ostanek % 10 == 3 or ostanek % 10 == 4):
-            return ("Dvorana je polna. Zunaj so ostali {} ljudje." .format(ostanek))
-        else:
-            return ("Dvorana je polna. Zunaj je ostalo {} ljudi." .format(ostanek))
-            
-        
-# =====================================================================@017298=
-# 3. podnaloga
-# Sestavite program, ki prebere naravno število `n` in nato izpiše niz oblike
-# 
-#     Koliko imaš limon: 103
-#     Imaš 103 limone.
-#     Koliko imaš limon: 0
-#     Imaš 0 limon.
-# 
-# pri čemer mora biti seveda vse pravilno sklanjano.
-# =============================================================================
+vid = int(input("Koliko * vidite: "))
 
+if vid == st_znakov:
+    print("Vaš vid je še dober.")
+else:
+    print("Prosim, zglasite se pri okulistu Tonetu.")
 
-
-def limone(n):
-    if n % 100 == 1:
-        return ("Imaš {} limono." .format(n))
-    if n % 100 == 2:
-        return ("Imaš {} limoni." .format(n))
-    if n % 100 == 3 or n % 100 == 4:
-        return ("Imaš {} limone." .format(n))
-    else:
-        return ("Imaš {} limon." .format(n))
-
-n = int(input("Koliko imaš limon: "))
-print(limone(n))
-    
-    
-    
 
 
 
@@ -402,7 +285,7 @@ class Check:
             if x not in global_env:
                 errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
             elif clean(global_env[x]) != clean(v):
-                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, s[x], v))
+                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, global_env[x], v))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
             return False
@@ -670,83 +553,23 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5Nn0:1gH1ra:bn3Acgh9AHgkE7I66UI-bTbE5Ew'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzMxOX0:1gItR5:iX6KfmCjdpfiHT8JHpo-v9UOpHY'
         try:
-            Check.equal("finStanje(0)", 'Stanje: 0 evrov.') and  \
-            Check.equal("finStanje(1)", 'Stanje: 1 evro.') and  \
-            Check.equal("finStanje(2)", 'Stanje: 2 evra.') and  \
-            Check.equal("finStanje(3)", 'Stanje: 3 evri.') and  \
-            Check.equal("finStanje(103)", 'Stanje: 103 evri.') and  \
-            Check.equal("finStanje(113)", 'Stanje: 113 evrov.') and  \
-            Check.equal("finStanje(-3)", 'Stanje: -3 evri.') and  \
-            Check.equal("finStanje(-4)", 'Stanje: -4 evri.') and  \
-            Check.equal("finStanje(-5)", 'Stanje: -5 evrov.') and  \
-            Check.equal("finStanje(-300)", 'Stanje: -300 evrov.') and  \
-            Check.equal("finStanje(-101)", 'Stanje: -101 evro.') and  \
-            Check.equal("finStanje(202)", 'Stanje: 202 evra.') and  \
-            Check.equal("finStanje(222)", 'Stanje: 222 evrov.') and  \
-            Check.equal("finStanje(16232)", 'Stanje: 16232 evrov.') and  \
-            Check.equal("finStanje(404)", 'Stanje: 404 evri.') and  \
-            Check.equal("finStanje(555)", 'Stanje: 555 evrov.') and  \
-            Check.equal("finStanje(1000000)", 'Tajkun!') and  \
-            Check.equal("finStanje(1010000)", 'Tajkun!') and  \
-            Check.equal("finStanje(999999)", 'Stanje: 999999 evrov.') and  \
-            Check.equal("finStanje(-300)", 'Stanje: -300 evrov.') and  \
-            Check.equal("finStanje(-301)", 'Ti si navadna zguba!') and  \
-            Check.equal("finStanje(-30108)", 'Ti si navadna zguba!')
-            Check.secret("""finStanje(30108)""")
-            Check.secret("""finStanje(1081)""")
-            Check.secret("""finStanje(-108)""")
-            Check.secret("""finStanje(1083)""")
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5N30:1gH1ra:7g6yFGY7H3j56Zzko0fG6QPZnfs'
-        try:
-            Check.equal("stLjudi(0)", 'Dvorana je prazna.') and \
-            Check.equal("stLjudi(1)",'V dvorani je 1 človek.') and \
-            Check.equal("stLjudi(2)",'V dvorani sta 2 človeka.') and \
-            Check.equal("stLjudi(3)",'V dvorani so 3 ljudje.') and \
-            Check.equal("stLjudi(4)",'V dvorani so 4 ljudje.') and \
-            Check.equal("stLjudi(5)",'V dvorani je 5 ljudi.') and \
-            Check.equal("stLjudi(10)",'V dvorani je 10 ljudi.') and \
-            Check.equal("stLjudi(101)",'V dvorani je 101 človek.') and \
-            Check.equal("stLjudi(202)",'V dvorani sta 202 človeka.') and \
-            Check.equal("stLjudi(303)",'V dvorani so 303 ljudje.') and \
-            Check.equal("stLjudi(404)",'V dvorani so 404 ljudje.') and \
-            Check.equal("stLjudi(499)",'V dvorani je 499 ljudi.') and \
-            Check.equal("stLjudi(500)",'Dvorana je polna.') and \
-            Check.equal("stLjudi(501)",'Dvorana je polna. Zunaj je ostal 1 človek.') and \
-            Check.equal("stLjudi(602)",'Dvorana je polna. Zunaj sta ostala 102 človeka.') and \
-            Check.equal("stLjudi(703)",'Dvorana je polna. Zunaj so ostali 203 ljudje.') and \
-            Check.equal("stLjudi(804)",'Dvorana je polna. Zunaj so ostali 304 ljudje.') and \
-            Check.equal("stLjudi(905)",'Dvorana je polna. Zunaj je ostalo 405 ljudi.')
-            Check.secret("""stLjudi(30108)""")
-            Check.secret("""stLjudi(11)""")
-            Check.secret("""stLjudi(108)""")
-            Check.secret("""stLjudi(1083)""")
-            Check.secret("""stLjudi(81)""")
-            Check.secret("""stLjudi(108)""")
-            Check.secret("""stLjudi(102)""")
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5OH0:1gH1ra:ecnuRHTfpaaPhp5x0uI4f0D8lEM'
-        try:
-            vhod = ['14', '101', '4', '202', '7', '1267', '303', '23', '111']
-            izhod = ['', 'o', 'e', 'i', '', '', 'e', '', '']
+            import random
+            random.seed(100)
+            with Check.input(['12']):
+                Check.output(Check.current_part['solution'], [
+                '* * * * * * * * * * * *',
+                'Koliko * vidite: 12',
+                'Vaš vid je še dober.'
+            ])
             
-            for i in range(len(vhod)):
-                with Check.input([vhod[i]]):
-                    if not Check.output(Check.current_part['solution'], [
-                        'Koliko imaš limon: ' + vhod[i],
-                        "Imaš {0} limon{1}.".format(vhod[i], izhod[i]),
-                        ]):
-                        break
+            with Check.input(['12']):
+                Check.output(Check.current_part['solution'], [
+                '* * * * * * * * * * * * * * * * *',
+                'Koliko * vidite: 12',
+                'Prosim, zglasite se pri okulistu Tonetu.'
+            ])
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
@@ -762,12 +585,12 @@ def _validate_current_file():
         print('Rešitve so shranjene.')
         update_attempts(Check.parts, response)
         if 'update' in response:
-            print('Posodabljam datoteko... ', end="")
+            print('Updating file... ', end="")
             backup_filename = backup(filename)
             with open(__file__, 'w', encoding='utf-8') as f:
                 f.write(response['update'])
-            print('Stara datoteka je bila preimenovana v {0}.'.format(backup_filename))
-            print('Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.')
+            print('Previous file has been renamed to {0}.'.format(backup_filename))
+            print('If the file did not refresh in your editor, close and reopen it.')
     Check.summarize()
 
 if __name__ == '__main__':
