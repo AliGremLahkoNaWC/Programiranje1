@@ -1,152 +1,101 @@
 # =============================================================================
-# Ednina, dvojina, množina
-# =====================================================================@017296=
+# Zamiki
+# =====================================================================@017306=
 # 1. podnaloga
-# Napiši funkcijo `finStanje(n)`, ki kot argument sprejme količino denarja
-# na bančnem računu, podano v evrih (celih) in slovničnemu številu
-# ustrezno vrne opis finančnega stanja.
+# Naslednja koda vsebuje, kar se zamikov tiče, cel kup napak.
 # 
-#      >>>finStanje(1)
-#      Stanje: 1 evro.
-#      >>>finStanje(1002)
-#      Stanje: 1002 evra.
-#      >>>finStanje(-203)
-#      Stanje: -203 evri.
-#      >>>finStanje(215)
-#      Stanje: 215 evrov.
+#         x = int(input('x: '))
+#         y = int(input('y: '))
+#         if x == 3 and y == 4:
+#             print("x je 3")
+#                print("y je morda 4, vem pa ne")
+#         if x > 2 and y < 5:
+#         print("x > 2")
+#         print("y < 5")
+#         if x < 4 and y > 3:
+#             print("x < 4")
+#                 print("y > 3")
 # 
-# Primer, če je vneseno stanje večje ali enako 1000000 evrov:
-# 
-#      >>>finStanje(1000002)
-#      Tajkun!
-# 
-# Primer, če je vneseno stanje nižje od -300 evrov: 
-# 
-#      >>>finStanje(-302)
-#      Ti si navadna zguba!
+# Skopiraj jo in jo popravi! Stavkov samih ne spreminjaj, le njihove zamike!
+# Popravki morajo biti taki, da so izpisi smiselni!
 # =============================================================================
-
-def finStanje(n):
-    '''
-    Funkcija bo povedala finančno stanje glede na vnešeno količino
-    '''
-    if n >= 1000000:
-        return ("Tajkun!")
-    if n < -300:
-        return ("Ti si navadna zguba!")
-
-        
-            
-    if n >= 0:
-        if n == 0:
-            return ("Stanje: {} evrov." .format(n))
-        if n % 100 == 1:
-            return ("Stanje: {} evro." .format(n))
-        if n % 100 == 2:
-            return ("Stanje: {} evra." .format(n))
-        if n % 100 == 3 or n % 100 == 4:
-            return ("Stanje: {} evri." .format(n))
-        else:
-            return ("Stanje: {} evrov." .format(n))
    
-   
-    if n < 0:
-        if n == -1 or (n * (-1)) % 10 == 1:
-            return ("Stanje: {} evro." .format(n))
-        if n == -2:
-            return ("Stanje: {} evra." .format(n))
-        if n == -3 or n == -4:
-            return ("Stanje: {} evri." .format(n))
-        else:
-            return ("Stanje: {} evrov." .format(n))
-        
-        
-# =====================================================================@017297=
+x = int(input('x: '))
+y = int(input('y: '))
+if x == 3 and y == 4:
+    print("x je 3")
+print("y je morda 4, vem pa ne")
+if x > 2 and y < 5:
+    print("x > 2")
+    print("y < 5")
+if x < 4 and y > 3:
+    print("x < 4")
+    print("y > 3")
+
+
+# =====================================================================@018409=
 # 2. podnaloga
-# Sestavi funkcijo `stLjudi(n)`, ki kot argument sprejme poljubno naravno
-# število in nato v slovnično pravilni obliki vrne opis števila ljudi
-# v dvorani kulturnega doma (glej zglede). Dvorana sprejme največ 500 ljudi. Podatki so smiselni, torej
-# celo število, večje ali enako 0.
-# Primer za n=0:
+# Naslednja koda predstavlja program, ki pretvarja temperaturo iz stopinj
+# Celzija v stopinje Fahrenheit in obratno. Ustrezno zamakni vrstice,
+# da bo koda pravilno delovala.
 # 
-#      Dvorana je prazna.
+#          enota = input("V kateri enoti boš podal temperaturo? Vnesi 'C' ali 'F': ")
+#          stopinje = int(input("Število stopinj: "))
+#          if enota != "C" and enota != "F":
+#          print("Vnesi ustrezno enoto.")
+#          else:
+#          if enota == "C":
+#          odg = int(round((9 * stopinje) / 5 + 32))
+#          nova_enota = "Fahrenheit"
+#          elif enota == "F":
+#          odg = int(round((stopinje - 32) * 5 / 9))
+#          nova_enota = "Celzija"
+#          print("Temperatura v stopinjah", nova_enota, "je", odg, "stopinj.")
 # 
-# Primer za n=1:
-# 
-#      V dvorani je 1 človek.
-# 
-# Primer za n=303:
-# 
-#      V dvorani so 303 ljudje.
-# 
-# Primer za n=500:
-# 
-#      Dvorana je polna.
-# 
-# Primer za n=502:
-# 
-#      Dvorana je polna. Zunaj sta ostala 2 človeka.
+# Skopiraj kodo in jo popravi! Stavkov samih ne spreminjaj, le njihove zamike!
 # =============================================================================
-
-def stLjudi(n):
-    '''
-    Funkcija bo povedala stanje okupiranosti dvorane.
-    '''
-    if n <= 500:
-        if n == 0:
-            return ("Dvorana je prazna.")
-        if n == 500:
-            return ("Dvorana je polna.")
-        if n % 10 == 1:
-            return ("V dvorani je {} človek." .format(n))
-        if n == 2 or n % 10 == 2:
-            return ("V dvorani sta {} človeka." .format(n))
-        if (n == 3 or n == 4) or (n % 10 == 3 or n % 10 == 4):
-            return ("V dvorani so {} ljudje." .format(n))
-        else:
-            return ("V dvorani je {} ljudi." .format(n))
-    elif n > 500:
-        ostanek = n - 500
-        if ostanek == 1 or ostanek % 10 == 1:
-            return ("Dvorana je polna. Zunaj je ostal {} človek." .format(ostanek))
-        if ostanek == 2 or ostanek % 10 == 2:
-            return ("Dvorana je polna. Zunaj sta ostala {} človeka." .format(ostanek))
-        if (ostanek == 3 or ostanek == 4) or (ostanek % 10 == 3 or ostanek % 10 == 4):
-            return ("Dvorana je polna. Zunaj so ostali {} ljudje." .format(ostanek))
-        else:
-            return ("Dvorana je polna. Zunaj je ostalo {} ljudi." .format(ostanek))
-            
-        
-# =====================================================================@017298=
+enota = input("V kateri enoti boš podal temperaturo? Vnesi 'C' ali 'F': ")
+stopinje = int(input("Število stopinj: "))
+if enota != "C" and enota != "F":
+    print("Vnesi ustrezno enoto.")
+else:
+    if enota == "C":
+        odg = int(round((9 * stopinje) / 5 + 32))
+        nova_enota = "Fahrenheit"
+    elif enota == "F":
+        odg = int(round((stopinje - 32) * 5 / 9))
+        nova_enota = "Celzija"
+    print("Temperatura v stopinjah", nova_enota, "je", odg, "stopinj.")
+# =====================================================================@018411=
 # 3. podnaloga
-# Sestavite program, ki prebere naravno število `n` in nato izpiše niz oblike
+# Naslednja koda predstavlja funkcijo, ki za dano celo število `n` vrne
+# niz `fizz`, če je `n` deljiv s 3, niz `buzz`, če je `n` deljiv s 5 ter
+# niz `fizzbuzz`, če je `n` deljiv s 3 in s 5. Popravi zamike vrstic,
+# da bo koda pravilno delovala.
 # 
-#     Koliko imaš limon: 103
-#     Imaš 103 limone.
-#     Koliko imaš limon: 0
-#     Imaš 0 limon.
+#             def fizzbuzz(n):
+#          if n % 3 == 0:
+#                 if n % 5 == 0:
+#              return "fizzbuzz"
+#                     else:
+#                     return "fizz"
+#          elif n % 5 == 0:
+#                     return "buzz"
+#          return None
 # 
-# pri čemer mora biti seveda vse pravilno sklanjano.
+# Skopiraj kodo in jo popravi! Stavkov samih ne spreminjaj, le njihove zamike!
 # =============================================================================
 
 
-
-def limone(n):
-    if n % 100 == 1:
-        return ("Imaš {} limono." .format(n))
-    if n % 100 == 2:
-        return ("Imaš {} limoni." .format(n))
-    if n % 100 == 3 or n % 100 == 4:
-        return ("Imaš {} limone." .format(n))
-    else:
-        return ("Imaš {} limon." .format(n))
-
-n = int(input("Koliko imaš limon: "))
-print(limone(n))
-    
-    
-    
-
+def fizzbuzz(n):
+    if n % 3 == 0:
+        if n % 5 == 0:
+            return "fizzbuzz"
+        else:
+            return "fizz"
+    elif n % 5 == 0:
+        return "buzz"
+    return None
 
 
 
@@ -402,7 +351,7 @@ class Check:
             if x not in global_env:
                 errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
             elif clean(global_env[x]) != clean(v):
-                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, s[x], v))
+                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, global_env[x], v))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
             return False
@@ -670,83 +619,55 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5Nn0:1gH1ra:bn3Acgh9AHgkE7I66UI-bTbE5Ew'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzMwNn0:1gIFIF:6ORtLBr64H0mZ__QQCqNzSPXrMg'
         try:
-            Check.equal("finStanje(0)", 'Stanje: 0 evrov.') and  \
-            Check.equal("finStanje(1)", 'Stanje: 1 evro.') and  \
-            Check.equal("finStanje(2)", 'Stanje: 2 evra.') and  \
-            Check.equal("finStanje(3)", 'Stanje: 3 evri.') and  \
-            Check.equal("finStanje(103)", 'Stanje: 103 evri.') and  \
-            Check.equal("finStanje(113)", 'Stanje: 113 evrov.') and  \
-            Check.equal("finStanje(-3)", 'Stanje: -3 evri.') and  \
-            Check.equal("finStanje(-4)", 'Stanje: -4 evri.') and  \
-            Check.equal("finStanje(-5)", 'Stanje: -5 evrov.') and  \
-            Check.equal("finStanje(-300)", 'Stanje: -300 evrov.') and  \
-            Check.equal("finStanje(-101)", 'Stanje: -101 evro.') and  \
-            Check.equal("finStanje(202)", 'Stanje: 202 evra.') and  \
-            Check.equal("finStanje(222)", 'Stanje: 222 evrov.') and  \
-            Check.equal("finStanje(16232)", 'Stanje: 16232 evrov.') and  \
-            Check.equal("finStanje(404)", 'Stanje: 404 evri.') and  \
-            Check.equal("finStanje(555)", 'Stanje: 555 evrov.') and  \
-            Check.equal("finStanje(1000000)", 'Tajkun!') and  \
-            Check.equal("finStanje(1010000)", 'Tajkun!') and  \
-            Check.equal("finStanje(999999)", 'Stanje: 999999 evrov.') and  \
-            Check.equal("finStanje(-300)", 'Stanje: -300 evrov.') and  \
-            Check.equal("finStanje(-301)", 'Ti si navadna zguba!') and  \
-            Check.equal("finStanje(-30108)", 'Ti si navadna zguba!')
-            Check.secret("""finStanje(30108)""")
-            Check.secret("""finStanje(1081)""")
-            Check.secret("""finStanje(-108)""")
-            Check.secret("""finStanje(1083)""")
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5N30:1gH1ra:7g6yFGY7H3j56Zzko0fG6QPZnfs'
-        try:
-            Check.equal("stLjudi(0)", 'Dvorana je prazna.') and \
-            Check.equal("stLjudi(1)",'V dvorani je 1 človek.') and \
-            Check.equal("stLjudi(2)",'V dvorani sta 2 človeka.') and \
-            Check.equal("stLjudi(3)",'V dvorani so 3 ljudje.') and \
-            Check.equal("stLjudi(4)",'V dvorani so 4 ljudje.') and \
-            Check.equal("stLjudi(5)",'V dvorani je 5 ljudi.') and \
-            Check.equal("stLjudi(10)",'V dvorani je 10 ljudi.') and \
-            Check.equal("stLjudi(101)",'V dvorani je 101 človek.') and \
-            Check.equal("stLjudi(202)",'V dvorani sta 202 človeka.') and \
-            Check.equal("stLjudi(303)",'V dvorani so 303 ljudje.') and \
-            Check.equal("stLjudi(404)",'V dvorani so 404 ljudje.') and \
-            Check.equal("stLjudi(499)",'V dvorani je 499 ljudi.') and \
-            Check.equal("stLjudi(500)",'Dvorana je polna.') and \
-            Check.equal("stLjudi(501)",'Dvorana je polna. Zunaj je ostal 1 človek.') and \
-            Check.equal("stLjudi(602)",'Dvorana je polna. Zunaj sta ostala 102 človeka.') and \
-            Check.equal("stLjudi(703)",'Dvorana je polna. Zunaj so ostali 203 ljudje.') and \
-            Check.equal("stLjudi(804)",'Dvorana je polna. Zunaj so ostali 304 ljudje.') and \
-            Check.equal("stLjudi(905)",'Dvorana je polna. Zunaj je ostalo 405 ljudi.')
-            Check.secret("""stLjudi(30108)""")
-            Check.secret("""stLjudi(11)""")
-            Check.secret("""stLjudi(108)""")
-            Check.secret("""stLjudi(1083)""")
-            Check.secret("""stLjudi(81)""")
-            Check.secret("""stLjudi(108)""")
-            Check.secret("""stLjudi(102)""")
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5OH0:1gH1ra:ecnuRHTfpaaPhp5x0uI4f0D8lEM'
-        try:
-            vhod = ['14', '101', '4', '202', '7', '1267', '303', '23', '111']
-            izhod = ['', 'o', 'e', 'i', '', '', 'e', '', '']
+            vhod = [['3', '4'], ['4', '3'],['14', '13'], ['3', '3'], ['100', '2'], ['1', '1'], ['5', '5']]
+            izhod = [['x: 3', 'y: 4', 'x je 3', 'y je morda 4, vem pa ne', 'x > 2', 'y < 5', 'x < 4', 'y > 3'],
+                     ['x: 4', 'y: 3', 'y je morda 4, vem pa ne', 'x > 2', 'y < 5'],
+                     ['x: 14', 'y: 13', 'y je morda 4, vem pa ne'],
+                     ['x: 3', 'y: 3', 'y je morda 4, vem pa ne', 'x > 2', 'y < 5'],
+                     ['x: 100', 'y: 2', 'y je morda 4, vem pa ne', 'x > 2', 'y < 5'],
+                     ['x: 1', 'y: 1', 'y je morda 4, vem pa ne'],
+                     ['x: 5', 'y: 5', 'y je morda 4, vem pa ne']]
             
             for i in range(len(vhod)):
-                with Check.input([vhod[i]]):
-                    if not Check.output(Check.current_part['solution'], [
-                        'Koliko imaš limon: ' + vhod[i],
-                        "Imaš {0} limon{1}.".format(vhod[i], izhod[i]),
-                        ]):
+                with Check.input(vhod[i]):
+                    if not Check.output(Check.current_part['solution'], izhod[i]):
                         break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxODQwOX0:1gIFIF:G4tDQki72FKL7O71PpG9HRuLq4k'
+        try:
+            vhod = [['C', '20'], ['C', '-3'],['C', '0'], ['F', '32'], ['F', '212'], ['F', '100'], ['A', '5']]
+            izhod = ['Temperatura v stopinjah Fahrenheit je 68 stopinj.',
+                     'Temperatura v stopinjah Fahrenheit je 27 stopinj.',
+                     'Temperatura v stopinjah Fahrenheit je 32 stopinj.',
+                     'Temperatura v stopinjah Celzija je 0 stopinj.',
+                     'Temperatura v stopinjah Celzija je 100 stopinj.',
+                     'Temperatura v stopinjah Celzija je 38 stopinj.',
+                     'Vnesi ustrezno enoto.']
+            
+            for i in range(len(vhod)):
+                with Check.input(vhod[i]):
+                    if not Check.output(Check.current_part['solution'], [
+                        "V kateri enoti boš podal temperaturo? Vnesi 'C' ali 'F': " + vhod[i][0],
+                        "Število stopinj: " + vhod[i][1],
+                        izhod[i]]):
+                        break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxODQxMX0:1gIFIF:B29GbsNbvDdWM0YGBMY_HgFwKm8'
+        try:
+            Check.equal("fizzbuzz(18)", 'fizz')
+            Check.equal("fizzbuzz(20)", 'buzz')
+            Check.equal("fizzbuzz(30)", 'fizzbuzz')
+            Check.equal("fizzbuzz(11)", None)
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
@@ -762,12 +683,12 @@ def _validate_current_file():
         print('Rešitve so shranjene.')
         update_attempts(Check.parts, response)
         if 'update' in response:
-            print('Posodabljam datoteko... ', end="")
+            print('Updating file... ', end="")
             backup_filename = backup(filename)
             with open(__file__, 'w', encoding='utf-8') as f:
                 f.write(response['update'])
-            print('Stara datoteka je bila preimenovana v {0}.'.format(backup_filename))
-            print('Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.')
+            print('Previous file has been renamed to {0}.'.format(backup_filename))
+            print('If the file did not refresh in your editor, close and reopen it.')
     Check.summarize()
 
 if __name__ == '__main__':

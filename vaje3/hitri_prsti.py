@@ -1,151 +1,105 @@
 # =============================================================================
-# Ednina, dvojina, množina
-# =====================================================================@017296=
+# Hitri prsti
+#
+# Če na začetek programa napišemo
+# 
+#       import time
+# 
+# bomo, med drugim, dobili funkcijo `time`, ki s klicem `time.time()` vrne čas v sekundah
+# od nekega trenutka v davni preteklosti.
+# 
+# **Pozor:** preverjanje lahko traja kar nekaj èasa - tudi do 20 sekund!
+# =====================================================================@017316=
 # 1. podnaloga
-# Napiši funkcijo `finStanje(n)`, ki kot argument sprejme količino denarja
-# na bančnem računu, podano v evrih (celih) in slovničnemu številu
-# ustrezno vrne opis finančnega stanja.
+# **Kako hitro razmišljamo**
 # 
-#      >>>finStanje(1)
-#      Stanje: 1 evro.
-#      >>>finStanje(1002)
-#      Stanje: 1002 evra.
-#      >>>finStanje(-203)
-#      Stanje: -203 evri.
-#      >>>finStanje(215)
-#      Stanje: 215 evrov.
+# Napiši program, ki uporabnika vpraša, koliko je `a` krat `b`. Pri tem racunalnik generira
+# `a` in`b` kot dve naključni enomestni naravni števili (vključno z 0).
+# Uporabnik bo premislil in vpisal odgovor.
+# Program naj izpiše, koliko sekund je človek potreboval za razmišljanje, ter, če je odgovor pravilen.
+# Namig: če veš, koliko je bila ura pred klicem funkcije input in koliko je bila ura po klicu,
+# znaš izračunati, koliko časa je minilo vmes.
 # 
-# Primer, če je vneseno stanje večje ali enako 1000000 evrov:
+#     >>>Koliko je 6 x 7: 42
+#     Čestitam! Odgovor je pravilen. Za odgovor si potreboval 2.503019332885742 s.
 # 
-#      >>>finStanje(1000002)
-#      Tajkun!
-# 
-# Primer, če je vneseno stanje nižje od -300 evrov: 
-# 
-#      >>>finStanje(-302)
-#      Ti si navadna zguba!
+#     >>>Koliko je 6 x 7: 40
+#     Čestitam! Žal narobe! Prav je 42! Za odgovor si potreboval 2.503019332885742 s.
 # =============================================================================
-
-def finStanje(n):
-    '''
-    Funkcija bo povedala finančno stanje glede na vnešeno količino
-    '''
-    if n >= 1000000:
-        return ("Tajkun!")
-    if n < -300:
-        return ("Ti si navadna zguba!")
-
-        
-            
-    if n >= 0:
-        if n == 0:
-            return ("Stanje: {} evrov." .format(n))
-        if n % 100 == 1:
-            return ("Stanje: {} evro." .format(n))
-        if n % 100 == 2:
-            return ("Stanje: {} evra." .format(n))
-        if n % 100 == 3 or n % 100 == 4:
-            return ("Stanje: {} evri." .format(n))
-        else:
-            return ("Stanje: {} evrov." .format(n))
-   
-   
-    if n < 0:
-        if n == -1 or (n * (-1)) % 10 == 1:
-            return ("Stanje: {} evro." .format(n))
-        if n == -2:
-            return ("Stanje: {} evra." .format(n))
-        if n == -3 or n == -4:
-            return ("Stanje: {} evri." .format(n))
-        else:
-            return ("Stanje: {} evrov." .format(n))
-        
-        
-# =====================================================================@017297=
+'''Program bo ocenil hitrost nasega mnozenja. '''
+import time
+import random
+cas_zacetek = time.time()
+a = random.randint(0,9)
+b = random.randint(0,9)
+odg = int(input("Koliko je {} krat {}: " .format(a,b)))
+cas_konec = time.time()
+rez = a * b
+if odg == rez:
+    print("Čestitam! Odgovor je pravilen. Za odgovor si potreboval {} s." .format(cas_konec))
+else:
+    print("Čestitam! Žal narobe! Prav je {}! Za odgovor si potreboval {} s." .format(rez,cas_konec))
+# =====================================================================@017317=
 # 2. podnaloga
-# Sestavi funkcijo `stLjudi(n)`, ki kot argument sprejme poljubno naravno
-# število in nato v slovnično pravilni obliki vrne opis števila ljudi
-# v dvorani kulturnega doma (glej zglede). Dvorana sprejme največ 500 ljudi. Podatki so smiselni, torej
-# celo število, večje ali enako 0.
-# Primer za n=0:
+# **Misleči stroj I**
 # 
-#      Dvorana je prazna.
+# Oglej si, kaj počne naslednji program:
 # 
-# Primer za n=1:
+#     import time
 # 
-#      V dvorani je 1 človek.
+#     a = int(input('Prvo število: '))
+#     b = int(input('Drugo število: '))
+#     print('Računam ...')
+#     time.sleep(3)
+#     print('Uf, je bilo težko. V 3 sek so se moji čipi pošteno ogreli. Rezultat je:', a*b)
 # 
-# Primer za n=303:
-# 
-#      V dvorani so 303 ljudje.
-# 
-# Primer za n=500:
-# 
-#      Dvorana je polna.
-# 
-# Primer za n=502:
-# 
-#      Dvorana je polna. Zunaj sta ostala 2 človeka.
+# nato ga spremeni tako, da bo računalnik razmišljal med 1 in 5 sekundami!
+# Pri tem lahko čaka tudi npr. 4.371232 sekunde ali pa točno 5! Oglej
+# si [dokumentacijo](https://docs.python.org/3.5/library/random.html) in
+# poišči ustrezno funkcijo. Čas razmišljanja izpiši zaokroženo na tisočinke!
 # =============================================================================
+import time
+import random
 
-def stLjudi(n):
-    '''
-    Funkcija bo povedala stanje okupiranosti dvorane.
-    '''
-    if n <= 500:
-        if n == 0:
-            return ("Dvorana je prazna.")
-        if n == 500:
-            return ("Dvorana je polna.")
-        if n % 10 == 1:
-            return ("V dvorani je {} človek." .format(n))
-        if n == 2 or n % 10 == 2:
-            return ("V dvorani sta {} človeka." .format(n))
-        if (n == 3 or n == 4) or (n % 10 == 3 or n % 10 == 4):
-            return ("V dvorani so {} ljudje." .format(n))
-        else:
-            return ("V dvorani je {} ljudi." .format(n))
-    elif n > 500:
-        ostanek = n - 500
-        if ostanek == 1 or ostanek % 10 == 1:
-            return ("Dvorana je polna. Zunaj je ostal {} človek." .format(ostanek))
-        if ostanek == 2 or ostanek % 10 == 2:
-            return ("Dvorana je polna. Zunaj sta ostala {} človeka." .format(ostanek))
-        if (ostanek == 3 or ostanek == 4) or (ostanek % 10 == 3 or ostanek % 10 == 4):
-            return ("Dvorana je polna. Zunaj so ostali {} ljudje." .format(ostanek))
-        else:
-            return ("Dvorana je polna. Zunaj je ostalo {} ljudi." .format(ostanek))
-            
-        
-# =====================================================================@017298=
+a = int(input('Prvo število: '))
+b = int(input('Drugo število: '))
+print('Računam ...')
+calc_time = round(random.uniform(1,5),3)
+time.sleep(calc_time)
+print('Uf, je bilo težko. V {} sek so se moji čipi pošteno ogreli. Rezultat je: {}' .format(calc_time,a*b))
+# =====================================================================@017318=
 # 3. podnaloga
-# Sestavite program, ki prebere naravno število `n` in nato izpiše niz oblike
+# **Misleči stroj II**
 # 
-#     Koliko imaš limon: 103
-#     Imaš 103 limone.
-#     Koliko imaš limon: 0
-#     Imaš 0 limon.
+# Večji kot je produkt, težji je račun. Računalnik naj zato čaka toliko sekund, kolikor je velik produkt,
+# deljeno z 10. Če mu damo množiti 6 in 7, naj pred
+# izpisom počaka 4.2 sekunde.
+# Če je katero od števil negativno, naj vedno čaka
+# 2 sekundi več, kot bi čakal pri pozitivnih številih.
+# V nobenem primeru pa čas čakanja ne sme biti več kot 10 sekund.
 # 
-# pri čemer mora biti seveda vse pravilno sklanjano.
+# Izpis naj bo tak, kot ga predvideva zgornji program!
 # =============================================================================
+import time
+
+a = int(input('Prvo število: '))
+b = int(input('Drugo število: '))
+print('Računam ...')
 
 
+if (a or b) < 0:
+    calc_time = abs((a * b) / 10) + 2    
+else:
+    calc_time = (a * b) / 10
 
-def limone(n):
-    if n % 100 == 1:
-        return ("Imaš {} limono." .format(n))
-    if n % 100 == 2:
-        return ("Imaš {} limoni." .format(n))
-    if n % 100 == 3 or n % 100 == 4:
-        return ("Imaš {} limone." .format(n))
-    else:
-        return ("Imaš {} limon." .format(n))
+if calc_time > 10:
+    time.sleep(10)
+else:
+    time.sleep(calc_time)
+   
 
-n = int(input("Koliko imaš limon: "))
-print(limone(n))
-    
-    
-    
+print('Uf, je bilo težko. V {} sek so se moji čipi pošteno ogreli. Rezultat je: {}' .format(calc_time,a*b))
+
 
 
 
@@ -402,7 +356,7 @@ class Check:
             if x not in global_env:
                 errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
             elif clean(global_env[x]) != clean(v):
-                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, s[x], v))
+                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, global_env[x], v))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
             return False
@@ -670,81 +624,90 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5Nn0:1gH1ra:bn3Acgh9AHgkE7I66UI-bTbE5Ew'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzMxNn0:1gIsjW:r0S74DFmxT-nMoW5ne5eUmXVe3Q'
         try:
-            Check.equal("finStanje(0)", 'Stanje: 0 evrov.') and  \
-            Check.equal("finStanje(1)", 'Stanje: 1 evro.') and  \
-            Check.equal("finStanje(2)", 'Stanje: 2 evra.') and  \
-            Check.equal("finStanje(3)", 'Stanje: 3 evri.') and  \
-            Check.equal("finStanje(103)", 'Stanje: 103 evri.') and  \
-            Check.equal("finStanje(113)", 'Stanje: 113 evrov.') and  \
-            Check.equal("finStanje(-3)", 'Stanje: -3 evri.') and  \
-            Check.equal("finStanje(-4)", 'Stanje: -4 evri.') and  \
-            Check.equal("finStanje(-5)", 'Stanje: -5 evrov.') and  \
-            Check.equal("finStanje(-300)", 'Stanje: -300 evrov.') and  \
-            Check.equal("finStanje(-101)", 'Stanje: -101 evro.') and  \
-            Check.equal("finStanje(202)", 'Stanje: 202 evra.') and  \
-            Check.equal("finStanje(222)", 'Stanje: 222 evrov.') and  \
-            Check.equal("finStanje(16232)", 'Stanje: 16232 evrov.') and  \
-            Check.equal("finStanje(404)", 'Stanje: 404 evri.') and  \
-            Check.equal("finStanje(555)", 'Stanje: 555 evrov.') and  \
-            Check.equal("finStanje(1000000)", 'Tajkun!') and  \
-            Check.equal("finStanje(1010000)", 'Tajkun!') and  \
-            Check.equal("finStanje(999999)", 'Stanje: 999999 evrov.') and  \
-            Check.equal("finStanje(-300)", 'Stanje: -300 evrov.') and  \
-            Check.equal("finStanje(-301)", 'Ti si navadna zguba!') and  \
-            Check.equal("finStanje(-30108)", 'Ti si navadna zguba!')
-            Check.secret("""finStanje(30108)""")
-            Check.secret("""finStanje(1081)""")
-            Check.secret("""finStanje(-108)""")
-            Check.secret("""finStanje(1083)""")
+            import random
+            koda = Check.current_part['solution']
+            
+            
+            if 'time.time()' not in koda:
+                Check.error("Čas meri s pomočju funkcije `time.time()`")
+            
+            elif not (('random.randint(0, 9)' in koda) or ('random.randint(0,9)' in koda) or ('random.randint(0 , 9)' in koda)):
+                Check.error("Števili `a` in`b` morata biti dve naključni enomestni\nnaravni števili, vključno z 0!\nUporabi metodo randint")
+            
+            else:
+                random.seed(1)
+                with Check.input(['18']):
+                    stdout = sys.stdout
+                    sys.stdout = io.StringIO()
+                    exec(koda)
+                    output = sys.stdout.getvalue()
+                    sys.stdout = stdout
+                    output = output.strip()
+                    if 'Čestitam! Odgovor je pravilen. Za odgovor si potreboval' not in output:
+                        Check.error("Izpis ob pravilnem uporabnikovem odgovoru je napačen.")
+                        
+                with Check.input(['20']):
+                    stdout = sys.stdout
+                    sys.stdout = io.StringIO()
+                    exec(koda)
+                    output = sys.stdout.getvalue()
+                    sys.stdout = stdout
+                    output = output.strip()
+                    if 'al narobe' not in output or 'Prav je 4' not in output or 'Za odgovor si potreboval' not in output:
+                        Check.error("Izpis ob napačnem uporabnikovem odgovoru je napačen.")
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5N30:1gH1ra:7g6yFGY7H3j56Zzko0fG6QPZnfs'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzMxN30:1gIsjW:lYZ4rteT1tGnLOJQetT95TKauDY'
         try:
-            Check.equal("stLjudi(0)", 'Dvorana je prazna.') and \
-            Check.equal("stLjudi(1)",'V dvorani je 1 človek.') and \
-            Check.equal("stLjudi(2)",'V dvorani sta 2 človeka.') and \
-            Check.equal("stLjudi(3)",'V dvorani so 3 ljudje.') and \
-            Check.equal("stLjudi(4)",'V dvorani so 4 ljudje.') and \
-            Check.equal("stLjudi(5)",'V dvorani je 5 ljudi.') and \
-            Check.equal("stLjudi(10)",'V dvorani je 10 ljudi.') and \
-            Check.equal("stLjudi(101)",'V dvorani je 101 človek.') and \
-            Check.equal("stLjudi(202)",'V dvorani sta 202 človeka.') and \
-            Check.equal("stLjudi(303)",'V dvorani so 303 ljudje.') and \
-            Check.equal("stLjudi(404)",'V dvorani so 404 ljudje.') and \
-            Check.equal("stLjudi(499)",'V dvorani je 499 ljudi.') and \
-            Check.equal("stLjudi(500)",'Dvorana je polna.') and \
-            Check.equal("stLjudi(501)",'Dvorana je polna. Zunaj je ostal 1 človek.') and \
-            Check.equal("stLjudi(602)",'Dvorana je polna. Zunaj sta ostala 102 človeka.') and \
-            Check.equal("stLjudi(703)",'Dvorana je polna. Zunaj so ostali 203 ljudje.') and \
-            Check.equal("stLjudi(804)",'Dvorana je polna. Zunaj so ostali 304 ljudje.') and \
-            Check.equal("stLjudi(905)",'Dvorana je polna. Zunaj je ostalo 405 ljudi.')
-            Check.secret("""stLjudi(30108)""")
-            Check.secret("""stLjudi(11)""")
-            Check.secret("""stLjudi(108)""")
-            Check.secret("""stLjudi(1083)""")
-            Check.secret("""stLjudi(81)""")
-            Check.secret("""stLjudi(108)""")
-            Check.secret("""stLjudi(102)""")
+            import random
+            odg = Check.current_part['solution']
+            if "uniform" not in odg:
+                if "random(" in odg:
+                    Check.error("Res je, lahko uporabimo tudi metodo random() in malo računanja. " +
+                                "Ampak obstaja tudi metoda, ki kar vrne ustrezno število. Poišči jo!")
+                else:
+                    Check.error("Hm, si našel pravo metodo za poljubno naključno število. Namig ... začne se na u.")
+            
+            vhod = [ ['2','2'], ['1','1'], ['-6','5']]
+            izhod = ['4.824', '4.791', '1.226']
+            random.seed(2)
+            for i in range(len(vhod)):
+                with Check.input(vhod[i]):
+                    if not Check.output(Check.current_part['solution'], [
+                        'Prvo število: ' + vhod[i][0],
+                        'Drugo število: ' + vhod[i][1],
+                        'Računam ...',
+                        'Uf, je bilo težko. V '+ izhod[i] + ' sek so se moji čipi pošteno ogreli. Rezultat je: ' + str(int(vhod[i][0])*int(vhod[i][1])),
+                        ]):
+                        break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzI5OH0:1gH1ra:ecnuRHTfpaaPhp5x0uI4f0D8lEM'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzMxOH0:1gIsjW:s20WrB3R44D9fZNWyqi5nMHTx1o'
         try:
-            vhod = ['14', '101', '4', '202', '7', '1267', '303', '23', '111']
-            izhod = ['', 'o', 'e', 'i', '', '', 'e', '', '']
+            vhod = [['4','7'], ['2','2'], ['1','1'], ['-6','5'], ['-3','-5']]
             
             for i in range(len(vhod)):
-                with Check.input([vhod[i]]):
+                vh = list(map(int, vhod[i]))
+                if i == 3:
+                    izh = [5.0, vh[0] * vh[1]]
+                elif i == 4:
+                    izh = [3.5, vh[0] * vh[1]]
+                else:
+                    izh = [min(vh[0]*vh[1]/10, 10), vh[0] * vh[1]]
+                with Check.input(vhod[i]):
                     if not Check.output(Check.current_part['solution'], [
-                        'Koliko imaš limon: ' + vhod[i],
-                        "Imaš {0} limon{1}.".format(vhod[i], izhod[i]),
+                        'Prvo število: ' + str(vh[0]),
+                        'Drugo število: ' + str(vh[1]),
+                        'Računam ...',
+                        'Uf, je bilo težko. V ' + str(izh[0]) + ' sek so se moji čipi pošteno ogreli. Rezultat je: ' + str(izh[1]),
                         ]):
                         break
         except:
@@ -762,12 +725,12 @@ def _validate_current_file():
         print('Rešitve so shranjene.')
         update_attempts(Check.parts, response)
         if 'update' in response:
-            print('Posodabljam datoteko... ', end="")
+            print('Updating file... ', end="")
             backup_filename = backup(filename)
             with open(__file__, 'w', encoding='utf-8') as f:
                 f.write(response['update'])
-            print('Stara datoteka je bila preimenovana v {0}.'.format(backup_filename))
-            print('Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.')
+            print('Previous file has been renamed to {0}.'.format(backup_filename))
+            print('If the file did not refresh in your editor, close and reopen it.')
     Check.summarize()
 
 if __name__ == '__main__':
