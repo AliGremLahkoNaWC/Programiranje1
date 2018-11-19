@@ -1,96 +1,143 @@
 # =============================================================================
-# Nekaj preprostih nalog iz tabel
-# =====================================================================@017378=
+# Tabele števil
+# =====================================================================@017382=
 # 1. podnaloga
-# Dana je funkcija `zmnozi(tab)`, ki vrne zmnožek vseh števil v tabeli.
+# Premisli, kaj počne spodaj navedena funkcija. Žal je rezultat domače naloge
+# študenta 1. letnika, ki še ne ve, da funkcija brez komentarjev ni preveč ...
 # 
-#      def zmnozi(tab_stevil):
-#        '''Vrne produkt vseh števil v tabeli'''
-#        produkt = 1
-#        ind = 0
-#        while ind < len(tab_stevil):
-#           stev = tab_stevil[ind]
-#           produkt = produkt * stev
-#           ind = ind + 1
-#        return produkt
+#        def funk(tab):
+#            j = 0            
+#            i = 0
+#            d = len(tab)
+#            while i < d:    
+#                if tab[i] == 1:
+#                    j += 1   
+#                i += 2
+#            return j        
 # 
-# Spremeni jo v funkcijo `zmnozi_brez_0(tab)` ki prav tako vrne zmožek vseh 
-# števil v tabeli, le da spusti vsa števila, enaka 0. 
-# V tabeli je vsaj eno od 0 različno število!
+# Predelaj jo (kar pomeni tudi, da jo opremiš s komentarji, ustrezno popraviš
+# imena spremenljivk ...) v funkcijo `prestej(n, tabelaSt)`, ki prešteje,
+# kolikokrat se tabeli `tabelaSt` pojavi število `n`
+# Na primer:
+# 
+#       >>> prestej(5,[2, 5, 12, 3, 5, 3, 12, 8, 12])
+#       2
 # =============================================================================
-
-def zmnozi_brez_0(tab_stevil):
-    '''Vrne produkt vseh števil v tabeli brez 0'''
-    produkt = 1
-    ind = 0
-    while ind < len(tab_stevil):
-        stev = tab_stevil[ind]
-        if stev == 0:
-            ind += 1
-        elif stev != 0:
-            produkt = produkt * stev
-            ind = ind + 1
-    return produkt
-# =====================================================================@017379=
+def prestej(n, tabelaSt):
+    ''' Funkcija bo prestela kolikokrat se parameter n,
+    pojavi v dani tabeli.'''
+    i = 0 # indeks
+    n_krat = 0
+    while i < len(tabelaSt):
+        if tabelaSt[i] == n:
+            n_krat += 1
+        i += 1
+    return n_krat
+# =====================================================================@017383=
 # 2. podnaloga
-# Sedaj pa funkcijo `zmnozi(tab_stevil)` spremeni v funkcijo `zmnoziHitreje(tab_stevil)`,
-# ki bo takoj, ko naletimo na 0, prekinila računanje in vrnila 0!
+# Napiši funkcijo `prestejSode(tab_st)`, ki v tabeli števil prešteje,
+# kolikokrat se v tej tabeli pojavi sodo število. 
+# Na primer:
+# 
+#       >>> prestejSode([2, 5, 12, 3, 5, 3, 12, 8, 12])
+#       5
 # =============================================================================
-def zmnoziHitreje(tab_stevil):
-    '''Vrne produkt vseh števil v tabeli. V tabeli je vsaj eno število'''
-    produkt = 1
-    ind = 0
-    while ind < len(tab_stevil):
-        stev = tab_stevil[ind]
-        if stev == 0:
-            return 0
-        produkt = produkt * stev
-        ind = ind + 1
-    return produkt
-# =====================================================================@017380=
+def prestejSode(tab_st):
+    ''' Funkcija bo vrnila stevilo sodih stevil v tabeli.'''
+    i = 0 # indeks
+    sod = 0 # stevec sodih stevil
+    while i < len(tab_st):
+        if tab_st[i] % 2 == 0:
+            sod += 1
+        i += 1
+    return sod
+            
+# =====================================================================@017384=
 # 3. podnaloga
-# Dana je tabela, v kateri hranimo naslove knjig v obliki nizov. A tabelo je 
-# napadel knjižni mol, ki je pojedel nekaj naslovov in namesto njih pustil 
-# le prazne nize. Ugotovi, kako lačen je bil - torej, koliko naslovov ni več.
+# Napiši funkcijo `prestejSodeLihe(tab_st)`, ki v tabeli števil prešteje,
+# kolikokrat se v tej tabeli pojavi sodo število. Rezultat naj vrne v
+# obliki para `(soda, liha)`
+# Na primer:
 # 
-#      >>>moje_knjige = ["", "Očarljivi skupinski samomor", "Prikupna struparka", "", "", "Tuleči mlinar", "Srečni človek"]
-#      >>>lacni_mol(moje_knjige)
-#      3
+#       >>> prestejSodeLihe([2, 5, 12, 3, 5, 3, 12, 8, 12])
+#       (5, 4)
 # =============================================================================
-def lacni_mol(moje_knjige):
-    '''Funkcija bo preštela prazne nize in to vrednost vrnila.'''
-    i = 0
-    greh = 0
-    while i < len(moje_knjige):
-        if moje_knjige[i] == "":
-            greh += 1
-        i += 1
-    return greh
-# =====================================================================@017381=
-# 4. podnaloga
-# Sestavi funkcijo `preglej(tab)`, ki bo v tabeli števil preštela pozitivna 
-# in negativna števila, ter števila enaka 0. Rezultat naj vrne v obliki
-# trojke `(neg, nič, poz)`.
-# 
-#        >>>preglej([2, 3, 2, -1, 0, 2, 0, -1, 4])
-#        (2, 2, 5)
-# =============================================================================
-def preglej(tab):
-    '''Funkcija bo vrnila trojico vrednosti za negativna,
-    nenegativna ter ničelna stevila.'''
-    i = 0
-    neg = 0
-    nic = 0
-    poz = 0
-    while i < len(tab):
-        if tab[i] < 0:
-            neg += 1
-        elif tab[i] == 0:
-            nic += 1
+def prestejSodeLihe(tab_st):
+    ''' Funkcija bo vrnila stevilo sodih ter lihih stevil v tabeli.'''
+    i = 0 # indeks
+    sod = 0 # stevec sodih stevil
+    lih = 0 # stevec lihih stevil
+    while i < len(tab_st):
+        if tab_st[i] % 2 == 0:
+            sod += 1
         else:
-            poz += 1
+            lih += 1
         i += 1
-    return neg,nic,poz
+    return sod,lih
+# =====================================================================@017385=
+# 4. podnaloga
+# Funkcija `tabMest(n,tab_st)`
+# 
+#      def tabMest(n, tab_st):
+#          '''indeksi, kje se v tabeli pojavi n '''
+#          i = 1
+#          while i <= len(tab_st):    # potujemo po vseh indeksih tabele
+#              if tab_st[i] == n:          # primerjamo ali je i-ti elt. enak n
+#                  mesta.append([i])         # če pridemo do tega mesta, indeks dodamo k novi tabeli
+#              i = i + 1
+#          return mesta                   # vrne nam tabelo indeksov
+# 
+# naj bi vrnila tabelo vseh mest, na katerih se v tabeli števil pojavi
+# število `n`. Mesta štejemo od 0 dalje! Na primer:
+# 
+#       >>> tabMest(12,[2, 5, 12, 3, 5, 3, 12, 8, 12])
+#       [2, 6, 8]
+# 
+# Žal ne dela prav. Ima sintaktične in semantične napake. Popravi jo!
+# =============================================================================
+def tabMest(n, tab_st):
+   '''indeksi, kje se v tabeli pojavi n '''
+   i = 0
+   mesta = []
+   while i < len(tab_st):    # potujemo po vseh indeksih tabele
+      if tab_st[i] == n:          # primerjamo ali je i-ti elt. enak n
+          mesta.append(i)         # če pridemo do tega mesta, indeks dodamo k novi tabeli
+      i = i + 1
+   return mesta                   # vrne nam tabelo indeksov
+# =====================================================================@017386=
+# 5. podnaloga
+# Funkcija `kolikoEnic(tab_celih)` naj vrne tabelo dolžine 10, kjer na mestu 
+# `i` povemo, koliko je v tabeli `tab_celih` števil, ki imajo kot enice 
+# vrednost `i`.
+# Na primer:
+# 
+#       >>> kolikoEnic([1432, 32155, 12, 351, 12353, 1255, 2313, 12, 8, 112])
+#       [0, 1, 4, 2, 0, 2, 0, 0, 1, 0]
+# 
+# saj v tabeli števil ni nobenega števila, ki bi imelo na mestu enic 0, je
+# eno število (namreč 351), ki ima na mestu enic 1, 4 števila
+# (1432, 12, 12 in 112), ki imajo na mestu enic 2 ....
+# =============================================================================
+def kolikoEnic(tab_celih):
+    '''Funkcija bo vrnila seznam, ki bo povedal kolikokrat se stevila
+    pojavijo na mestih enic, pri dani vrednosti (to je indeks). Torej,
+    ce je indeks = 0, bo preveril kolikokrat se pojavi stevilo 0
+    na mestu enic, za vsak element tabele.'''
+    i1 = 0 # glavni stevec
+    i2 = 0 # sekundarni stevec
+    stevec = 0
+    seznam = [] * 10
+    while i1 < len(tab_celih):
+        
+        while i2 < len(tab_celih):
+            if tab_celih[i2] % 10 == i1:
+                stevec += 1
+            i2 += 1
+        seznam.append(stevec)
+        stevec = 0
+        i2 = 0
+        i1 += 1
+    return seznam
 
 
 
@@ -616,64 +663,74 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM3OH0:1gOf29:d4H_nAq5z0pAkbe34ri7egYVp-A'
-        try:
-            Check.equal('zmnozi_brez_0([2, 3, 2, -1, 0, 2, 0, -1, 4])', 96) and \
-                Check.equal('zmnozi_brez_0([12, 0, 12])', 144) and \
-                Check.equal('zmnozi_brez_0([2])', 2) and \
-                Check.equal('zmnozi_brez_0([0, 0, 0, 3])', 3) and \
-                Check.equal('zmnozi_brez_0([1, 0, 0, 0, 2])', 2) and \
-                Check.equal('zmnozi_brez_0([-1, -2, 0, 0, 0])', 2) and \
-                Check.equal('zmnozi_brez_0([-1, -1, -45])', -45)
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM3OX0:1gOf29:jq7MmErDwQ4T90pu2E-1nS0gl6o'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4Mn0:1gOgYT:t9jeWVm9eyShbPI8CEgZrfbyKh8'
         try:
             odg = Check.current_part['solution']
-            if 'return 0' not in odg:
-                Check.error('Znotraj zanke mora biti stavek return 0, mar ne?')
-            else:
-                Check.equal('zmnoziHitreje([2, 3, 2, -1, 2, -1, 4])', 96) and \
-                    Check.equal('zmnoziHitreje([12, 12])', 144) and \
-                    Check.equal('zmnoziHitreje([2])', 2) and \
-                    Check.equal('zmnoziHitreje([3])', 3) and \
-                    Check.equal('zmnoziHitreje([1, 2])', 2) and \
-                    Check.equal('zmnoziHitreje([-1, -2])', 2) and \
-                    Check.equal('zmnoziHitreje([2, 3, 2, -1, 0, 2, 0, -1, 4])', 0) and \
-                    Check.equal('zmnoziHitreje([12, 0, 12])', 0) and \
-                    Check.equal('zmnoziHitreje([2])', 2) and \
-                    Check.equal('zmnoziHitreje([0, 0, 0, 3])', 0) and \
-                    Check.equal('zmnoziHitreje([1, 0, 0, 0, 2])', 0) and \
-                    Check.equal('zmnoziHitreje([-1, -2, 0, 0, 0])', 0) and \
-                    Check.equal('zmnoziHitreje([-1, -1, -45])', -45)
+            k1 = "'''"
+            k2 = '"""'
+            if k1 not in odg and k2 not in odg:
+                Check.error("Kaj pa dokumentacijski komentar?")
+            
+            Check.equal("""prestej(5,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", 2)
+            Check.equal("""prestej(2,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", 1)
+            Check.equal("""prestej(12,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", 3)
+            Check.equal("""prestej(4,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", 0)
+            Check.equal("""prestej(2,[2, 2, 2, 2, 2, 2])""", 6)
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4MH0:1gOf29:pbk0QNiqaabivrq8dDwm2zcb7mQ'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4M30:1gOgYT:O2VgFAx9mixBdF7pWm0XRFpmyJY'
         try:
-            Check.equal('lacni_mol(["", "Očarljivi skupinski samomor", "Prikupna struparka", "", "", "Tuleči mlinar", "Srečni človek"])', 3)
-            Check.equal('lacni_mol([""])', 1)
-            Check.equal('lacni_mol([])', 0)
-            Check.equal('lacni_mol(["Očarljivi skupinski samomor", "Prikupna struparka", "Tuleči mlinar", "Srečni človek"])', 0)
+            if "'''" not in Check.current_part['solution'] and '"""' not in Check.current_part['solution']:
+                Check.error("Kaj pa dokumentacijski komentar?")
+            Check.equal("""prestejSode([2, 5, 12, 3, 5, 3, 12, 8, 12])""", 5) and \
+                Check.equal("""prestejSode([2, 52, 12, 32, 52, 32, 12, 8, 12])""", 9) and \
+                Check.equal("""prestejSode([21, 51, 121, 31, 51, 33, 127, 89, 125])""", 0) and \
+                Check.equal("""prestejSode([])""", 0) and \
+                Check.equal("""prestejSode([1])""", 0) and \
+                Check.equal("""prestejSode([-13])""", 0) and \
+                Check.equal("""prestejSode([-2, -2, 2, 2, 2, 2])""", 6) and \
+                Check.equal("""prestejSode([-21, -22, -21, 21, 23, -1111211111])""", 1)
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4MX0:1gOf29:oFC6ih4CGjPZ6HtJ8MjG7-OYrLY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4NH0:1gOgYT:d7Bg8E3uMlloB7jGNmmxUPP6wyE'
         try:
-            Check.equal('preglej([2, 3, 2, -1, 0, 2, 0, -1, 4])', (2, 2, 5)) and \
-                Check.equal('preglej([])', (0, 0, 0)) and \
-                Check.equal('preglej([2])', (0, 0, 1)) and \
-                Check.equal('preglej([0, 0, 0])', (0, 3, 0)) and \
-                Check.equal('preglej([1, 0, 0, 0, 2])', (0, 3, 2)) and \
-                Check.equal('preglej([-1, -2, 0, 0, 0])', (2, 3, 0)) and \
-                Check.equal('preglej([-1, -2, -3, -1, -45])', (5, 0, 0))
+            Check.equal("""prestejSodeLihe([2, 5, 12, 3, 5, 3, 12, 8, 12])""", (5, 4))
+            Check.equal("""prestejSodeLihe([2, 52, 12, 32, 52, 32, 12, 8, 12])""", (9, 0))
+            Check.equal("""prestejSodeLihe([21, 51, 121, 31, 51, 33, 127, 89, 125])""", (0, 9))
+            Check.equal("""prestejSodeLihe([])""", (0, 0))
+            Check.equal("""prestejSodeLihe([-2, -2, 2, 2, 2, 2])""", (6, 0))
+            Check.equal("""prestejSodeLihe([-21, -22, -21, 21, 23, -1111211111])""", (1, 5))
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4NX0:1gOgYT:gu7Yzk5v6ZHY4erVaCBKdzwpXcY'
+        try:
+            Check.equal("""tabMest(5,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", [1, 4])
+            Check.equal("""tabMest(12,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", [2, 6, 8])
+            Check.equal("""tabMest(4,[2, 5, 12, 3, 5, 3, 12, 8, 12])""", [])
+            Check.equal("""tabMest(4,[4, 4, 4, 4])""", [0, 1, 2, 3])
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM4Nn0:1gOgYT:yTQFcd7BtD_LhQ7gjT6NsV_lEn4'
+        try:
+            Check.equal("""kolikoEnic([2, 5, 12, 1, 3, 5, 3, 12, 8, 12])""", [0, 1, 4, 2, 0, 2, 0, 0, 1, 0])
+            Check.equal("""kolikoEnic([1432, 32155, 12, 351, 12353, 1255, 2313, 12, 8, 112])""", [0, 1, 4, 2, 0, 2, 0, 0, 1, 0])
+            Check.equal("""kolikoEnic([])""", [0] * 10)
+            Check.equal("""kolikoEnic([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])""", [1] * 10)
+            Check.equal("""kolikoEnic([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])""", [2] * 10)
+            Check.equal("""kolikoEnic([-1, -2, -3, 4, 5, -6, 7, 8, 9, -10, 1, 2, 3, -4, 5, 6, 7, 8, 9, 10])""", [2] * 10)
+            Check.equal("""kolikoEnic([13132, 1315, 131234212, 24243, -5, -1, 3, -12, -8, 12])""", [0, 1, 4, 2, 0, 2, 0, 0, 1, 0])
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
