@@ -11,7 +11,8 @@
 # =============================================================================
 import random
 def dvakratZapored():
-    
+    ''' Funkcija bo vrnila stevilo metov, ko dvakrat zapored vrzemo stevilo 6.
+    Trojica: Jakob Mencin, Peter Kac, Gasper Kovacic'''
     st_metov = 0
     prejsnji_met = 0
     while True:
@@ -29,6 +30,8 @@ def dvakratZapored():
 # =============================================================================
 
 def verjetnostDveh6(n):
+    ''' Funkcija bo vrnila povprecno stevilo poskusov da vržemo dvakrat zapored stevilo 6
+    Trojica: Jakob Mencin, Peter Kac, Gasper Kovacic'''
     x = 0
     i = n
     while i != 0:

@@ -28,8 +28,13 @@ def ploscinaVal(n):
     tocke_pod = 0
     
     while vse_toc != 0:
-        x = random.random(0,math.pi)
+        x = math.pi * random.random()
         y = random.random()
+        vse_toc -= 1
+        if y <= math.sin(x):
+            tocke_pod += 1
+    plosc = (tocke_pod / n) * math.pi
+    return plosc
         
         
     
