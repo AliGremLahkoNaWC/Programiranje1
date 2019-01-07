@@ -1,44 +1,152 @@
 # =============================================================================
-# Ploščina pod valom
+# Malica
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
-# 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Srednje šole po Sloveniji si prizadevajo, da bi njihovi dijaki jedli čim bolj 
+# zdravo malico. Ravnatelj ene od srednjih šol je vaš dobri prijatelj. Rad bi, 
+# da mu napišete program, s katerim bo lahko analiziral jedilnike, saj si želi, 
+# da bi bili njegovi dijaki zdravi in srečni.
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# 
+#        primer_jedilnika = [
+#            'svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič',
+#            'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek',
+#            'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon' ]
+# =====================================================================@017485=
+# 1. podnaloga
+# Jedilnik opišemo s tabelo nizov, kot vidite na primeru. Vsak zaporedni 
+# element tabele ustreza enemu od zaporednih dni. Jedilnik se periodično 
+# ponavlja. Če je dolžina jedilnika $n$, bodo dijaki $(n+1)$-ti dan spet jedli 
+# tisto, kar je na prvem mestu na jedilniku. Ravnatelj je opazil, da so 
+# nekatere stvari na jedilniku napisane po večkrat. Rad bi, da napišete 
+# funkcijo `brez_ponovitev(jedi)`, ki sestavi novo tabelo, tako da se bo vsak 
+# element pojavil samo enkrat.
+# Zgled:
+# 
+#     >>> brez_ponovitev(primer_jedilnika)
+#     ['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'sirov burek']
+# 
+# Elementi naj se v novi tabeli pojavijo v takem vrstnem redu, kot njihove prve 
+# ponovitve v originalni tabeli `jedi`.
 # =============================================================================
-
-import random
-import math
-
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
+def brez_ponovitev(jedi):
+    '''funkcija vrne tabelo unikatnih jedi na voljo.'''
+    nov_jedilnik = []
     
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
+    for x in jedi:
+        if x in nov_jedilnik:
+            pass
+        else:
+            nov_jedilnik.append(x)
+    return nov_jedilnik
+# =====================================================================@017486=
+# 2. podnaloga
+# Ravnatelj je sicer ugotovil, da se jedi ponavljajo. Če pa je od dneva, ko je
+# bila neka jed nazadnje na jedilniku, minilo dovolj časa, ni s tem nič narobe.
+# Napišite funkcijo `kdaj_prej(jedilnik)`, ki dobi nek jedilnik in vrne enako
+# dolgo tabelo, kjer je za vsak dan število, ki pove koliko dni je minilo od
+# takrat, ko je bila jed nazadnje na jedilniku. Upoštevajte, da je jedilnik
+# periodičen, torej jedilnik `['burek', 'jogurt', 'burek']` je v 5 dneh
+# `['burek', 'jogurt', 'burek', 'burek', 'jogurt']` v 10 pa `['burek', 
+# 'jogurt', 'burek', 'burek', 'jogurt', 'burek', 'burek', 'jogurt', 'burek', 
+# 'burek']`.
+# Primera (za vsebino tabele `primer_jedilnika` glej zgoraj):
+# 
+#     >>> kdaj_prej(['burek', 'jogurt', 'burek'])
+#     [1, 3, 2]
+#     >>> kdaj_prej(primer_jedilnika)
+#     [7, 2, 5, 3, 2, 10, 5, 3, 2, 1]
+# =============================================================================
+def kdaj_prej(jedilnik):
+#    tabela = []
+#    invertiran_jedilnik = jedilnik[::-1]
+#    stevec = 1
+#    i = 0
+#    for x in jedilnik:
+#        if invertiran_jedilnik[i] == x:
+#            tabela.append(stevec)
+#            i = 0
+#            stevec = 1 + jedilnik.index(x)
+#        else:
+#            stevec += 1
+#            i += 1
+#        
+#    return tabela
+    tabela = []
+    i = -1
+    f = 1
     
-
+    for x in range(len(jedilnik)):
+        f = 1
+        i = -1 + x
+        while True:
+            if jedilnik[x] == jedilnik[i]:
+                
+                tabela.append(f)
+                break
+            else:
+                i -= 1
+                f += 1
+        
+    return tabela    
+# =====================================================================@017487=
+# 3. podnaloga
+# Ravnatelj je definiral pojma _raznolikost_ in _kakovost_. (Opomba: Ravnatelj 
+# je študiral matematiko in jo svoje čase tudi poučeval.) _Raznolikost_ je 
+# število različnih jedi na jedilniku. _Kakovost_ pa je povprečje kvadratov 
+# vrednosti elementov tabele, ki ga vrne funkcija `kdaj_prej(l)`. Sestavite 
+# funkcijo `raznolikost_in_kakovost(jedilnik)`, ki vrne par števil in sicer 
+# raznolikost in kakovost jedilnika. 
+# Primer:
+# 
+#     >>> raznolikost_in_kakovost(['burek', 'burek', 'jogurt'])
+#     (2, 4.666666666666667)
+#     >>> raznolikost_in_kakovost(primer_jedilnika)
+#     (4, 23.0)
+# =============================================================================
+def raznolikost_in_kakovost(jedilnik):
+    
+    
+    kakovost = kdaj_prej(jedilnik)
+    raznolikost = brez_ponovitev(jedilnik)
+    
+    for x in range(len(kakovost)):
+        kakovost[x] = int(kakovost[x] * kakovost[x])
+    
+    return (len(raznolikost), (sum(kakovost)/len(kakovost)))
+    
+# =====================================================================@017488=
+# 4. podnaloga
+# Ravnatelj je v zbornici zbral različne predloge jedilnikov in jih združil v 
+# eno samo tabelo. Sestavite funkcijo `naj_jedilnik(jedilniki)`, ki izmed vseh 
+# teh jedilnikov v tabeli `jedilniki` izbere in vrne najboljšega. Bolši je 
+# tisti jedilnik, ki je bolj raznolik. Med jedilniki z enako raznolikostjo je 
+# boljši tisti, ki je kakovostnejši. Predpostavite, da imate vsaj en jedilnik 
+# in da v podatkih ne bo dveh enako dobrih jedilnikov.
+# Primera (za vsebino tabele `primer_jedilnika` glej zgoraj)::
+# 
+#     >>> naj_jedilnik([['burek', 'jogurt'], ['pomaranča', 'pomaranča']])
+#     ['burek', 'jogurt']
+#     
+#     >>> naj_jedilnik([['burek', 'jogurt'], primer_jedilnika])
+#     ['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič',
+#     'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek',
+#     'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon']
+# =============================================================================
+def naj_jedilnik(jedilniki):
+    '''funkcija vrne najboljsi jedilnik.'''
+    
+    tabela = []
+    for x in jedilniki:
+        tabela.append(raznolikost_in_kakovost(x))
+    #[(1, 1.0), (2, 4.666666666666667)]
+    
+                
+            
+    
+    
+    
+    
+        
 
 
 
@@ -561,16 +669,76 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4NX0:1ga0Oz:52xcLFBP31-5cbVQUXcF1wS3RXg'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            test_data = [
+                ("brez_ponovitev(['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek', 'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon'])",
+                 ['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'sirov burek']),
+                ("brez_ponovitev(['svinjski zrezek v omaki', 'zelenjavna rižota', 'puranji zrezek v gobovi omaki', 'sojini polpeti', 'sojini polpeti', 'puranji zrezek v gobovi omaki', 'zelenjavna rižota', 'svinjski zrezek v omaki'])",
+                 ['svinjski zrezek v omaki', 'zelenjavna rižota', 'puranji zrezek v gobovi omaki', 'sojini polpeti']),
+                ("brez_ponovitev(['burek'])",
+                 ['burek']),
+                ("brez_ponovitev(['burek', 'burek', 'burek', 'burek', 'burek', 'burek', 'burek', 'burek'])",
+                 ['burek']),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4Nn0:1ga0Oz:VLg8kW5YSesSZMeN0qNrYaxWgA8'
+        try:
+            test_data = [
+                ("kdaj_prej(['A', 'B'])", [2, 2]),
+                ("kdaj_prej(['burek', 'jogurt', 'burek'])", [1, 3, 2]),
+                ("kdaj_prej(['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek', 'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon'])",
+                 [7, 2, 5, 3, 2, 10, 5, 3, 2, 1]),
+                ("kdaj_prej(['svinjski zrezek v omaki', 'zelenjavna rižota', 'puranji zrezek v gobovi omaki', 'sojini polpeti', 'sojini polpeti', 'puranji zrezek v gobovi omaki', 'zelenjavna rižota', 'svinjski zrezek v omaki'])",
+                 [1, 3, 5, 7, 1, 3, 5, 7]),
+                ("kdaj_prej(['burek'])",
+                 [1]),
+                ("kdaj_prej(['burek', 'burek', 'burek', 'burek', 'burek', 'burek', 'burek', 'burek'])",
+                 [1, 1, 1, 1, 1, 1, 1, 1]),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4N30:1ga0Oz:M5KmRPQvwEuwqvf31cPFV8K09d4'
+        try:
+            test_data = [
+                ("raznolikost_in_kakovost(['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek', 'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon'])", (4, 23.0)),
+                ("raznolikost_in_kakovost(['svinjski zrezek v omaki', 'zelenjavna rižota', 'puranji zrezek v gobovi omaki', 'sojini polpeti', 'sojini polpeti', 'puranji zrezek v gobovi omaki', 'zelenjavna rižota', 'svinjski zrezek v omaki'])", (4, 21.0)),
+                ("raznolikost_in_kakovost(['burek'])", (1, 1.0)),
+                ("raznolikost_in_kakovost(['burek', 'burek', 'burek', 'burek', 'burek', 'burek', 'burek', 'burek'])", (1, 1.0)),
+                ("raznolikost_in_kakovost(['burek', 'burek', 'jogurt'])", (2, 4.666666666666667)),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4OH0:1ga0Oz:38eQpeY2iGtpoFrqDNU8cSglows'
+        try:
+            test_data = [
+                ("naj_jedilnik([['burek'], ['burek', 'burek', 'jogurt']])", ['burek', 'burek', 'jogurt']),
+                ("naj_jedilnik([['burek', 'jogurt'], ['pomaranča', 'pomaranča']])", ['burek', 'jogurt']),
+                ("naj_jedilnik([['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek', 'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon'], ['svinjski zrezek v omaki', 'zelenjavna rižota', 'puranji zrezek v gobovi omaki', 'sojini polpeti', 'sojini polpeti', 'puranji zrezek v gobovi omaki', 'zelenjavna rižota', 'svinjski zrezek v omaki']])",
+                 ['svinjski zrezek v omaki', 'sirov kanelon', 'ocvrt oslič', 'svinjski zrezek v omaki', 'ocvrt oslič', 'sirov burek', 'sirov kanelon', 'ocvrt oslič', 'sirov kanelon', 'sirov kanelon']),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

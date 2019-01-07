@@ -21,7 +21,7 @@ import math
 
 def priblizekPi(st_tock):
     '''
-    Funkcija bo izračunala približek vrednosti Pi, po metodi MC.
+    Funkcija bo izračunala približek vrednosti Pi, po metodi MC. Trojica: Jakob Mencin, Gašper Kovacic, Peter Kac
     '''
     tocke_krog = 0
     st_t = st_tock

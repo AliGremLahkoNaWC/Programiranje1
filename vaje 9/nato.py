@@ -1,43 +1,133 @@
 # =============================================================================
-# Ploščina pod valom
+# NATO
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
-# 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Za prenos kritičnih informacij in za zmanjšanje napak pri prenosu je
+# mednarodna organizacija za civilno letalstvo (ang. _International Civil
+# Aviation Organization - ICAO_) uvedla mednarodno abecedo za radio-telefonsko
+# črkovanje.
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# To pomeni, da je vsaki izmed 26 črk angleške abecede priredila
+# besedo, ki se začne s to črko: alfa, bravo, charlie, delta, echo, foxtrot,
+# golf, hotel, india, juliett, kilo, lima, mike, november, oscar, papa,
+# quebec, romeo, sierra, tango, uniform, victor, whiskey, x-ray, yankee, zulu.
+# 
+# Kasneje so to [abecedo](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)
+# prevzele NATO in nekatere druge organizacije.
+# =====================================================================@017535=
+# 1. podnaloga
+# Sestavite funkcijo `crkujNATO(besedilo)`, ki vrne niz, v katerem je 
+# vsaka mala črka iz niza `besedilo` zamenjana z ustrezno besedo iz zgornje
+# abecede. Če znak ni mala tiskana črka, naj ostane nespremenjen. Med vsako
+# besedo oz. nespremenjenim znakom naj bo presledek. Na koncu niza naj ne
+# bo presledka.
+# 
+# Za pretvorbo uporabite naslednjo tabelo:
+# 
+#     ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf',
+#      'hotel', 'india', 'juliett', 'kilo', 'lima', 'mike', 'november',
+#      'oscar', 'papa', 'quebec', 'romeo', 'sierra', 'tango', 'uniform',
+#      'victor', 'whiskey', 'x-ray', 'yankee', 'zulu']
+# 
+# Na primer:
+# 
+#     >>> crkujNATO('test')
+#     tango echo sierra tango 
+#     >>> crkujNATO('star sem 18 let.')
+#     sierra tango alpha romeo   sierra echo mike   1 8   lima echo tango .
+# =============================================================================
+def crkujNATO(besedilo):
+    '''funkcija bo zamenjala crke v besedilu z njej ekvivalentnem pomenu v aviatorski abecedi.'''
+    nato = ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf',
+         'hotel', 'india', 'juliett', 'kilo', 'lima', 'mike', 'november',
+         'oscar', 'papa', 'quebec', 'romeo', 'sierra', 'tango', 'uniform',
+         'victor', 'whiskey', 'x-ray', 'yankee', 'zulu']
+    
+    niz = ''
+    st = 0
+    for znak in besedilo:
+        if znak.isalpha() and znak.istitle():
+            niz = niz + ' ' + znak
+        elif znak.isalpha():
+            for x in range(len(nato)):
+                if znak == nato[x][0]:
+                    niz = niz + ' ' + nato[x]
+                    break
+
+        
+        else:
+            niz = niz + ' ' + znak
+    return niz[1:]
+            
+# =====================================================================@017536=
+# 2. podnaloga
+# Sestavite funkcijo `razberiNATO(nizNATO)`, ki sprejme niz `nizNATO` črkovan
+# po NATO standardu in ga pretvori v navadno besedilo. Vsaka črka (torej
+# beseda) je v `nizNATO` ločena z enim presledkom.
+# 
+# Predpostavi, da v besedilu ni presledkov in da je besedilo zagotovo pravilno
+# črkovano! 
+# Na primer:
+# 
+#     >>> razberiNATO('tango echo sierra tango')
+#     test 
+#     >>> razberiNATO('sierra tango alpha romeo - sierra echo mike - 1 8 - lima echo tango .')
+#     star-sem-18-let.
+# =============================================================================
+def razberiNATO(nizNATO):
+    '''funkcija pocne obratno kot funkcija crkujNATO()'''
+    
+    abeceda = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p',
+               'q','r','s','t','u','v','w','x','y','z']
+    
+    tab = nizNATO.split(' ')
+    niz = ''
+    
+    for elt in tab:
+        if elt.isalpha() and elt.istitle():
+            niz = niz + elt
+        
+        elif elt.isalpha():
+            for x in abeceda:
+                if x == elt[0]:
+                    niz = niz + x
+        else:
+            niz = niz + elt
+    return niz 
+                    
+# =====================================================================@017537=
+# 3. podnaloga
+# Sestavite funkcijo `prav_razberiNATO(nizNATO)`, ki naredi isto kot funkcija
+# `razberiNATO`, le da tokrat dopuščamo presledke med besedami. 
+# Če je v originalnem besedilu bil presledek, se seveda v `nizNATO` pojavijo
+# trije zaporedni presledki.
+# Na primer:
+# 
+#     >>> prav_razberiNATO('tango echo sierra tango')
+#     test
+#     >>> prav_razberiNATO('sierra tango alpha romeo - sierra echo mike - 1 8 - lima echo tango .')
+#     star-sem-18-let.
+#     >>> prav_razberiNATO('sierra tango alpha romeo   sierra echo mike   1 8   lima echo tango .')
+#     star sem 18 let.
 # =============================================================================
 
-import random
-import math
+# =====================================================================@017538=
+# 4. podnaloga
+# Sestavite funkcijo `razberiNATODeLux(nizNATO)`, ki naredi isto kot funkcija
+# `prav_razberiNATO`, le da tokrat dopuščamo, da je besedilo napačno črkovano.
+# Če je besedilo napačno črkovano, naj funkcija vrne niz `NAPAKA!`
+# 
+# Na primer:
+# 
+#     >>> razberiNATODeLux('tango echo sierra tango')
+#     test
+#     >>> razberiNATODeLux('tangice echo sierra tango')
+#     NAPAKA!
+#     >>> razberiNATODeLux('sierra tango alpha romeo - sierra echo mike - 1 8 - lima echo tango .')
+#     star-sem-18-let.
+# =============================================================================
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
+
 
 
 
@@ -561,16 +651,83 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUzNX0:1gdHLJ:7wJPJY81nqbhX8HfUMMJfvKZWHU'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            tests = [
+                ("crkujNATO('test')", "tango echo sierra tango"),
+                ("crkujNATO('Test')", "T echo sierra tango"),
+                ("crkujNATO('star sem 18 let.')", "sierra tango alpha romeo   sierra echo mike   1 8   lima echo tango .")
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUzNn0:1gdHLJ:3DSwct-YUE3TVsifaLrRLwNGqbY'
+        try:
+            tests = [
+                ("razberiNATO('tango echo sierra tango')", "test"),
+                ("razberiNATO('tango echo sierra tango india 2 0 1 8')", "testi2018"),
+                ("razberiNATO('T echo sierra tango')", "Test"),
+                ("razberiNATO('')", ""),
+                ("razberiNATO('K O N E C')", "KONEC"),
+                ("razberiNATO('kilo oscar november echo charlie')", "konec"),
+                ("razberiNATO('sierra tango alpha romeo - sierra echo mike - 1 8 - lima echo tango .')", "star-sem-18-let.")
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUzN30:1gdHLJ:2-zoWwEuttu9BhrfkiG5YDlVzRY'
+        try:
+            tests = [
+                ("prav_razberiNATO('tango echo sierra tango')", "test"),
+                ("prav_razberiNATO('tango echo sierra tango')", "test"),
+                ("prav_razberiNATO('tango   echo   sierra   tango')", "t e s t"),
+                ("prav_razberiNATO('tango echo sierra tango india 2 0 1 8')", "testi2018"),
+                ("prav_razberiNATO('T echo sierra tango')", "Test"),
+                ("prav_razberiNATO('')", ""),
+                ("prav_razberiNATO('K O N E C')", "KONEC"),
+                ("prav_razberiNATO('K   O   N   E   C')", "K O N E C"),
+                ("prav_razberiNATO('kilo oscar november echo charlie')", "konec"),
+                ("prav_razberiNATO('sierra tango alpha romeo - sierra echo mike - 1 8 - lima echo tango .')", "star-sem-18-let."),
+                ("prav_razberiNATO('sierra tango alpha romeo   sierra echo mike   1 8   lima echo tango .')", "star sem 18 let.")
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUzOH0:1gdHLJ:NYVsUucwc5f5Y5cpKqX7as5hiO4'
+        try:
+            tests = [
+                ("razberiNATODeLux('tango echo sierra tango')", "test"),
+                ("razberiNATODeLux('tango echo sierra tangice')", "NAPAKA!"),
+                ("razberiNATODeLux('tango echo sierra tango india 2 0 1 8')", "testi2018"),
+                ("razberiNATODeLux('T echo sierra tango')", "Test"),
+                ("razberiNATODeLux('')", ""),
+                ("razberiNATODeLux('K O N E C')", "KONEC"),
+                ("razberiNATODeLux('kilo oscar november echo charlie')", "konec"),
+                ("razberiNATODeLux('kilo oscar november echo charle')", "NAPAKA!"),
+                ("razberiNATODeLux('sierra tango alpha romeo - sierra echo mike - 1 8 - lima echo tango .')", "star-sem-18-let.")
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

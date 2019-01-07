@@ -1,43 +1,87 @@
 # =============================================================================
-# Ploščina pod valom
-#
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Hammingova razdalja
+# =====================================================================@017542=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Naj bosta $a$ in $b$ niza dolžine $n$, sestavljena iz samih $'1'$ in $'0'$
+# (recimo jima binarna niza). Hammingova razdalja med binarnima nizoma $a$ in$
+# b$ je število pozicij v katerih se razlikujeta.
+# Sestavite funkcijo `hammingova_razdalja(a, b)`, ki vrne Hammingovo razdaljo
+# med `a` in `b`. Če niza nista enakih dožin, naj funkcija vrne `False`.
+# Na primer:
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+#     >>> hammingova_razdalja('00100', '10000')
+#     2
+#     >>> hammingova_razdalja('11100', '00011')
+#     5
+#     >>> hammingova_razdalja('11100000', '00011')
+#     False
+# =============================================================================
+def hammingova_razdalja(a,b):
+    '''funkcija vrne hammingovo razdaljo danih nizov, če jo je možno izračunati.'''
+    stevec = 0
+    if len(a) != len(b):
+        return False
+    for x in range(len(a)):
+        if a[x] != b[x]:
+            stevec += 1
+    
+    return stevec
+# =====================================================================@017543=
+# 2. podnaloga
+# Recimo, da imamo tri binarne nize $a$, $b$, $c$ dolžine $n$. Mediana nizov
+# $a$, $b$, $c$ je binarni niz dolžine $n$, katerega $i$-ta črka je tista črka,
+# ki predstavlja večino med $i$-timi črkami nizov $a$, $b$, $c$.
+# Sestavite funkcijo `mediana(a, b, c)`, ki vrne mediano nizov `a`, `b` in `c`.
+# Na primer:
+# 
+#     >>> mediana('0000', '1100', '1010')
+#     '1000'
+#     >>> mediana('10101', '11010','00011')
+#     '10011'
+# =============================================================================
+def mediana(a,b,c):
+    '''funkcija vrne binarni niz sestavljen iz znakov, ki so prevalentni
+    na danem indeksu nizov.'''
+    st_1 = ''
+    niz = ''
+    for x in range(len(a)):
+        st_1 = a[x]
+        if a[x] == b[x] or a[x] == c[x]:
+            niz = niz + a[x]
+        else:
+            niz = niz + b[x]
+    return niz
+# =====================================================================@017544=
+# 3. podnaloga
+# Naj bo $S$ tabela različnih binarnih nizov dolžine $n$. Pravimo, da je
+# tabela medianska, če je za vsako trojico nizov iz $S$ tudi njihova mediana
+# v $S$. Sestavite funkcijo `je_medianska(S)`, ki vrne `True`, če je tabela `S
+# medianska in `False` v nasprotnem primeru.
+# Na primer:
+# 
+#     >>> je_medianska(['111','110','100','000'])
+#     True
+#     >>> je_medianska(['010', '100','001'])
+#     False
 # =============================================================================
 
-import random
-import math
+# =====================================================================@017545=
+# 4. podnaloga
+# Recimo, da opazite na majhnem seznamu binarnih nizov, da za poljubno trojico
+# nizov $a$, $b$, $c$ in njihovo mediano $m$ velja:
+# $d(a,m)=(1/2)*(d(a,b)+d(a,c)-d(b,c))$, kjer je $d(x,y)$ Hammingova razdalja
+# med $x$ in $y$. Radi bi imeli program, ki preveri, ali to velja na več
+# primerih. Sestavite funkcijo `ali_velja(S)`, ki prejme seznam `S` binarnih
+# nizov enake dolžine in preveri ali zgornja trditev velja za vsako trojico
+# nizov iz tega seznama.
+# Na primer:
+# 
+#     >>> ali_velja(['000','001','011', '111'])
+#     True
+# =============================================================================
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
+
 
 
 
@@ -561,16 +605,73 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0Mn0:1gdyyu:P0N3m-0nY-qDUN9x7pOOXPNhels'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            tests = [
+                ('hammingova_razdalja(\'00100\', \'10000\')', 2),
+                ('hammingova_razdalja(\'11100\', \'00011\')', 5),
+                ('hammingova_razdalja(\'11100000\', \'00011\')', False)
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+            
+            for i in range(10):
+                for j in range(10):
+                    Check.secret(hammingova_razdalja("0"+i*"1"+j*"0", "0"+j*"1"+i*"0"))
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0M30:1gdyyu:GpxerjNO6tIbLQnr2l7M0ba8MWM'
+        try:
+            tests = [
+                ('mediana(\'0000\', \'1100\', \'1010\')', '1000'),
+                ('mediana(\'10101\', \'11010\',\'00011\')', '10011')
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+            
+            primeri = ["000101", "010100", "010101", "000010", "010000"]
+            for x in primeri:
+                for y in primeri:
+                    for z in primeri:
+                        Check.secret(mediana(x, y, z))
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0NH0:1gdyyu:akUxuYriFMsYtxp2qi_VWX4You0'
+        try:
+            tests = [
+                ('je_medianska([\'111\',\'110\',\'100\',\'000\'])', True),
+                ('je_medianska([\'010\', \'100\',\'001\'])', False)
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+            
+            from itertools import combinations
+            
+            for combo in combinations(["0000", "0001", "0010", "0011", "0100", "0101",
+                                       "0110", "0111", "1000", "1001", "1010", "1011",
+                                       "1100", "1101", "1110", "1111"], 3):
+                Check.secret(je_medianska(combo))
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0NX0:1gdyyu:N3n9Ad6CipL-p7sjB4rRV5g4WSk'
+        try:
+            Check.equal('ali_velja([\'000\',\'001\',\'011\', \'111\'])', True)
+            Check.secret(ali_velja(['00', '10', '11']))
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

@@ -1,43 +1,76 @@
 # =============================================================================
-# Ploščina pod valom
-#
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Vsote podtabel
+# =====================================================================@017492=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Vsote peterk
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# Podana je tabela nenegativnih števil in naloga je poiskati največjo vsoto 
+# petih zaporednih števil v tej tabeli. Napiši funkcijo `vsota_peterk(tabela)`, 
+# ki prejme tabelo nenegativnih števil `tabela` in vrne največjo vsoto. Če je v 
+# tabeli manj kot 5 števil, vrni -1.
+# 
+# Primer (največja vsota je pri 3, 8, 9, 0, 4):
+# 
+#      >>> vsota_peterk([9, 1, 2, 3, 8, 9, 0, 4, 3, 7])
+#      24
+# =============================================================================
+def vsota_peterk(tabela):
+    
+    if len(tabela) < 5:
+        return -1
+    elif len(tabela) == 5:
+        return sum(tabela)
+    i = 0
+    vsota = 0
+    tabela1 = []
+    
+    while i < (len(tabela) - 4):
+        tabela1 = tabela1 + tabela[i:5+i]
+        if vsota < sum(tabela1):
+            vsota = sum(tabela1)
+        i += 1
+        tabela1 = []
+    return vsota
+# =====================================================================@017493=
+# 2. podnaloga
+# Sestavi funkcijo, ki za dano tabelo in naravno število `k` izračuna in vrne
+# tabelo vsot vseh strnjenih podtabel dolžine `k`.
+# 
+#      >>> vsote([1, 2, 3, 4], 2)
+#      [3, 5, 7]
+#      >>> vsote([2, 6, 3, 7, 5, 2, 3], 3)
+#      [11, 16, 15, 14, 10]
+#      >>> vsote([3, 5, 1], 1)
+#      [3, 5, 1]
+#      >>> vsote([3, 5, 1], 4)
+#      []
+# =============================================================================
+def vsote(tabela, k):
+    prazen_tab = []
+    vsota = 0
+    for x in range(len(tabela)-(k-1)):
+        vsota = sum(tabela[x:k+x])
+        prazen_tab.append(vsota)
+    return prazen_tab
+        
+# =====================================================================@017494=
+# 3. podnaloga
+# Razmisli, kako bi rešil nalogo, kjer moramo poiskati največjo vsoto
+# strnjenega podzaporedja, če je tabela zelo velika (> 100 000) in iščemo
+# največjo vsoto daljših (> 10 000) zaporedij števil. Napiši funkcijo
+# `max_vsota_nterk(tabela, n)`, kjer je podana tabela števil in število
+# zaporednih števil v zaporedju.
+# 
+# Če bi morali poiskati vsoto desettisočerk, bi moral na vsakem koraku sešteti
+# 10 000 števil, to bi storili skoraj milijonkrat. Vsega skupaj bi seštel deset
+# milijard števil, za kar bi potrebovali kar nekaj časa.
+# 
+# Pri preverjanju na sistemu Tomo - če odgovora ne dobiš v recimo 20 sekundah
+# - s `CTRL-C`prekini program, saj tvoja rešitev očitno ni dovolj hitra!
 # =============================================================================
 
-import random
-import math
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
 
 
 
@@ -561,16 +594,64 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5Mn0:1gam7d:LD9cYCAaGCfw_JK7J57MuAdUnPc'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            test_data = [
+                ('vsota_peterk([9, 1, 2, 3, 8, 9, 0, 4, 3, 7])', 24),
+                ('vsota_peterk([5, 6, 3, 2, 5, 1, 6, 1, 3, 2, 2])', 21),
+                ('vsota_peterk([1, 2, 3, 4, 5])', 15),
+                ('vsota_peterk([1, 2, 3, 4, 5, 0])', 15),
+                ('vsota_peterk([1, 2, 3, 4, 5, 6])', 20),
+                ('vsota_peterk([1, 2, 3, 4])', -1),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5M30:1gam7d:YcUIgeQo2p3yjCjwQZ0Ic2T2yac'
+        try:
+            test_data = [
+                ('vsote([2, 6, 3, 7, 5, 2, 3], 3)', [11, 16, 15, 14, 10]),
+                ('vsote([1, 2, 3, 4], 2)', [3, 5, 7]),
+                ('vsote([3, 5, 1], 1)', [3, 5, 1]),
+                ('vsote([3, 5, 1], 3)', [9]),
+                ('vsote([3, 5, 1], 4)', []),
+                ('vsote([2, 6, 3, 7, 5, 2, 3], 6)', [25,26]),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5NH0:1gam7d:pGOjnpkbmHe7uKU3VaAE7SQWC20'
+        try:
+            test_data = [
+                ('max_vsota_nterk([9, 1, 2, 3, 1, 1, 1, 1, 1, 1, 0, 8, 9, 0, 4, 3, 7], 5)', 24),
+                ('max_vsota_nterk([3, 3, 4, 9, 1, 2, 3, 8, 9, 0, 4, 3, 7], 5)', 24),
+                ('max_vsota_nterk([9, 1, 2, 3, 8, 9, 0, 4, 3, 7], 1)', 9),
+                ('max_vsota_nterk([1, 2, 3, 4, 5], 1)', 5),
+                ('max_vsota_nterk([1, 2, 3, 4, 5, 4, 3, 2, 1], 5)', 19),
+                ('max_vsota_nterk([9, 1, 2, 3, 8, 9, 0, 4, 3, 7], 5)', 24),
+                ('max_vsota_nterk([5, 6, 3, 2, 5, 1, 6, 1, 3, 2, 2],5)', 21),
+                ('max_vsota_nterk([1, 2, 3, 4, 5],5)', 15),
+                ('max_vsota_nterk([1, 2, 3, 4, 5, 0],5)', 15),
+                ('max_vsota_nterk([1, 2, 3, 4, 5, 6],5)', 20)
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+            
+            sez = []
+            for i in range(10**6):
+                sez.append(1)
+            Check.equal("max_vsota_nterk("+str(sez)+",10000)", 10000)
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

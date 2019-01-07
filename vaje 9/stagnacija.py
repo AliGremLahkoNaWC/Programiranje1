@@ -1,43 +1,67 @@
 # =============================================================================
-# Ploščina pod valom
-#
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Stagnacija
+# =====================================================================@017550=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Jure se je odločil, da se bo udeležil kolesarskega maratona, zato je pričel
+# z dvomesečnim treningom. Treniral je vsak dan natanko eno uro in si dnevno
+# število prevoženih kilometrov zapisoval v enodimenzionalno tabelo realnih
+# števil. Pri tem je Jure opazil, da se njegova kondicija v glavnem izboljšuje,
+# saj lahko skoraj vsak dan prevozi nekoliko več kilometrov. Kljub vsem
+# prizadevanjem pa trening ni vedno pokazal želenih rezultatov, saj zaradi
+# utrujenosti mišic Jure ni uspel vedno povečati prevožene razdalje.
+# Pomagaj Juretu napisati funkcijo `stagnacija`, s pomočjo katere bo lahko
+# analiziral svoje nazadovanje (stagnacijo) v svojem treningu. Funkcija
+# `stagnacija` naj vrne število dni stagnacije.
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# Primeri:
+# 
+#     stagnacija([26.5,27.1,27.3,27.9,26.8,26.5,27.2])
+#     stagnacija([27.5,27.9,27.2,27.6,28.3,27.7,27.7,28.4,28.5])
+# 
+# Prva funkcija vrne vrednost `2`, ker je prišlo `5.` in `6.` dan do
+# nazadovanja.
+# Druga funkcija vrne vrednost `3`, ker je prišlo`3.`, `6.` in `7.` dan do
+# nazadovanja.
 # =============================================================================
+def stagnacija(tabela):
+    '''funkcija vrne število dni, ko je jure nazadoval pri treningu.'''
+    prim = 0
+    st_stag = 0
+    for x in tabela:
+        if x <= prim:
+            st_stag += 1
+            prim = x
 
-import random
-import math
+        else:
+            prim = x
+    return st_stag
+# =====================================================================@017551=
+# 2. podnaloga
+# Miha sledi Juretovemu postopku. Pri pogovorih ob pivu pravi, da
+# njemu vedno uspe, da nikoli ne nazaduje, torej da vedno naslednji dan prevoz
+# vsaj toliko kot prejšnji dan.
+# Jure mu ne verjame in zato se dogovorita, da bo Miha naslednji dan prinesel
+# zapiske svojega treninga.
+# 
+# Miha je seveda s pomočjo tvojega programa iz prejšnje naloge ugotovil, da
+# se je prejšnji dan preveč bahal in da dejansko tudi on določeno dni nazaduje.
+# Zato se odloči, da bo malo "popravil" svoj dnevnik.
+# Pomagaj mu, in sestavi funkcijo `popravki(razdalje)`, ki na podlagi tabele
+# razdalj vrne novo tabelo (z istimi podatki), a v takem vrstnem redu, 
+# da bi funkcija `stagnacija` na tej popravljeni tabeli vrnila 0!
+# 
+# Primeri:
+# 
+#     >>>popravki([26.5,27.1,27.3,27.9,26.8,26.5,27.2])
+#     [26.5, 26.5, 26.8, 27.1, 27.2, 27.3, 27.9]
+#     >>>popravki([27.5,27.9,27.2,27.6,28.3,27.7,27.7,28.4,28.5])
+#     [27.2, 27.5, 27.6, 27.7, 27.7, 27.9, 28.3, 28.4, 28.5]
+# =============================================================================
+def popravki(tabela):
+    '''funkcija uredi dano tabelo od najmanjšega do največjega elementa.'''
+    return sorted(tabela)
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
 
 
 
@@ -561,16 +585,37 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU1MH0:1gdGuu:9U03dKpdqZuAWLMnHHad_UVYFxQ'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            tests = [
+                ('stagnacija([26.5,27.1,27.3,27.9,26.8,26.5,27.2])', 2),
+                ('stagnacija([27.5,27.9,27.2,27.6,28.3,27.7,27.7,28.4,28.5])', 3),
+                ('stagnacija([25.5,25.5])', 1),
+                ('stagnacija([23.5,22.9])', 1),
+                ('stagnacija([27.5,27.9,28.2,29.6,29.8,30.4,30.7])', 0)
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU1MX0:1gdGuu:49IU7cm5cc3fYYZPAjk7SRMF498'
+        try:
+            tests = [
+                ('popravki([26.5,27.1,27.3,27.9,26.8,26.5,27.2])', [26.5, 26.5, 26.8, 27.1, 27.2, 27.3, 27.9]),
+                ('popravki([27.5,27.9,27.2,27.6,28.3,27.7,27.7,28.4,28.5])', [27.2, 27.5, 27.6, 27.7, 27.7, 27.9, 28.3, 28.4, 28.5]),
+                ('popravki([25.5,25.5])', [25.5,25.5]),
+                ('popravki([23.5,22.9])', [22.9,23.5]),
+                ('popravki([27.5,27.9,28.2,29.6,29.8,30.4,30.7])', [27.5,27.9,28.2,29.6,29.8,30.4,30.7])
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

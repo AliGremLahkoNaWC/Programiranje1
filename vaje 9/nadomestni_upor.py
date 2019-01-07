@@ -1,43 +1,155 @@
 # =============================================================================
-# Ploščina pod valom
+# Nadomestni upor
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Kot je dobro znano iz elektrotehnike, nadomestni upor dveh zaporedno
+# vezanih upornikov izračunamo po formuli $R = R_1 + R_2$, nadomestni
+# upor dveh vzporedno vezanih upornikov pa je $1/R = 1/R_1 + 1/R_2$.
+# =====================================================================@017514=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Napišite funkcijo `nadomestni_upor(r1, r2, tipV)`, ki kot argumenta dobi
+# dve števili `r1` in `r2` (tj. upor obeh upornikov) in tip vezave `tipV`,
+# ki je bodisi znak `'V'` bodisi znak `'Z'`. Funkcija naj vrne nadomestni
+# upor vezja.
+# Pozor: nekateri uporniki so vezani kratkostično in imajo upor 0.
+# (Upor dveh vzporedno vezanih upornikov, od katerih ima vsaj en upor 0, je 0.)
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+#     >>> nadomestni_upor(3, 5, 'Z')
+#     8
+#     >>> nadomestni_upor(3, 0, 'V')
+#     0
+#     >>> nadomestni_upor(2, 5, 'V')
+#     1.875
+# =============================================================================
+def nadomestni_upor(r1, r2, tipV):
+    
+    
+    if tipV == 'Z':
+        return r1+r2
+    elif tipV == 'V':
+        if r1 == 0 or r2 == 0:
+            return 0
+        else:
+            return 1/((1/r1)+(1/r2))
+    #1/R = 1/R_1 + 1/R_2$ vzpo
+    #R = R_1 + R_2 zap
+# =====================================================================@017515=
+# 2. podnaloga
+# Sestavite funkcijo `upor_vezja(niz)`, ki izračuna nadomestni upor vezja.
+# Vezje je podano kot niz v "RPN notaciji": operandoma (tj. vrednosti dveh
+# uporov) sledi operator (tj. način vezave, `'V'` ali `'Z'`).
+# 
+# Analizirajmo vezje `'3 4 1 Z Z 0 V 3 2 Z V'`: 
+# Niz `'4 1 Z'` tako pomeni, da sta zaporedno vezana upornika z upornostma
+# 4 in 1 (ki ju lahko nadomestimo z enim upornikom z upornostjo 5). Torej je
+# enako, če bi imeli `'3 5 Z Z 0 V 3 2 Z V'`. Upra 3 in 5 sta spoet zaporedno
+# vezana torej dobimo vezje `'8 0 V 3 2 Z V'`.
+# V tem novem vezju niz `'8 0 V'` pomeni, da sta vzporedno vezana upornika z
+# upornostma 8 in 0. Vzporedna vezava, ki vsebuje kratkostični upornik, je
+# kratkostična, zato je 0 nadomestni upor vezja `'8 0 V'`. Skratka, dobimo
+# vezje `'0 3 2 Z V'`.
+# Niz `'3 2 Z'` pomeni, da sta zaporedno vezana upornika z upornostima 3 in 2
+# (in torej z nadomestno upornostjo 5). Če upoštevamo še to, potem dobimo
+# vezje `'0 5 V'`, kar na koncu da rezultat 0.
+# 
+#     >>> upor_vezja('3 5 Z 0 V 3 2 Z V')
+#     0
+# 
+# Predpostavite, da v nizu `niz` nastopajo (poleg znakov `'V'`, `'Z'`
+# in `' '`) le nenegativna cela števila.
+# =============================================================================
+def upor_vezja(niz):
+    
+    prazen = ''
+    nov_niz = []
+    tab = []
+#*
+    for k in range(len(niz)):
+    
+        if niz[k] != ' ':
+            prazen = prazen + niz[k]
+        elif niz[k] == ' ':
+            nov_niz.append(prazen)
+            prazen = ''
+    
+    nov_niz.append(niz[-1])
+# niz.strip().split(' ') naredi enako kot zgornja zanka
+#*            
+    
+    while True:
+        
+        for x in range(len(nov_niz)):
+            
+            if x == len(nov_niz) -1:
+                return nadomestni_upor(float(nov_niz[x-2]), float(nov_niz[x-1]), nov_niz[x])
+            
+            if nov_niz[x] == 'Z':
+                prazen = str(nadomestni_upor(float(nov_niz[x-2]), float(nov_niz[x-1]), nov_niz[x]))
+                tab.append(prazen)
+                if nov_niz[x-3]:
+                    nov_niz = nov_niz[:x-2] + tab + nov_niz[x+1:]
+                    tab = []
+                    break
+                else:
+                    nov_niz = tab + nov_niz[x+1:]
+                    tab = []
+                    break
+            
+            elif nov_niz[x] == 'V':
+                if nov_niz[x-1] == '0' or nov_niz[x-2] == '0':
+                    prazen = '0'
+                    tab.append(prazen)
+                    if nov_niz[x-3]:
+                        nov_niz = nov_niz[:x-2] + tab + nov_niz[x+1:]
+                        tab = []
+                        break
+                    else:
+                        nov_niz = tab + nov_niz[x+1:]
+                        tab = []
+                        break
+                else:
+                    prazen = str(nadomestni_upor(float(nov_niz[x-2]), float(nov_niz[x-1]), nov_niz[x]))
+                    tab.append(prazen)
+                    if nov_niz[x-3]:
+                        nov_niz = nov_niz[:x-2] + tab + nov_niz[x+1:]
+                        tab = []
+                        break
+                    else:
+                        nov_niz = tab + nov_niz[x+1:]
+                        tab = []
+                        break
+
+    
+        
+# =====================================================================@017516=
+# 3. podnaloga
+# Napišite še funkcijo `sestavi_racun(niz)`, ki namesto da izračuna
+# nadomestni upor vezja sestavi račun, ki ga je potrebno izračunati,
+# da dobimo nadomestni upor vezja.
+# 
+#     >>> sestavi_racun('3 5 Z 0 V 3 2 Z V')
+#     '(1/(1/(3 + 5) + 1/0)^-1 + 1/(3 + 2))^-1'
+# 
+# _Namig_: Ali lahko nalogo rešite tako, da malenkost predelate rešitev
+# prejšnje naloge?
 # =============================================================================
 
-import random
-import math
+# =====================================================================@017517=
+# 4. podnaloga
+# Stari električarski mački si račun poenostavijo na sledeč način: če je
+# upor $R_a$ več kot 10-krat večji kot upor $R_b$, potem za nadomestni
+# upor zaporedne vezave upornikov $R_a$ in $R_b$ vzamejo kar $R_a$, kot
+# nadomestni upor vzporedne vezave pa kar upor $R_b$. Seveda pa pravilno
+# razumejo vezavo, če je kakšen upor enak 0.
+# 
+# Sestavite funkcijo `stari_macki(niz)`, ki bo nadomestni upor vezja
+# izračunala po "metodi starih mačkov".
+# 
+#     >>> stari_macki('2 30 Z 20 V 3 2 Z V')
+#     3.5294117647058822
+# =============================================================================
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
+
 
 
 
@@ -561,16 +673,72 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUxNH0:1gbBT5:Dijmn19pj-gAPuK_0iZigTI3diw'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            test_data = [
+                ("nadomestni_upor(3, 5, 'Z')", 8),
+                ("nadomestni_upor(0, 0, 'Z')", 0),
+                ("nadomestni_upor(3, 0, 'V')", 0),
+                ("nadomestni_upor(0, 0, 'V')", 0),
+                ("nadomestni_upor(0, 3, 'V')", 0),
+                ("nadomestni_upor(3, 5, 'V')", 1.875),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUxNX0:1gbBT5:wpW-8gkelIH2Fd6ltK2CIMzpFBs'
+        try:
+            test_data = [
+                ("upor_vezja('3 5 Z')", 8),
+                ("upor_vezja('3 5 1 1 2 2 Z Z Z Z Z')", 14),
+                ("upor_vezja('3 5 1 1 2 2 2 2 0 Z Z Z Z Z V V V')", 0.6081081081081081),
+                ("upor_vezja('0 3 5 1 1 2 2 2 2 0 Z Z Z Z Z V V V V')", 0),    
+                ("upor_vezja('3 5 Z 0 V')", 0),
+                ("upor_vezja('3 2 Z')", 5),
+                ("upor_vezja('3 5 Z 0 V 3 2 Z V')", 0),
+                ("upor_vezja('2 30 Z 20 V 3 2 Z V')", 3.555555555555555),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUxNn0:1gbBT5:s-X4I5ozkB3QgtxcuzbPFAqwxyU'
+        try:
+            test_data = [
+                ("sestavi_racun('3 5 Z')", '(3 + 5)'),
+                ("sestavi_racun('3 5 Z 0 V')", '(1/(3 + 5) + 1/0)^-1'),
+                ("sestavi_racun('3 2 Z')", '(3 + 2)'),
+                ("sestavi_racun('3 5 Z 0 V 3 2 Z V')", '(1/(1/(3 + 5) + 1/0)^-1 + 1/(3 + 2))^-1'),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUxN30:1gbBT5:YaLsoZnlWM7-QzRaVwiQpNRku4E'
+        try:
+            test_data = [
+                ("stari_macki('3 5 Z')", 8),
+                ("stari_macki('3 5 Z 0 V')", 0),
+                ("stari_macki('3 2 Z')", 5),
+                ("stari_macki('3 5 Z 0 V 3 2 Z V')", 0),
+                ("stari_macki('2 30 Z 20 V 3 2 Z V')", 3.5294117647058822),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

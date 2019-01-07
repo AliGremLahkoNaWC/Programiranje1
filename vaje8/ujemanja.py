@@ -1,43 +1,131 @@
 # =============================================================================
-# Ploščina pod valom
-#
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Ujemanja
+# =====================================================================@017481=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Sestavite funkcijo `zacetek(a, b)`, ki bo za niza `a` in `b` preštela,
+# v koliko začetnih znakih se ujemata.
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# Niza nimata nujno enakega začetka, lahko se delno ujemata na začetku,
+# lahko se en niz v celoti pojavi na začetku drugega, ali pa sta niza
+# celo enaka. Ni potrebno obravnavati vsakega od teh primerov posebej,
+# samo pazite, da bo funkcija delala pravilno za vse primere. 
+# 
+#     >>> zacetek('matematika', 'fizika')
+#     0
+#     >>> zacetek('matematika', 'matija')
+#     3
+#     >>> zacetek('oder', 'oderuh')
+#     4
+#     >>> zacetek('izpit', 'izpit')
+#     5
+# 
+# Pri rešitvi **obvezno** uporabite zanko `while`, ne pa `for`.
 # =============================================================================
-
-import random
-import math
-
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
+def zacetek(a,b):
+    '''funkcija šteje v kolikih znakih se niza ujemata'''
+    i = 0
+    dol_niza = 0
+    stevec_enakih_znakov = 0
+    if len(a) > len(b):
+        dol_niza = len(b)
+    else:
+        dol_niza = len(a)
     
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
+    while i < dol_niza:
+        if a[i] != b[i]:
+            return stevec_enakih_znakov
+        elif a[i] == b[i]:
+            stevec_enakih_znakov += 1
+        i += 1
     
+    return stevec_enakih_znakov
+
+# =====================================================================@017482=
+# 2. podnaloga
+# Sestavite funkcijo `zacetek_for(a, b)`, ki bo za niza `a` in `b` preštela,
+# v koliko začetnih znakih se ujemata.
+# 
+# Tokrat v rešitvi uporabite zanko `for` in ne zanke `while`.
+# =============================================================================
+def zacetek_for(a, b):
+    '''funkcija steje v katerih zacetnih znakih se niza ujemata.'''
+#    daljsi_niz = ''
+#    krajsi_niz = ''
+#    if len(a) > len(b):
+#        krajsi_niz = b
+#        daljsi_niz = a
+#    else:
+#        krajsi_niz = a
+#        daljsi_niz = b
+#    
+#    i = 0
+#    
+#    for znak in krajsi_niz:
+#        if znak != daljsi_niz[i]
+    dol_zina = 0
+    stevec = 0
+    if len(a) > len(b):
+        dol_zina = len(b)
+    else:
+        dol_zina = len(a)
+    for x in range(0, dol_zina):
+        if a[x] != b[x]:
+            return stevec
+        elif a[x] == b[x]:
+            stevec += 1
+    return stevec
+            
+# =====================================================================@017483=
+# 3. podnaloga
+# Napiši funkcijo `st_ujemanj(b1, b2)`, ki prejme dve besedi in vrne število
+# znakov, v katerih se besedi ujemata (znak mora biti na istem mestu
+# v obeh besedah).
+# 
+# Primeri:
+# 
+#     >>> st_ujemanj("ROKA", "ROKAV")
+#     4
+#     >>> st_ujemanj("CELINKE", "POLOVINKE")
+#     1
+# =============================================================================
+def st_ujemanj(b1, b2):
+    '''funkcija vrne stevilo znakov v katerih se besedi ujemata. znaki morajo biti na istem mestu(indeksu).'''
+    
+    najkrajsi = min(len(b1), len(b2))
+    stevec = 0
+    for x in range(najkrajsi):
+        if b1[x] == b2[x]:
+            stevec += 1
+    return stevec
+# =====================================================================@017484=
+# 4. podnaloga
+# Napiši funkcijo `ujeme(b1, b2)`, ki kot vhod prejme dve besedi `b1` in `b2` 
+# ter vrne novo besedo, ki vsebuje tiste znake, v katerih se besedi ujemata 
+# (imata na istem mestu isti znak), znaki na ostalih mestih pa so zamenjani s 
+# pikami. Če besedi nista enako dolgi, naj bo nova beseda tako dolga, 
+# kolikor je dolga krajša izmed obeh besed.
+# 
+# Primeri:
+# 
+#     >>> ujeme("ROKA", "REKE")
+#     'R.K.'
+#     >>> ujeme("ROKA", "ROKAV")
+#     'ROKA'
+# =============================================================================
+def ujeme(b1, b2):
+    '''funkcija stika skupaj znake ki se ujemajo, in vmes postavi piko, če se
+    znak na tistem indeksu ni ujemal.'''
+    najkrajsi = min(len(b1), len(b2))
+    prazen_niz = ''
+    for x in range(najkrajsi):
+        if b1[x] == b2[x]:
+            prazen_niz = prazen_niz + b1[x]
+        else:
+            prazen_niz = prazen_niz + '.'
+    return prazen_niz
+    
+
+
 
 
 
@@ -561,16 +649,101 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4MX0:1gZzcP:I-WaUYwqJHHuHMF3ycYi4wT2dz0'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            s = Check.current_part['solution']
+            if 'while' not in s:
+                Check.error('Obvezno uporabi zanko while.')
+            elif 'for' in s:
+                Check.error('Zanke for ne smeš uporabiti!')
+            elif not Check.equal("""zacetek('miha', 'meta')""", 1):
+                Check.error('Si morda primerjal vse znake? Ne le začetne?')
+            elif not Check.equal("""zacetek('oder', 'oderuh')""", 4):
+                Check.error('Preveri, kaj se zgodi, če je en niz v celoti vsebovan na začetku drugega.')
+            elif not Check.equal("""zacetek('izpit', 'izpit')""", 5):
+                Check.error('Kaj se zgodi, če sta niza enako dolga?')
+            elif not Check.equal("""zacetek('abc', '')""", 0):
+                Check.error('Ne pozabi na prazne nize.')
+            
+            try:
+                Check.equal("""zacetek('fizika', 'matematika')""", 0)
+            except:
+                Check.error('Če sta niza različno dolga, je potrebno preveriti največ toliko parov, kot je dolžina krajšega niza.')
+            try:
+                Check.equal("""zacetek('matematika', 'fizika')""", 0)
+            except:
+                Check.error('Če sta niza različno dolga, je potrebno preveriti največ toliko parov, kot je dolžina krajšega niza.')
+            
+            Check.equal("""zacetek('matija', 'matematika')""", 3) and \
+                Check.equal("""zacetek('oder', 'oderuh')""", 4) and \
+                Check.equal("""zacetek('oderuh', 'oder')""", 4) and \
+                Check.equal("""zacetek('x', 'x')""", 1) and \
+                Check.equal("""zacetek('x', 'y')""", 0) and \
+                Check.equal("""zacetek('', 'abc')""", 0) and \
+                Check.equal("""zacetek('', '')""", 0)
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4Mn0:1gZzcP:iE93oX8N0pUACNekzaNd_X7SWZE'
+        try:
+            s = Check.current_part['solution']
+            if 'while' in s:
+                Check.error('Zanke while ne smeš uporabiti.')
+            elif 'for' not in s:
+                Check.error('Uporabi zanko for.')
+            elif not Check.equal("""zacetek_for('miha', 'meta')""", 1):
+                Check.error('Si morda primerjal vse znake? Ne le začetne?')
+            elif not Check.equal("""zacetek_for('oder', 'oderuh')""", 4):
+                Check.error('Preveri, kaj se zgodi, če je en niz v celoti vsebovan na začetku drugega.')
+            elif not Check.equal("""zacetek_for('izpit', 'izpit')""", 5):
+                Check.error('Kaj se zgodi, če sta niza enako dolga?')
+            elif not Check.equal("""zacetek_for('abc', '')""", 0):
+                Check.error('Ne pozabi na prazne nize.')
+            
+            try:
+                Check.equal("""zacetek_for('fizika', 'matematika')""", 0)
+            except:
+                Check.error('Če sta niza različno dolga, je potrebno preveriti največ toliko parov, kot je dolžina krajšega niza.')
+            try:
+                Check.equal("""zacetek_for('matematika', 'fizika')""", 0)
+            except:
+                Check.error('Če sta niza različno dolga, je potrebno preveriti največ toliko parov, kot je dolžina krajšega niza.')
+            
+            Check.equal("""zacetek_for('matija', 'matematika')""", 3) and \
+                Check.equal("""zacetek_for('oder', 'oderuh')""", 4) and \
+                Check.equal("""zacetek_for('oderuh', 'oder')""", 4) and \
+                Check.equal("""zacetek_for('x', 'x')""", 1) and \
+                Check.equal("""zacetek_for('x', 'y')""", 0) and \
+                Check.equal("""zacetek_for('', 'abc')""", 0) and \
+                Check.equal("""zacetek_for('', '')""", 0)
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4M30:1gZzcP:x-mHFRidHUbjvn6O-7I0sGA2qu8'
+        try:
+            Check.equal("""st_ujemanj("ROKA", "REKE")""", 2) and \
+                Check.equal("""st_ujemanj("ROKA", "ROKAV")""", 4) and \
+                Check.equal("""st_ujemanj("CELINKE", "POLOVINKE")""", 1) and \
+                Check.equal("""st_ujemanj("", "")""", 0) and \
+                Check.equal("""st_ujemanj("", "TEST")""", 0) and \
+                Check.equal("""st_ujemanj("TEST", "TEST")""", 4)
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4NH0:1gZzcP:H6QcgcXcBNnUEeVIzxpY-sGq9bw'
+        try:
+            Check.equal("""ujeme("ROKA", "REKE")""", 'R.K.') and \
+                Check.equal("""ujeme("ROKA", "ROKAV")""", 'ROKA') and \
+                Check.equal("""ujeme("ROKAV", "ROKA")""", 'ROKA') and \
+                Check.equal("""ujeme("CELINKE", "POLOVINKE")""", '..L....') and \
+                Check.equal("""ujeme("MATIJA", "MXTXJX")""", 'M.T.J.') and \
+                Check.equal("""ujeme("PIKAPOLONICA", "PIKAPOKA")""", 'PIKAPO..')
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

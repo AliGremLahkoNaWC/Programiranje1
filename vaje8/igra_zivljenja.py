@@ -1,43 +1,118 @@
 # =============================================================================
-# Ploščina pod valom
+# Igra življenja
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
-# 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Igro življenja si je izmislil britanski matematik 
+# [John H. Conway](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), gre 
+# pa takole: Imamo matriko, katere elementi sta logični vrednosti `True` in 
+# `False`. Vrednost `True` pomeni, da je celica živa, vrednost `False` pa 
+# pomeni, da je celica mrtva. Celice (razen robnih) imajo po 8 sosedov: dva 
+# horizontalna, dve vertikalna in štiri diagonalne. Čas teče v diskretnih 
+# korakih. S trenutnim stanjem sveta je tudi stanje sveta v naslednjem koraku 
+# natanko določeno in sicer po naslednjih pravilih:
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# - Živa celica, ki ima manj kot 2 živa soseda, umre (zaradi osamljenosti).
+# - Živa celica, ki ima 2 ali 3 žive sosede, preživi.
+# - Živa celica, ki ima več kot 3 žive sosede, umre (zaradi prenaseljenosti).
+# - Mrtva celica, ki ima natanko 3 žive sosede, oživi (reprodukcija).
+# 
+# Primeri matrik, ki predstavljajo stanje sveta:
+# 
+#     svet_1 = [
+#         [False, False, False, False, False, False],
+#         [False, False, False, True, False, False],
+#         [False, True, False, False, True, False],
+#         [False, True, False, False, True, False],
+#         [False, False, True, False, False, False],
+#         [False, False, False, False, False, False]
+#     ]
+# 
+#     svet_2 = [
+#         [False, False, False, False],
+#         [False, True, True, False],
+#         [False, True, True, False],
+#         [False, False, False, False]
+#     ]
+# 
+# Tukaj si lahko 
+# [ogledate simulacijo](http://pmav.eu/stuff/javascript-game-of-life-v3.1.1/)
+# =====================================================================@017489=
+# 1. podnaloga
+# Napišite funkcijo `koliko_zivih(svet, i, j)`, ki v svetu `svet` prešteje in
+# vrne število živih sosedov celice v $i$-ti vrstici in $j$-tem stolpcu.
+# Zgled (naj bo `svet_1` matrika, kot je definirana zgoraj):
+# 
+#     >>> koliko_zivih(svet_1, 2, 0)
+#     2
+# 
+# _Opomba_: Kot je za Python običajno, se stolpci in vrstice začnejo številčiti
+# pri 0.
+# =============================================================================
+def koliko_zivih(svet, i, j):
+    
+    stevec_zivih = 0
+    
+    
+    
+#     svet_1 = [
+#         [False, False, False, False, False, False],
+#         [False, False, False, True, False, False],
+#         [False, True, False, False, True, False],
+#         [False, True, False, False, True, False],
+#         [False, False, True, False, False, False],
+#         [False, False, False, False, False, False]
+#     ]        
+# =====================================================================@017490=
+# 2. podnaloga
+# Napišite funkcijo `korak_igre(svet)`, ki sestavi in vrne matriko, ki 
+# predstavlja  novo stanje sveta. Štiri pravila, ki določajo novo stanje sveta, 
+# so opisana zgoraj.
+# 
+# Zgled (matrika `svet_1` naj bo enaka kot zgoraj):
+# 
+#     >>> korak_igre(svet_1)
+#     [[False, False, False, False, False, False],
+#      [False, False, False, False, False, False],
+#      [False, False, True, True, True, False],
+#      [False, True, True, True, False, False],
+#      [False, False, False, False, False, False],
+#      [False, False, False, False, False, False]]
 # =============================================================================
 
-import random
-import math
+# =====================================================================@017491=
+# 3. podnaloga
+# Napišite funkcijo `populacije_tekom_igre(svet, n)`, ki naredi `n` korakov
+# igre življenje in na vsakem koraku prešteje število živih celic. Ta števila
+# naj vrne v obliki seznama, ki ima $n + 1$ elementov – prvo število v seznamu
+# naj bo število živih celic v začetnem svetu. Zgled (matrika `svet_1` naj bo
+# enaka kot zgoraj):
+# 
+#     >>> populacije_tekom_igre(svet_1, 3)
+#     [6, 6, 6, 6]
+# 
+# Funkcijo bomo testirali še na naslednjih svetovih (poleg tistih dveh, ki sta 
+# podana zgoraj):
+# 
+#     svet_3 = [
+#         [False, False, False, False, False, False],
+#         [False, True, True, False, False, False],
+#         [False, True, True, False, False, False],
+#         [False, False, False, True, True, False],
+#         [False, False, False, True, True, False],
+#         [False, False, False, False, False, False]
+#     ]
+# 
+#     svet_4 = [
+#         [True, True, True],
+#         [True, True, True],
+#         [True, True, True]
+#     ]
+# 
+# _Nasvet_: Najprej napišite pomožno funkcijo, ki prešteje število živih celic 
+# v matriki.
+# =============================================================================
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
+
 
 
 
@@ -561,16 +636,96 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ4OX0:1gakcR:2lMmNKdsADBzwl1YpbrV8ao3oLw'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            svet_1 = [
+                [False, False, False, False, False, False],
+                [False, False, False, True, False, False],
+                [False, True, False, False, True, False],
+                [False, True, False, False, True, False],
+                [False, False, True, False, False, False],
+                [False, False, False, False, False, False]
+            ]
+            Check.equal('koliko_zivih(svet_1, 5, 5)', 0, env={'svet_1': svet_1})
+            Check.equal('koliko_zivih(svet_1, 2, 0)', 2, env={'svet_1': svet_1})
+            Check.equal('koliko_zivih(svet_1, 3, 1)', 2, env={'svet_1': svet_1})
+            Check.equal('koliko_zivih(svet_1, 3, 3)', 3, env={'svet_1': svet_1})
+            Check.equal('koliko_zivih(svet_1, 3, 4)', 1, env={'svet_1': svet_1})
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5MH0:1gakcR:rPRJa9Oblawy90DPjCZHkwl0R5k'
+        try:
+            svet_1 = [
+                [False, False, False, False, False, False],
+                [False, False, False, True, False, False],
+                [False, True, False, False, True, False],
+                [False, True, False, False, True, False],
+                [False, False, True, False, False, False],
+                [False, False, False, False, False, False]
+            ]
+            vse_ok = Check.equal('korak_igre(svet_1)', [
+                [False, False, False, False, False, False],
+                [False, False, False, False, False, False],
+                [False, False, True, True, True, False],
+                [False, True, True, True, False, False],
+                [False, False, False, False, False, False],
+                [False, False, False, False, False, False]], env={'svet_1': svet_1})
+            if vse_ok:
+                vse_ok = Check.equal('korak_igre(korak_igre(svet_1))', svet_1, env={'svet_1': svet_1})
+            svet_2 = [
+                [False, False, False, False],
+                [False, True, True, False],
+                [False, True, True, False],
+                [False, False, False, False]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal('korak_igre(svet_2)', svet_2, env={'svet_2': svet_2})
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5MX0:1gakcR:7vwQ9_X8_AQypuzcNC50Xb9UvYo'
+        try:
+            svet_1 = [
+                [False, False, False, False, False, False],
+                [False, False, False, True, False, False],
+                [False, True, False, False, True, False],
+                [False, True, False, False, True, False],
+                [False, False, True, False, False, False],
+                [False, False, False, False, False, False]
+            ]
+            vse_ok = Check.equal('populacije_tekom_igre(svet_1, 3)', [6, 6, 6, 6], env={'svet_1': svet_1})
+            svet_2 = [
+                [False, False, False, False],
+                [False, True, True, False],
+                [False, True, True, False],
+                [False, False, False, False]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal('populacije_tekom_igre(svet_2, 0)', [4], env={'svet_2': svet_2})
+            if vse_ok:
+                vse_ok = Check.equal('populacije_tekom_igre(svet_2, 5)', [4, 4, 4, 4, 4, 4], env={'svet_2': svet_2})
+            svet_3 = [
+                [False, False, False, False, False, False],
+                [False, True, True, False, False, False],
+                [False, True, True, False, False, False],
+                [False, False, False, True, True, False],
+                [False, False, False, True, True, False],
+                [False, False, False, False, False, False]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal('populacije_tekom_igre(svet_3, 5)', [8, 6, 8, 6, 8, 6], env={'svet_3': svet_3})
+            svet_4 = [
+                [True, True, True],
+                [True, True, True],
+                [True, True, True]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal('populacije_tekom_igre(svet_4, 5)', [9, 4, 0, 0, 0, 0], env={'svet_4': svet_4})
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

@@ -1,43 +1,91 @@
 # =============================================================================
-# Ploščina pod valom
+# Kolesarska dirka
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Gibanje kolesarja na dirki podamo s tabelo časov (v minutah), ki
+# povedo, koliko časa je kolesar porabil za posamezno etapo. Dolžina
+# tabele pove, koliko etap je kolesar prevozil.
+# =====================================================================@017546=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Napiši funkcijo `statistika(casi)`, ki vrne par števil: število etap,
+# ki jih je kolesar prevozil, in skupen čas.
+# =============================================================================
+def statistika(casi):
+    '''funkcija vrne skupen čas in število etap.'''
+    
+    return (len(casi),sum(casi))
+# =====================================================================@017547=
+# 2. podnaloga
+# V spremenljivki `dirka` je zapisana tabela tabel etapnih časov
+# kolesarjev. Napiši funkcijo `zmagovalec(dirka)`, ki vrne par: število
+# etap, in indeks zmagovalca. Pozor: nekateri kolesarji pred zaključkom
+# dirke odstopijo, zato ne prevozijo vseh etap.
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+#     >>> dirka([[2, 1], [1, 2, 3], [6, 3, 1]])
+#     (3, 1)
+# 
+# Prepdostavite lahko, da je dirko uspešno zaključil vsaj en tekmovalec
+# ter da na koncu rezultat ni bil izenačen.
+# =============================================================================
+def zmagovalec(dirka):
+    '''funkcija vrne stevilo etap ter indeks zmagovalca.'''
+    naj = []
+    naj_e = 0
+    naj_t = 100000000000000000
+    indeks = 0
+    mhm = [0]
+    mhm = statistika(mhm)
+    for x in dirka:
+        naj.append(statistika(x))
+    
+    for k in naj:
+        if k[0] > naj_e:
+            naj_e = k[0]
+            
+    for j in naj:
+        if j[0] != naj_e:
+            pass
+        elif j[1] < naj_t:
+            indeks = naj.index(j)
+            naj_t = j[1]
+            
+            
+    return (naj_e,indeks)
+    
+            
+            
+        
+# =====================================================================@017548=
+# 3. podnaloga
+# Dani sta dve (enako dolgi) tabeli časov po etapah. Funkcija
+# `primerjaj(prvi, drugi)` naj vrne trojico števil
+# `(hitrejsi_prvi, enako_hitra, hitrejsi_drugi)`, kjer
+# 
+# * število `hitrejsi_prvi` pove, v koliko etapah je bil hitrejši
+#   prvi tekmovalec,
+# * število `enako_hitra` pove, v koliko etapah sta bila oba tekmovalca
+#   enako hitra,
+# * število `hitrejsi_drugi` pove, v koliko etapah je bil hitrejši
+#   drugi tekmovalec.
+# 
+# Na primer:
+# 
+#     >>> primerjaj([3, 7, 4, 3], [5, 6, 3, 2])
+#     (1, 0, 3)
 # =============================================================================
 
-import random
-import math
+# =====================================================================@017549=
+# 4. podnaloga
+# Sestavite funkcijo `idealni_cas(dirka)`, ki za tabelo tabel časov
+# `dirka` pove, koliko časa bi za celotno dirko potreboval idealni kolesar,
+# torej tak, ki bi posamezno etapo prevozil tako hitro kot zmagovalec te
+# etape.
+# 
+#     >>> idealni_cas([[2, 1], [1, 2, 3], [6, 3, 1]])
+#     3
+# =============================================================================
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+
+
 
 
 
@@ -561,16 +609,70 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0Nn0:1gdI6V:PWzdSNi1UrFfyBFJNqCdwvqsOQE'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            tests = [
+                ("statistika([14, 9, 23, 11, 7, 15])", (6, 79)),
+                ("statistika([14, 9, 23])", (3, 46)),
+                ("statistika([])", (0, 0)),
+                ("statistika([11, 13, 5, 8])", (4, 37)),
+                ("statistika([])", (0, 0))
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0N30:1gdI6V:cFZhfdUX2KOvTe1xRYAteDzQ6nc'
+        try:
+            tests = [
+                ("zmagovalec([[2, 1], [1, 2, 3], [6, 3, 1]])", (3, 1)),
+                ("zmagovalec([[2, 1, 2], [1, 2, 3], [6, 3, 1]])", (3, 0)),
+                ("zmagovalec([[2, 1, 2], [1, 2, 3], [5], [6, 3, 1]])", (3, 0)),
+                ("zmagovalec([[2, 1, 9, 4], [1, 2, 8, 4], [5], [6, 3, 1, 4]])", (4, 3))
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0OH0:1gdI6V:OAxBm1kcz-AZa9aBHGtEQEpqvAU'
+        try:
+            tests = [
+                ("primerjaj([3, 7, 4, 3], [5, 6, 3, 2])", (1, 0, 3)),
+                ("primerjaj([3, 7, 5, 2, 7, 4, 4, 3], [4, 6, 3, 2, 6, 3, 5, 4])", (3, 1, 4)),
+                ("primerjaj([2, 3, 3, 3], [3, 3, 3, 3])", (1, 3, 0)),
+                ("primerjaj([3, 3, 3, 3], [2, 3, 3, 3])", (0, 3, 1)),
+                ("primerjaj([3, 3, 3, 3], [3, 3, 3, 3])", (0, 4, 0))
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzU0OX0:1gdI6V:x2pzkXL8C68W0wUVDl90ozvKdoA'
+        try:
+            tests = [
+                ("idealni_cas([[2, 1], [1, 2, 3], [6, 3, 1]])", 3),
+                ("idealni_cas([[2, 2], [1, 2, 3], [6, 3, 1]])", 4),
+                ("idealni_cas([[2, 1], [1, 2, 3], [6, 3, 1], [5, 4, 2]])", 3)
+            ]
+            
+            for test in tests:
+                if not Check.equal(*test):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

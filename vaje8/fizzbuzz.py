@@ -1,43 +1,78 @@
 # =============================================================================
-# Ploščina pod valom
+# FizzBuzz
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# [FizzBuzz](https://en.wikipedia.org/wiki/Fizz_buzz) je priljubljena otroška
+# igrica, ki se jo lahko igrajo vsi otroci, ki znajo deliti cela števila. 
+# Otroci se usedejo v krog in štejejo (začenši z 1), pri čemer številke glasno 
+# izgovarjajo. Če je število deljivo s 3, potem morajo (namesto številke) 
+# zaklicati ‘Fizz!’. Če je število deljivo s 5, morajo zaklicati ‘Buzz!’. Če pa 
+# je število deljivo s 3 in 5 hkrati, morajo zaklicati ‘Fizzbuzz!’.
+# =====================================================================@017506=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Sestavite funkcijo `fizzbuzz(n)`, ki kot argument dobi naravno število `n` in 
+# vrne tabelo števil od 1 do $n$, pri čemer naj:
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+# * večkratnike števila 3 zamenja z nizom `'Fizz'`,
+# * večkratnike števila 5 zamenja z nizom `'Buzz'`,
+# * večkratnike števila 15 pa zamenja z nizom `'FizzBuzz'`.
+# 
+# Primer:
+# 
+#        >>> fizzbuzz(16)
+#        [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8,
+#        'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz', 16]
 # =============================================================================
-
-import random
-import math
-
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
+def fizzbuzz(n):
     
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
+    tabela = []
+    for x in range(1, n + 1):
+        tabela.append(x)
     
+    for indeks in tabela:
+        if indeks % 15 == 0:
+                tabela[tabela.index(indeks)] = 'FizzBuzz'
+        elif indeks % 3 == 0:
+            tabela[tabela.index(indeks)] = 'Fizz'
+        elif indeks % 5 == 0:
+            tabela[tabela.index(indeks)] = 'Buzz'
+            
+    return tabela 
+# =====================================================================@017507=
+# 2. podnaloga
+# Sestavite še funkcijo `poisci_napake(besede)`, ki kot argument prejme
+#  tabelo `besede`. Ta tabela je FizzBuzz zaporedje, ki lahko vsebuje napake.
+# Funkcija naj vrne tabelo vseh indeksov tabele `besede`, kjer se pojavijo
+# napake. Elementi izhodne tabele naj bodo urejeni naraščajoče. Zgled:
+# 
+#     >>> poisci_napake([1, 2, 3, 'Fizz', 'Buzz', 7, 'Fizz', 8])
+#     [2, 3, 5, 6]
+# =============================================================================
+def poisci_napake(besede):
+    i = 0
+    tabela = []
+    for x in range(1, len(besede)+1):
+        if x % 3 == 0 and besede[i] != 'Fizz':
+            tabela.append(i)
+            i += 1
+        
+        elif x % 5 == 0 and besede[i] != 'Buzz':
+            tabela.append(i)
+            i += 1
+        
+        elif x % 15 == 0 and besede[i] != 'FizzBuzz':
+            tabela.append(i)
+            i += 1
+            
+        elif besede[i] != x:
+            tabela.append(i)
+            i += 1
+        else:
+            i += 1
+    return tabela
+        
+            
+
+
 
 
 
@@ -561,16 +596,43 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUwNn0:1gapuM:3s7cHtSdlPKPfpyPV08jfW2duuY'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            test_data = [
+                ("fizzbuzz(15)",
+                 [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz']),
+                ("fizzbuzz(1)",
+                 [1]),
+                ("fizzbuzz(5)",
+                 [1, 2, 'Fizz', 4, 'Buzz']),
+                ("fizzbuzz(50)",
+                 [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz', 16, 17, 'Fizz', 19, 'Buzz', 'Fizz', 22, 23, 'Fizz', 'Buzz', 26, 'Fizz', 28, 29, 'FizzBuzz', 31, 32, 'Fizz', 34, 'Buzz', 'Fizz', 37, 38, 'Fizz', 'Buzz', 41, 'Fizz', 43, 44, 'FizzBuzz', 46, 47, 'Fizz', 49, 'Buzz']),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUwN30:1gapuM:pX44YYGfbH6idhADONoNxjRTtW0'
+        try:
+            test_data = [
+                ("poisci_napake([1, 2, 3, 'Fizz', 'Buzz', 7, 'Fizz', 8])",
+                 [2, 3, 5, 6]),
+                ("poisci_napake([1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz'])",
+                 []),
+                ("poisci_napake(['Fizz', 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz'])",
+                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]),
+                ("poisci_napake([1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Buzz', 'Fizz', 11, 'Fizz', 13, 14, 'FizzBuzz', 16, 17, 18, 19, 'Buzz', 'Fizz', 22, 23, 'Fizz', 25, 26])",
+                 [8, 9, 17, 24]),
+                ("poisci_napake([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])",
+                 [2, 4, 5, 8, 9, 11, 14]),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])

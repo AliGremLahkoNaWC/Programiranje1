@@ -1,43 +1,156 @@
 # =============================================================================
-# Ploščina pod valom
+# Analiza besedila
 #
-# Z metodo Monte Carlo lahko računamo tudi ploščine. Pri tem gre v grobem za to, da
-# naključno izbiramo točke na nekem pravokotniku in štejemo, koliko točk je takih, 
-# da "spadajo" k ploščini. Če razmerje med "zadetki" in vsemi točkami
-# pomnožimo s ploščino pravokotnika, dobimo približek za ploščino območja.
-# =====================================================================@017345=
+# Pri tej nalogi bomo analizirali nize, ki predstavljajo pravilno slovensko 
+# oblikovane besede in stavke. Pri vseh podnaloge lahko predpostavite, da so 
+# vhodni nizi `s` dobro oblikovani, tj. ne vsebujejo dveh zaporednih presledkov 
+# oz. nepotrebnih presledkov ter prelomov vrstice na začetku ali na koncu.
+# =====================================================================@017495=
 # 1. podnaloga
-# Ploščino pod enim valom funkcije sinus (enaka je 2) lahko približno
-# izračunamo tudi tako, da naključno izbiramo točke na
-# pravokotniku [0, Pi] x [0, 1] in s Pi pomnožimo razmerje med točkami
-# pod valom in vsemi točkami.
+# Sestavite funkcijo `stevilo_besed(niz)`, ki v podanem nizu prešteje
+# število besed, pri čemer lahko predpostavite, da presledki stojijo
+# **natanko pred vsako** (razen prvo) besedo v nizu.
+# Primer:
 # 
-# Sestavi funkcijo `ploscinaVal(n)`, ki izračuna ploščino vala funkcije
-# `sin(x)` po opisani metodi. Število naključnih točk
-# funkcija dobi kot parameter.
+#     >>> stevilo_besed('Višje, hitreje, močneje!')
+#     3
+# =============================================================================
+def stevilo_besed(niz):
+    '''funkcija steje besede v nizu.'''
+    if niz == '':
+        return 0
+    besede = 1
+    for x in niz:
+        if x == ' ':
+            besede += 1
+    return besede
+# =====================================================================@017496=
+# 2. podnaloga
+# Sestavite funkcijo `koliko_samoglasnikov(niz)`, ki v podanem nizu prešteje 
+# število samoglasnikov. Primer:
+# 
+#     >>> koliko_samoglasnikov('pomaranča')
+#     4
+# =============================================================================
+def koliko_samoglasnikov(niz):
+    '''funkcija presteje stevilo samoglasnikov v nizu.'''
+    
+    samo = 'aeiouAEIOU'
+    stevilo = 0
+    for x in niz:
+        if x in samo:
+            stevilo += 1
+    return stevilo
+# =====================================================================@017497=
+# 3. podnaloga
+# V Pythonu vrstice večvrstičnega niza ločujemo z znakom `'\n'`. Sestavite 
+# funkcijo `vrstice(niz)`, ki sprejme večvrstični niz in vrne seznam, ki 
+# vsebuje vse vrstice tega niza (v enakem vrstnem redu).
+# Primer:
+# 
+#     >>> vrstice("Danes\n je lep\ndan.\n")
+#     ['Danes', ' je lep', 'dan.', '']
+# 
+# _Opomba_: Python obravnava niz `'\n'` kot en sam znak.
+# =============================================================================
+def vrstice(niz):
+    '''funkcija sestavi tabelo besed iz podanega niza. elemente loci,
+    ce je v nizu \n.'''
+    
+    prazen_niz = ''
+    tabela = []
+    
+    for x in niz:
+        
+        if x == '\n':
+            tabela.append(prazen_niz)
+            prazen_niz = ''
+        else:
+            prazen_niz = prazen_niz + x
+    tabela.append(prazen_niz)
+    return tabela
+# =====================================================================@017498=
+# 4. podnaloga
+# Haiku (japonsko 俳句) je japonska pesniška oblika iz treh verzov (vrstic), ki 
+# obsega sedemnajst zlogov. Prvi in tretji verz imata po pet zlogov, drugi 
+# sedem.
+# 
+# Na kulturnem natečaju TomoHaiku udeleženci oddajajo svoje izdelke na strežnik
+# Tomo. Napišite kontrolno funkcijo `je_haiku(niz)`, ki sprejme niz, ter vrne 
+# `True`, če niz ustreza pesniški obliki haiku, sicer pa vrne `False`.
+# 
+# Predpostavite lahko, da število samoglasnikov v neki besedi ustreza številu 
+# njenih zlogov, ter da niz ne vsebuje nepotrebnih začetnih oz. končnih praznih
+# vrstic. Vrstice so ločene z znakom za prelom vrstice `'\n'`.
+# Primer:
+# 
+#     >>> je_haiku('Skrit v svojem svetu,\ntemna otožnost neba,\ntvoj topli objem.')
+#     True
+#     >>> je_haiku('Riba,\nraca, rak,\nvinjak je grenak!')
+#     False
+# =============================================================================
+def je_haiku(niz):
+    '''funkcija ugotavlja ali je niz haiku.'''
+    
+    tabela = vrstice(niz)
+    if len(tabela) == 1:
+        return False
+    elif koliko_samoglasnikov(tabela[0]) == koliko_samoglasnikov(tabela[2]) and koliko_samoglasnikov(tabela[1]) == 7:
+        return True
+    else:
+        return False
+        
+# =====================================================================@017499=
+# 5. podnaloga
+# Sestavite funkcijo `podcrtaj(niz)`, ki za parameter dobi niz, v katerem so 
+# podnizi, ki bi morali biti izpisani podčrtano, označeni s podčrtajem na 
+# začetku in na koncu. Če je v nizu liho mnogo podčrtajev, si mislite, da je še 
+# eden na koncu. Funkcija naj vrne dvovrstični niz, kjer je v prvi vrstici 
+# izvorni niz toda brez podčrtajev, sledi znak za prelom vrstice, naslednjo 
+# vrstico pa sestavlja niz, sestavljen iz presledkov in minusov, pri čemer 
+# minusi ležijo pod tistimi deli besedila, ki morajo biti podčrtani.
+# Primer:
+# 
+#     >>> podcrtaj("Jaz _sem_ pa cajzelc!")
+#     'Jaz sem pa cajzelc!\n    ---            '
+# 
+# Predpostavite, da v nizu ni nobenega znaka `'\n'`.
 # =============================================================================
 
-import random
-import math
+# =====================================================================@017500=
+# 6. podnaloga
+# Sestavite funkcijo `stevilo_znakov(niz)`, ki v podanem nizu prešteje število
+# znakov, pri čemer se presledki ne upoštevajo. 
+# Primer:
+# 
+#     >>> stevilo_znakov('B     u!')
+#     3
+# =============================================================================
 
-def ploscinaVal(n):
-    '''
-    Funkcija izračuna ploščino sinusa po metodi MC.
-    '''
-    vse_toc = n
-    tocke_pod = 0
-    
-    while vse_toc != 0:
-        x = math.pi * random.random()
-        y = random.random()
-        vse_toc -= 1
-        if y <= math.sin(x):
-            tocke_pod += 1
-    plosc = (tocke_pod / n) * math.pi
-    return plosc
-        
-        
-    
+# =====================================================================@017501=
+# 7. podnaloga
+# [Sonet](https://sl.wikipedia.org/wiki/Sonet) je priljubljena pesniška oblika.
+# Sestavljen je iz štirih kitic, pri čemur med vsakima dvema kiticama avtor 
+# izpusti eno prazno vrstico. Prvi dve kitici sta štirivrstični — kvartini, 
+# drugi dve pa sta trivrstični — tercini.
+# 
+# V slovenskem sonetu je standardni verz italijanski (laški) ali jambski
+# enajsterec. To pomeni, da v vsaki vrstici nastopa natanko enajst zlogov.
+# 
+# Na kulturnem natečaju TomoSonet udeleženci oddajajo svoje izdelke na strežnik 
+# Tomo. Napiši kontrolno funkcijo `je_sonet(niz)`, ki sprejme niz, ter vrne 
+# `True`, če niz ustreza slovenskemu sonetu, in `False` sicer.
+# Primer:
+# 
+#     >>> je_sonet('Bolj slab\nsonet.\n\nZa umret!')
+#     False
+# 
+# _Namig_: V slovenskem jeziku število samoglasnikov v neki besedi ustreza
+# številu njenih zlogov. (Obstaja nekaj izjem, ki pa jih bomo zanemarili.)
+# =============================================================================
+
+
+
 
 
 
@@ -561,16 +674,116 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzM0NX0:1gM8QG:TvvSPbJQxnU4FmHd0wSCyZU62GY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5NX0:1gamY4:AJ5MD6FPOg-ULKxpo4sVb_bRw3Y'
         try:
-            random.seed(42)
-            Check.equal('ploscinaVal(100)', 2.0106192982974678)
-            Check.equal('ploscinaVal(1000)', 2.0420352248333655)
-            Check.equal('ploscinaVal(10000)', 1.9955396535602365)
-            Check.equal('ploscinaVal(100000)', 1.9983042550953956)
-            # Check.equal('ploscinaVal(1000000)', 2.001411290229796)
-            # Check.equal('ploscinaVal(2000000)', 1.9994446532286487)
-            # Check.equal('ploscinaVal(1000000)', 2.0001420867977457)
+            Check.equal('stevilo_besed("Višje, hitreje, močneje!")', 3)
+            Check.equal('stevilo_besed("Bu!")', 1)
+            Check.equal('stevilo_besed("Matej ima tri hruške.")', 4)
+            Check.equal('stevilo_besed("Eno ima za Alenko.")', 4)
+            Check.equal('stevilo_besed("")', 0)
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5Nn0:1gamY4:Bld5tHc6zNfFl-0T3sFhUL-2ZsM'
+        try:
+            test_data = [
+                ("koliko_samoglasnikov('Višje, hitreje, močneje')", 8),
+                ("koliko_samoglasnikov('Bu!')", 1),
+                ("koliko_samoglasnikov('krst')", 0),
+                ("koliko_samoglasnikov('Matej ima tri hruške.')", 7),
+                ("koliko_samoglasnikov('Eno ima za Alenko.')", 8),
+                ("koliko_samoglasnikov('pomaranča')", 4),
+                ("koliko_samoglasnikov('Tu je 7 samoglasnikov!')", 7),
+                ("koliko_samoglasnikov('Buci-buc!')", 3),
+                ("koliko_samoglasnikov('Mateja ima štiri hruške!')", 9),
+                ("koliko_samoglasnikov('Aaaaaaaa')", 8),
+                ("koliko_samoglasnikov('smrt')", 0),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5N30:1gamY4:xf_7Xf4BApTfJRC55vmbo1tkyzM'
+        try:
+            test_data = [
+                ('vrstice("Danes\\n je lep\\ndan.\\n")', ["Danes", " je lep", "dan.", ""]),
+                ('vrstice("Danes je lep dan.")', ["Danes je lep dan."]),
+                ('vrstice("\\nDanes je lep dan.\\n")', ["", "Danes je lep dan.", ""]),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5OH0:1gamY4:AwQS3QV_wgn5T5qWgTjcxjktLbw'
+        try:
+            Check.equal("je_haiku('Bu!')", False)
+            Check.equal("je_haiku('Srečna ljubezen\\nje kot svobodna ptica,\\nki je vesela.')", True)
+            Check.equal("je_haiku('Skrit v svojem svetu,\\ntemna otožnost neba,\\ntvoj topli objem.')", True)
+            Check.equal("je_haiku('Riba,\\nraca, rak,\\nvinjak je grenak!')", False)
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzQ5OX0:1gamY4:Yg7MIjmhw3AGf_o7XlHoB2GHvq8'
+        try:
+            test_data = [
+                ('podcrtaj("Jaz _sem_ pa cajzelc!")', 'Jaz sem pa cajzelc!\n    ---            '),
+                ('podcrtaj("_Podčrtajmo_ povedek!")', 'Podčrtajmo povedek!\n----------         '),
+                ('podcrtaj("Zdaj _pa_ predlog!")', 'Zdaj pa predlog!\n     --         '),
+                ('podcrtaj("_Zdaj pa vse!")', 'Zdaj pa vse!\n------------'),
+                ('podcrtaj("__")', '\n'),
+                ('podcrtaj("_a_")', 'a\n-'),
+                ('podcrtaj("Nič")', 'Nič\n   '),
+                ('podcrtaj("__AAA__")', 'AAA\n   '),
+                ('podcrtaj("A__A")', 'AA\n  '),
+                ('podcrtaj("_T__X_")', 'TX\n--'),
+                ('podcrtaj("__T__X_")', 'TX\n  '),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUwMH0:1gamY4:HwoLCHvaX9DVitMGGMyi_Y8FW3s'
+        try:
+            test_data = [
+                ("""stevilo_znakov('Višje, hitreje, močneje!')""", 22),
+                ("""stevilo_znakov('Bu!')""", 3),
+                ("""stevilo_znakov('Matej ima tri hruške!')""", 18),
+                ("""stevilo_znakov('Eno ima za Alenko.')""", 15),
+                ("""stevilo_znakov('   ')""", 0),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}",
+                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
+
+    if Check.part():
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxNzUwMX0:1gamY4:rqkCKv6b3K12qgvfBmsfejx5LV8'
+        try:
+            test_data = [
+                ("je_sonet(\"Poet tvoj nov Slovencam venec vije,\\n'z petnajst sonetov ti tako ga spleta,\\nde 'magistrale', pesem trikrat peta,\\nvseh drugih skupej veže harmonije.\\n\\nIz njega zvira, vanjga se spet zlije\\npo versti pesem vsacega soneta;\\nprihodnja v prednje koncu je začeta;\\nenak je pevec vencu poezije:\\n\\nvse misli zvirajo 'z ljubezni ene,\\nin kjer ponoči v spanji so zastale,\\nzbude se, ko spet zarja noč prežene.\\n\\nTi si življenja moj'ga magistrale,\\nglasil se 'z njega, ko ne bo več mene,\\nran mojih bo spomin in tvoje hvale.\")", True),
+                ("je_sonet(\"Bolj slab\\nsonet.\\n\\nZa umret!\")", False),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
