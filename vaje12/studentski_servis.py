@@ -1,111 +1,66 @@
 # =============================================================================
-# Kovanci v vrsti
-# =====================================================================@019419=
+# Študentski servis
+# =====================================================================@019428=
 # 1. podnaloga
-# Čestitam! V nagradni igri si bil izžreban za dobitnika nagrade. Kolikšna bo
-# nagrada, pa je odvisno od tvoje iznajdljivosti. Za nagrado si lahko izbereš
-# poljubne kovance iz podane vrste kovancev (ki so lahko vsi različni ali pa
-# tudi ne). Edini pogoj pri izbiranju je, da nikoli ne izbereš dveh
-# sosednjih kovancev. Da se boš prepričal, da si boš izbral največjo možno
-# nagrado, sestavi funkcijo `nagrada(kovanci)`, ki bo za dane kovance vrnila
-# največjo možno vsoto, ki jo lahko izbereš.
+# Po koncu poletnega izpitnega obdobja si ugotovil, da imaš premalo denarja
+# za potovanje, na katerega odhajaš čez slab mesec. Zato greš hitro pogledat
+# na študentski servis, kako bi v tem času lahko zaslužil čimveč denarja.
+# Denimo, da lahko delaš 22 dni.
+# Našel si štiri ponudbe za delo in sicer
+# * montaža, 6 dni, zaslužek: 300€
+# * razvoz, 10 dni, zaslužek: 440€
+# * anketiranje, 8 dni, zaslužek: 310€
+# * pomoč v kuhinji, 15 dni, zaslužek: 900€
+# Seveda želiš izbrati tista opravila, s katerimi boš v treh tednih zaslužil
+# čimveč.
+# Sestavi funkcijo `zasluzek(opravila, cas)`, ki bo, s pregledom vseh možnih
+# kombinacij izbire opravil, vrnila največji možni zaslužek v danem času.
+# Opravila so podana v tabeli `opravila`, ki jo sestavljajo pari
+# `(trajanje, zasluzek)`.
 # 
-#     >>> nagrada([5, 6, 4, 8, 1, 2, 1, 1])
-#     17
-#     >>> nagrada([2, 2, 2])
-#     4
-#     >>> nagrada([1, 3, 1])
-#     3
-#     >>> nagrada([1, 3, 1, 4, 6])
-#     9
-#     >>> nagrada([3, 2, 1, 4, 6])
-#     10
-#     >>> nagrada([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#     49
-#     >>> nagrada([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#     43
+#     >>>zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 22)
+#     1200
+# 
+# Namig: verjetno si lahko pomagaš tudi z rešitvijo naloge 0/1 tabela.
 # =============================================================================
-def nicle_enke(tab_bin):
-    '''funkcija pretvori tabelo kovancev v nicle in enke.'''
-    if tab_bin == list():
-        return list()
-    elif len(tab_bin) == 1:
-        return [1]
-        
-    prvo_mesto = [1,0] + nicle_enke(tab_bin[2:])
-    drugo_mesto =  [0] + nicle_enke(tab_bin[1:])
-    return prvo_mesto + drugo_mesto
-def nagrada(kovanci):
-    '''vrne najvecjo mozno vsoto iz kombinacij kovancev.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
-    
-    vsota_prvo = kovanci[0] + nagrada(kovanci[2:])
-    vsota_drugo = nagrada(kovanci[1:])
-    return max(vsota_prvo,vsota_drugo)
-# =====================================================================@019420=
+
+# =====================================================================@019429=
 # 2. podnaloga
-# Za izplačilo nagrade ni dovolj povedati, kakšno vsoto lahko dobiš, ampak s
-# katerimi kovanci prideš do te vsote. Sestavi funkcijo `kateri(kovanci)`, ki
-# vrne tabelo z izbranimi kovanci, urejeno v naraščajočem vrstnem redu.
+# Poznavanje največjega možnega zaslužka nam ne koristi, če ne vemo pri
+# kakšni izbiri opravil ga dosežemo. Sestavi funkcijo `katera(opravila, cas)`,
+# ki vrne tabelo enake dolžine kot tabela `opravila` in vsebuje enice na
+# indeksih, ki sovpadajo z izbranimi opravili, na ostalih indeksih pa ničle.
+# Nalogo reši s pregledom vseh možnih kombinacij izbire opravil.
 # 
-#     >>> kateri([5, 6, 4, 8, 1, 2, 1, 1])
-#     [1, 2, 6, 8]
+#     >>>katera([(6, 300), (10, 440), (8, 310), (15, 900)], 22)
+#     [1, 0, 0, 1]
 # =============================================================================
 
-def kateri(kovanci):
-    '''vrne izbrane kovance, za najvecji zasluzek.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
-    
-    
-
-
-    
-        
-# =====================================================================@019421=
+# =====================================================================@019430=
 # 3. podnaloga
-# Predsednik komisije za nagradno igro pa s funkcijo `kateri` ni najbolj
-# zadovoljen, saj mora sedaj, če želi ugotoviti znesek, poklicati
-# funkcijo `nagrada` ali pa sešteti rezultat funkcije `kateri`. Zato želi
-# funkcijo, ki vrne par - prva je maksimalna vrednost, druga vrednost pa tabela
-# kovancev.
+# Pregled vseh možnih kombinacij izbire opravil je zamuden postopek.
+# Na predavanjih smo zato sestavili družino rekurzivnih funkcij,
+# s katerimi lahko izračunamo največji možni zaslužek za poljubno število dni.
+# I-ta funkcija upošteva prvih i opravil na voljo.
 # 
-# A pozor! Nalogo reši "od začetka", torej pri rešitvi nikakor ne uporabi
-# funkciji `nagrada` in `kateri`.
+# Funkcije (rečemo jim tudi Bellmanove enačbe) so oblike
 # 
-#       >>> naj_vsota([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#       (43, [10, 8, 14, 4, 7])
-#       >>> naj_vsota([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#       (49, [10, 8, 14, 10, 7])
-#       >>> naj_vsota([3, 2, 1, 4, 6])
-#       (10, [3, 1, 6])
-#       >>> naj_vsota([1, 3, 1])
-#       (3, [3])
-#       >>> naj_vsota([2, 2, 2])
-#       (4, [2, 2])
+#   $$G_i(Č) = max( G_{i-1}(Č), zaslužek_i + G_{i-1}(Č - trajanje_i))$$
+# 
+# Sestavi funkcijo `zasluzek_bellman(opravila, cas)`, ki zgornjo nalogo reši
+# z rekurzivno bellmanovo enačbo.
+# 
+#     >>>zasluzek_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 22)
+#     1200
 # =============================================================================
 
-# =====================================================================@019422=
+# =====================================================================@019431=
 # 4. podnaloga
-# Blagajnik komisije za nagradno igro pa pravi, da je predsednik malo
-# čuden in si z njegovo funkcijo nima kaj pomagati. Želi bolj "vizualen" rezultat.
-# Kakšne, je razvidno iz primerov!
+# Tudi za zgornji postopek bi bilo smiselno, da bi vedeli, katera opravila
+# smo izbrali. 
 # 
-#       >>> naj_vsota_kako([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#       (43, [10, '_', 8, '_', 14, '_', 4, '_', 7])
-#       >>> naj_vsota_kako([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#       (49, [10, '_', 8, '_', 14, '_', 10, '_', '_', 7])
-#       >>> naj_vsota_kako([3, 2, 1, 4, 6])
-#       (10, [3, '_', 1, '_', 6])
-#       >>> naj_vsota_kako([1, 3, 1])
-#       (3, ['_', 3, '_'])
-#       >>> naj_vsota_kako([2, 2, 2])
-#       (4, [2, '_', 2])
+#     >>>katera_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 22)
+#     [1, 0, 0, 1]
 # =============================================================================
 
 
@@ -633,15 +588,14 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQxOX0:1glU0I:u5m5_EcPULfL3DxnuSMxiVrPoHs'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyOH0:1gmjcD:7EqwVMsv3czxswDwpG7ZqWhU0ec'
         try:
-            tests = [('''nagrada([5, 6, 4, 8, 1, 2, 1, 1])''', 17),
-                     ('''nagrada([2, 2, 2])''', 4),
-                     ('''nagrada([1, 3, 1])''', 3),
-                     ('''nagrada([1, 3, 1, 4, 6])''', 9),
-                     ('''nagrada([3, 2, 1, 4, 6])''', 10),
-                     ('''nagrada([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', 49),
-                     ('''nagrada([10, 2, 8, 16, 14, 10, 4, 5, 7])''', 43)]
+            tests = [('''zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 11)''', 440),
+                     ('''zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 5)''', 0),
+                     ('''zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 7)''', 300),
+                     ('''zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 22)''', 1200),
+                     ('''zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 21)''', 1200),
+                     ('''zasluzek([(6, 300), (10, 440), (8, 310), (15, 900)], 24)''', 1210)]
             
             for test in tests:
                 if not Check.equal(*test):
@@ -651,16 +605,14 @@ def _validate_current_file():
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMH0:1glU0I:6I3s1Wu0Yj8Xv5TGKWSN8dE0sN8'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyOX0:1gmjcD:KsB8DktK8FRQvCc1ZqQjtPPzZAs'
         try:
-            tests = [('''kateri([5, 6, 4, 8, 1, 2, 1, 1])''', [1, 2, 6, 8]),
-                     ('''kateri([2, 2, 2])''', [2, 2]),
-                     ('''kateri([1, 3, 1])''', [3]),
-                     ('''kateri([1, 3, 1, 4, 6])''', [3, 6]),
-                     ('''kateri([3, 2, 1, 4, 6])''', [1, 3, 6]),
-                     ('''kateri([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', [7, 8, 10, 10, 14])]
-                    # ('''kateri([10, 2, 8, 16, 14, 10, 4, 5, 7])''', [7, 10, 10, 16] ali
-                    # [4, 7, 8, 10, 14])]
+            tests = [('''katera([(6, 300), (10, 440), (8, 310), (15, 900)], 11)''', [0, 1, 0, 0]),
+                     ('''katera([(6, 300), (10, 440), (8, 310), (15, 900)], 5)''', [0, 0, 0, 0]),
+                     ('''katera([(6, 300), (10, 440), (8, 310), (15, 900)], 7)''', [1, 0, 0, 0]),
+                     ('''katera([(6, 300), (10, 440), (8, 310), (15, 900)], 22)''', [1, 0, 0, 1]),
+                     ('''katera([(6, 300), (10, 440), (8, 310), (15, 900)], 21)''', [1, 0, 0, 1]),
+                     ('''katera([(6, 300), (10, 440), (8, 310), (15, 900)], 24)''', [0, 0, 1, 1])]
             
             for test in tests:
                 if not Check.equal(*test):
@@ -670,14 +622,13 @@ def _validate_current_file():
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMX0:1glU0I:HkUd4Z5Ye9RCkIesNihp8RE-iOI'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQzMH0:1gmjcD:HdgOoopGWQfaSDDgTQS1Zgn1Pd8'
         try:
-            tests = [('''naj_vsota([5, 6, 4, 8, 1, 2, 1, 1])''', (17, [1, 2, 6, 8])),
-                     ('''naj_vsota([2, 2, 2])''', (4, [2, 2])),
-                     ('''naj_vsota([1, 3, 1])''', (3, [3])),
-                     ('''naj_vsota([1, 3, 1, 4, 6])''', (9, [3, 6])),
-                     ('''naj_vsota([3, 2, 1, 4, 6])''', (10, [1, 3, 6])),
-                     ('''naj_vsota([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', (49, [7, 8, 10, 10, 14]))]
+            tests = [('''zasluzek_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 11)''', 440),
+                     ('''zasluzek_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 5)''', 0),
+                     ('''zasluzek_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 7)''', 300),
+                     ('''zasluzek_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 22)''', 1200),
+                     ('''zasluzek_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 24)''', 1210)]
             
             for test in tests:
                 if not Check.equal(*test):
@@ -687,14 +638,14 @@ def _validate_current_file():
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMn0:1glU0I:_fu9MPKEuMVhkw_B_wD0TdKmpyY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQzMX0:1gmjcD:jFyhS4PkhL7z8IAEmfZmrmVQxCk'
         try:
-            tests = [('''naj_vsota_kako([5, 6, 4, 8, 1, 2, 1, 1])''', (17, ['_', 6, '_', 8, '_', 2, '_', 1])),
-                     ('''naj_vsota_kako([2, 2, 2])''', (4, [2, '_', 2])),
-                     ('''naj_vsota_kako([1, 3, 1])''', (3, ['_', 3, '_'])),
-                     ('''naj_vsota_kako([1, 3, 1, 4, 6])''', (9, ['_', 3, '_', '_', 6])),
-                     ('''naj_vsota_kako([3, 2, 1, 4, 6])''', (10, [3, '_', 1, '_', 6])),
-                     ('''naj_vsota_kako([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', (49, [10, '_', 8, '_', 14, '_', 10, '_', '_', 7]))]
+            tests = [('''katera_bellman([(3, 300), (10, 440), (8, 310), (15, 900)], 5)''', [1, 0, 0, 0]),
+                     ('''katera_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 11)''', [0, 1, 0, 0]),
+                     ('''katera_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 5)''', [0, 0, 0, 0]),
+                     ('''katera_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 7)''', [1, 0, 0, 0]),
+                     ('''katera_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 22)''', [1, 0, 0, 1]),
+                     ('''katera_bellman([(6, 300), (10, 440), (8, 310), (15, 900)], 24)''', [0, 0, 1, 1])]
             
             for test in tests:
                 if not Check.equal(*test):

@@ -1,111 +1,65 @@
 # =============================================================================
-# Kovanci v vrsti
-# =====================================================================@019419=
+# Tabele tabel nizov I
+#
+# Tabela tabel nizov je tabela, katere elementi so bodisi nizi bodisi
+# tabele tabel nizov.
+# =====================================================================@019423=
 # 1. podnaloga
-# Čestitam! V nagradni igri si bil izžreban za dobitnika nagrade. Kolikšna bo
-# nagrada, pa je odvisno od tvoje iznajdljivosti. Za nagrado si lahko izbereš
-# poljubne kovance iz podane vrste kovancev (ki so lahko vsi različni ali pa
-# tudi ne). Edini pogoj pri izbiranju je, da nikoli ne izbereš dveh
-# sosednjih kovancev. Da se boš prepričal, da si boš izbral največjo možno
-# nagrado, sestavi funkcijo `nagrada(kovanci)`, ki bo za dane kovance vrnila
-# največjo možno vsoto, ki jo lahko izbereš.
+# Sestavi funkcijo `skupna_dolzina(ttn)`, ki bo vrnila skupno dolžino vseh
+# nizov v tabeli tabel nizov `ttn`.
 # 
-#     >>> nagrada([5, 6, 4, 8, 1, 2, 1, 1])
-#     17
-#     >>> nagrada([2, 2, 2])
-#     4
-#     >>> nagrada([1, 3, 1])
-#     3
-#     >>> nagrada([1, 3, 1, 4, 6])
-#     9
-#     >>> nagrada([3, 2, 1, 4, 6])
-#     10
-#     >>> nagrada([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#     49
-#     >>> nagrada([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#     43
+#     >>> skupna_dolzina(['sonce', [['dez', 'veter'], 'sneg'], [[[['mavrica']]]]])
+#     24
 # =============================================================================
-def nicle_enke(tab_bin):
-    '''funkcija pretvori tabelo kovancev v nicle in enke.'''
-    if tab_bin == list():
-        return list()
-    elif len(tab_bin) == 1:
-        return [1]
+def odstrani_oklepaj(tab):
+    if len(tab) == 1:
+        if isinstance(tab[0],list):
+            rezultat = odstrani_oklepaj(tab[0])
+        else:
+            rezultat = tab
+    elif isinstance(tab[0],list):
+        rezultat = odstrani_oklepaj(tab[0]) + odstrani_oklepaj(tab[1:])
+    else:
+        rezultat = [tab[0]] + odstrani_oklepaj(tab[1:])
+    return rezultat
         
-    prvo_mesto = [1,0] + nicle_enke(tab_bin[2:])
-    drugo_mesto =  [0] + nicle_enke(tab_bin[1:])
-    return prvo_mesto + drugo_mesto
-def nagrada(kovanci):
-    '''vrne najvecjo mozno vsoto iz kombinacij kovancev.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
-    
-    vsota_prvo = kovanci[0] + nagrada(kovanci[2:])
-    vsota_drugo = nagrada(kovanci[1:])
-    return max(vsota_prvo,vsota_drugo)
-# =====================================================================@019420=
+def skupna_dolzina(ttn):
+    tab = ''
+    for x in odstrani_oklepaj(ttn):
+        tab = tab + x
+    return len(tab)
+# =====================================================================@019424=
 # 2. podnaloga
-# Za izplačilo nagrade ni dovolj povedati, kakšno vsoto lahko dobiš, ampak s
-# katerimi kovanci prideš do te vsote. Sestavi funkcijo `kateri(kovanci)`, ki
-# vrne tabelo z izbranimi kovanci, urejeno v naraščajočem vrstnem redu.
+# Sestavi funkcijo `max_dolzina(ttn)`, ki bo vrnila dolžino najdaljšega niza
+# v tabeli tabel nizov `ttn`.
 # 
-#     >>> kateri([5, 6, 4, 8, 1, 2, 1, 1])
-#     [1, 2, 6, 8]
+#     >>> max_dolzina(['sonce', [['dez', 'veter'], 'sneg'], [[[['mavrica']]]]])
+#     7
 # =============================================================================
-
-def kateri(kovanci):
-    '''vrne izbrane kovance, za najvecji zasluzek.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
+def max_dolzina(ttn):
     
+    najD = 0
     
-
-
-    
-        
-# =====================================================================@019421=
+    for x in odstrani_oklepaj(ttn):
+        if len(x) > najD:
+            najD = len(x)
+    return najD
+# =====================================================================@019425=
 # 3. podnaloga
-# Predsednik komisije za nagradno igro pa s funkcijo `kateri` ni najbolj
-# zadovoljen, saj mora sedaj, če želi ugotoviti znesek, poklicati
-# funkcijo `nagrada` ali pa sešteti rezultat funkcije `kateri`. Zato želi
-# funkcijo, ki vrne par - prva je maksimalna vrednost, druga vrednost pa tabela
-# kovancev.
+# Sestavi funkcijo `max_dolzina_zadnji(ttn)`, ki bo vrnila najdaljši niz
+# v tabeli tabel nizov `ttn`. Če je takih nizov več, naj vrne zadnjega.
 # 
-# A pozor! Nalogo reši "od začetka", torej pri rešitvi nikakor ne uporabi
-# funkciji `nagrada` in `kateri`.
-# 
-#       >>> naj_vsota([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#       (43, [10, 8, 14, 4, 7])
-#       >>> naj_vsota([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#       (49, [10, 8, 14, 10, 7])
-#       >>> naj_vsota([3, 2, 1, 4, 6])
-#       (10, [3, 1, 6])
-#       >>> naj_vsota([1, 3, 1])
-#       (3, [3])
-#       >>> naj_vsota([2, 2, 2])
-#       (4, [2, 2])
+#     >>> max_dolzina_zadnji(['sonce', [['dez', 'veter'], 'sneg'], [[[['oblak']]]]])
+#     'oblak'
 # =============================================================================
 
-# =====================================================================@019422=
+# =====================================================================@019426=
 # 4. podnaloga
-# Blagajnik komisije za nagradno igro pa pravi, da je predsednik malo
-# čuden in si z njegovo funkcijo nima kaj pomagati. Želi bolj "vizualen" rezultat.
-# Kakšne, je razvidno iz primerov!
+# Sestavi funkcijo `max_dolzina_vsi(ttn)`, ki bo vrnila množico vseh najdaljših
+# nizov v tabeli tabel nizov `ttn`.
 # 
-#       >>> naj_vsota_kako([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#       (43, [10, '_', 8, '_', 14, '_', 4, '_', 7])
-#       >>> naj_vsota_kako([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#       (49, [10, '_', 8, '_', 14, '_', 10, '_', '_', 7])
-#       >>> naj_vsota_kako([3, 2, 1, 4, 6])
-#       (10, [3, '_', 1, '_', 6])
-#       >>> naj_vsota_kako([1, 3, 1])
-#       (3, ['_', 3, '_'])
-#       >>> naj_vsota_kako([2, 2, 2])
-#       (4, [2, '_', 2])
+#     >>> max_dolzina_vsi(['sonce', [['dez', 'veter'], 'sneg'], [[[['oblak']]]]])
+#     {'sonce', 'oblak', 'veter'}
 # =============================================================================
 
 
@@ -633,15 +587,12 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQxOX0:1glU0I:u5m5_EcPULfL3DxnuSMxiVrPoHs'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyM30:1gmiCk:1BUAUEW3l4_oDKijmkw_bIYNys0'
         try:
-            tests = [('''nagrada([5, 6, 4, 8, 1, 2, 1, 1])''', 17),
-                     ('''nagrada([2, 2, 2])''', 4),
-                     ('''nagrada([1, 3, 1])''', 3),
-                     ('''nagrada([1, 3, 1, 4, 6])''', 9),
-                     ('''nagrada([3, 2, 1, 4, 6])''', 10),
-                     ('''nagrada([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', 49),
-                     ('''nagrada([10, 2, 8, 16, 14, 10, 4, 5, 7])''', 43)]
+            tests = [('''skupna_dolzina(['sonce', [['dez', 'veter'], 'sneg'], [[[['mavrica']]]]])''', 24),
+                     ('''skupna_dolzina(['a', 'ab', 'abc'])''', 6),
+                     ('''skupna_dolzina([[[[[[['       ']]]]]]])''', 7),
+                     ('''skupna_dolzina(['', [[['']]]])''', 0)]
             
             for test in tests:
                 if not Check.equal(*test):
@@ -651,16 +602,12 @@ def _validate_current_file():
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMH0:1glU0I:6I3s1Wu0Yj8Xv5TGKWSN8dE0sN8'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyNH0:1gmiCk:K0DoOhTj7IBUVW9lT61ueauEPRE'
         try:
-            tests = [('''kateri([5, 6, 4, 8, 1, 2, 1, 1])''', [1, 2, 6, 8]),
-                     ('''kateri([2, 2, 2])''', [2, 2]),
-                     ('''kateri([1, 3, 1])''', [3]),
-                     ('''kateri([1, 3, 1, 4, 6])''', [3, 6]),
-                     ('''kateri([3, 2, 1, 4, 6])''', [1, 3, 6]),
-                     ('''kateri([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', [7, 8, 10, 10, 14])]
-                    # ('''kateri([10, 2, 8, 16, 14, 10, 4, 5, 7])''', [7, 10, 10, 16] ali
-                    # [4, 7, 8, 10, 14])]
+            tests = [('''max_dolzina(['sonce', [['dez', 'veter'], 'sneg'], [[[['mavrica']]]]])''', 7),
+                     ('''max_dolzina(['a', 'ab', 'abc'])''', 3),
+                     ('''max_dolzina([[[[[[['       ']]]]]]])''', 7),
+                     ('''max_dolzina(['', [[['']]]])''', 0)]
             
             for test in tests:
                 if not Check.equal(*test):
@@ -670,14 +617,14 @@ def _validate_current_file():
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMX0:1glU0I:HkUd4Z5Ye9RCkIesNihp8RE-iOI'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyNX0:1gmiCk:XbbHYCY0NvybgsOTiFo53uDa_Us'
         try:
-            tests = [('''naj_vsota([5, 6, 4, 8, 1, 2, 1, 1])''', (17, [1, 2, 6, 8])),
-                     ('''naj_vsota([2, 2, 2])''', (4, [2, 2])),
-                     ('''naj_vsota([1, 3, 1])''', (3, [3])),
-                     ('''naj_vsota([1, 3, 1, 4, 6])''', (9, [3, 6])),
-                     ('''naj_vsota([3, 2, 1, 4, 6])''', (10, [1, 3, 6])),
-                     ('''naj_vsota([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', (49, [7, 8, 10, 10, 14]))]
+            tests = [('''max_dolzina_zadnji(['sonce', [['dez', 'veter'], 'sneg'], [[[['oblak']]]]])''', 'oblak'),
+                     ('''max_dolzina_zadnji(['sonce', [['dez', 'veter'], 'sneg'], 'oblak'])''', 'oblak'),
+                     ('''max_dolzina_zadnji(['sonce', [['dez', 'veter'], 'sneg'], [[[['mavrica']]]]])''', 'mavrica'),
+                     ('''max_dolzina_zadnji(['a', 'ab', 'abc'])''', 'abc'),
+                     ('''max_dolzina_zadnji([[[[[[['       ']]]]]]])''', '       '),
+                     ('''max_dolzina_zadnji(['', [[['']]]])''', '')]
             
             for test in tests:
                 if not Check.equal(*test):
@@ -687,14 +634,13 @@ def _validate_current_file():
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMn0:1glU0I:_fu9MPKEuMVhkw_B_wD0TdKmpyY'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyNn0:1gmiCk:aqX0EFtpuzHkjLgRTXlO7eJ4yTI'
         try:
-            tests = [('''naj_vsota_kako([5, 6, 4, 8, 1, 2, 1, 1])''', (17, ['_', 6, '_', 8, '_', 2, '_', 1])),
-                     ('''naj_vsota_kako([2, 2, 2])''', (4, [2, '_', 2])),
-                     ('''naj_vsota_kako([1, 3, 1])''', (3, ['_', 3, '_'])),
-                     ('''naj_vsota_kako([1, 3, 1, 4, 6])''', (9, ['_', 3, '_', '_', 6])),
-                     ('''naj_vsota_kako([3, 2, 1, 4, 6])''', (10, [3, '_', 1, '_', 6])),
-                     ('''naj_vsota_kako([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', (49, [10, '_', 8, '_', 14, '_', 10, '_', '_', 7]))]
+            tests = [('''max_dolzina_vsi(['sonce', [['dez', 'veter'], 'sneg'], [[[['oblak']]]]])''', {'sonce', 'oblak', 'veter'}),
+                     ('''max_dolzina_vsi(['sonce', [['dez', 'veter'], 'sneg'], [[[['mavrica']]]]])''', {'mavrica'}),
+                     ('''max_dolzina_vsi(['a', 'ab', 'abc'])''', {'abc'}),
+                     ('''max_dolzina_vsi([[[[[[['       ']]]]]]])''', {'       '}),
+                     ('''max_dolzina_vsi(['', [[['']]]])''', {''})]
             
             for test in tests:
                 if not Check.equal(*test):

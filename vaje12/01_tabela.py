@@ -1,113 +1,28 @@
 # =============================================================================
-# Kovanci v vrsti
-# =====================================================================@019419=
+# 0/1 tabela
+# =====================================================================@019427=
 # 1. podnaloga
-# Čestitam! V nagradni igri si bil izžreban za dobitnika nagrade. Kolikšna bo
-# nagrada, pa je odvisno od tvoje iznajdljivosti. Za nagrado si lahko izbereš
-# poljubne kovance iz podane vrste kovancev (ki so lahko vsi različni ali pa
-# tudi ne). Edini pogoj pri izbiranju je, da nikoli ne izbereš dveh
-# sosednjih kovancev. Da se boš prepričal, da si boš izbral največjo možno
-# nagrado, sestavi funkcijo `nagrada(kovanci)`, ki bo za dane kovance vrnila
-# največjo možno vsoto, ki jo lahko izbereš.
+# Sergej je iz ničel in enk sestavil vse možne tabele dolžine 3. Združil jih
+# je v tabelo tabel in dobil rezultat`[[0, 0, 0], [0, 0, 1], [0, 1, 0],
+# [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]`. Dobil je torej
+# tabelo osmih različnih tabel. Zatem je želel zapisati vse možne tabele
+# dolžine 7, a je hitro ugotovil, da je število teh zelo naraslo. Pomagaj
+# mu in sestavi funkcijo `tabele01(n)`, ki bo vrnila tabelo vseh možnih tabel
+# dolžine `n`, sestavljenih iz samih ničel in enk. Tabela mora biti
+# leksikografsko urejena!
 # 
-#     >>> nagrada([5, 6, 4, 8, 1, 2, 1, 1])
-#     17
-#     >>> nagrada([2, 2, 2])
-#     4
-#     >>> nagrada([1, 3, 1])
-#     3
-#     >>> nagrada([1, 3, 1, 4, 6])
-#     9
-#     >>> nagrada([3, 2, 1, 4, 6])
-#     10
-#     >>> nagrada([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#     49
-#     >>> nagrada([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#     43
+#     >>>tabele01(3)
+#     [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
+# 
+# Namig: morda ti prav pride
+# 
+#     >>>bin(10)
+#     '0b1010'
 # =============================================================================
-def nicle_enke(tab_bin):
-    '''funkcija pretvori tabelo kovancev v nicle in enke.'''
-    if tab_bin == list():
-        return list()
-    elif len(tab_bin) == 1:
-        return [1]
-        
-    prvo_mesto = [1,0] + nicle_enke(tab_bin[2:])
-    drugo_mesto =  [0] + nicle_enke(tab_bin[1:])
-    return prvo_mesto + drugo_mesto
-def nagrada(kovanci):
-    '''vrne najvecjo mozno vsoto iz kombinacij kovancev.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
+def tabele01(n):
     
-    vsota_prvo = kovanci[0] + nagrada(kovanci[2:])
-    vsota_drugo = nagrada(kovanci[1:])
-    return max(vsota_prvo,vsota_drugo)
-# =====================================================================@019420=
-# 2. podnaloga
-# Za izplačilo nagrade ni dovolj povedati, kakšno vsoto lahko dobiš, ampak s
-# katerimi kovanci prideš do te vsote. Sestavi funkcijo `kateri(kovanci)`, ki
-# vrne tabelo z izbranimi kovanci, urejeno v naraščajočem vrstnem redu.
-# 
-#     >>> kateri([5, 6, 4, 8, 1, 2, 1, 1])
-#     [1, 2, 6, 8]
-# =============================================================================
-
-def kateri(kovanci):
-    '''vrne izbrane kovance, za najvecji zasluzek.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
-    
-    
-
-
-    
-        
-# =====================================================================@019421=
-# 3. podnaloga
-# Predsednik komisije za nagradno igro pa s funkcijo `kateri` ni najbolj
-# zadovoljen, saj mora sedaj, če želi ugotoviti znesek, poklicati
-# funkcijo `nagrada` ali pa sešteti rezultat funkcije `kateri`. Zato želi
-# funkcijo, ki vrne par - prva je maksimalna vrednost, druga vrednost pa tabela
-# kovancev.
-# 
-# A pozor! Nalogo reši "od začetka", torej pri rešitvi nikakor ne uporabi
-# funkciji `nagrada` in `kateri`.
-# 
-#       >>> naj_vsota([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#       (43, [10, 8, 14, 4, 7])
-#       >>> naj_vsota([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#       (49, [10, 8, 14, 10, 7])
-#       >>> naj_vsota([3, 2, 1, 4, 6])
-#       (10, [3, 1, 6])
-#       >>> naj_vsota([1, 3, 1])
-#       (3, [3])
-#       >>> naj_vsota([2, 2, 2])
-#       (4, [2, 2])
-# =============================================================================
-
-# =====================================================================@019422=
-# 4. podnaloga
-# Blagajnik komisije za nagradno igro pa pravi, da je predsednik malo
-# čuden in si z njegovo funkcijo nima kaj pomagati. Želi bolj "vizualen" rezultat.
-# Kakšne, je razvidno iz primerov!
-# 
-#       >>> naj_vsota_kako([10, 2, 8, 16, 14, 10, 4, 5, 7])
-#       (43, [10, '_', 8, '_', 14, '_', 4, '_', 7])
-#       >>> naj_vsota_kako([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])
-#       (49, [10, '_', 8, '_', 14, '_', 10, '_', '_', 7])
-#       >>> naj_vsota_kako([3, 2, 1, 4, 6])
-#       (10, [3, '_', 1, '_', 6])
-#       >>> naj_vsota_kako([1, 3, 1])
-#       (3, ['_', 3, '_'])
-#       >>> naj_vsota_kako([2, 2, 2])
-#       (4, [2, '_', 2])
-# =============================================================================
-
+    for x in range(2**n):
+        print(bin(x)[2:])
 
 
 
@@ -633,68 +548,15 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQxOX0:1glU0I:u5m5_EcPULfL3DxnuSMxiVrPoHs'
+        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyN30:1gmiZp:cXi40xiGRfj2LLFN73kptqiAhKY'
         try:
-            tests = [('''nagrada([5, 6, 4, 8, 1, 2, 1, 1])''', 17),
-                     ('''nagrada([2, 2, 2])''', 4),
-                     ('''nagrada([1, 3, 1])''', 3),
-                     ('''nagrada([1, 3, 1, 4, 6])''', 9),
-                     ('''nagrada([3, 2, 1, 4, 6])''', 10),
-                     ('''nagrada([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', 49),
-                     ('''nagrada([10, 2, 8, 16, 14, 10, 4, 5, 7])''', 43)]
-            
-            for test in tests:
-                if not Check.equal(*test):
-                    break
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMH0:1glU0I:6I3s1Wu0Yj8Xv5TGKWSN8dE0sN8'
-        try:
-            tests = [('''kateri([5, 6, 4, 8, 1, 2, 1, 1])''', [1, 2, 6, 8]),
-                     ('''kateri([2, 2, 2])''', [2, 2]),
-                     ('''kateri([1, 3, 1])''', [3]),
-                     ('''kateri([1, 3, 1, 4, 6])''', [3, 6]),
-                     ('''kateri([3, 2, 1, 4, 6])''', [1, 3, 6]),
-                     ('''kateri([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', [7, 8, 10, 10, 14])]
-                    # ('''kateri([10, 2, 8, 16, 14, 10, 4, 5, 7])''', [7, 10, 10, 16] ali
-                    # [4, 7, 8, 10, 14])]
-            
-            for test in tests:
-                if not Check.equal(*test):
-                    break
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMX0:1glU0I:HkUd4Z5Ye9RCkIesNihp8RE-iOI'
-        try:
-            tests = [('''naj_vsota([5, 6, 4, 8, 1, 2, 1, 1])''', (17, [1, 2, 6, 8])),
-                     ('''naj_vsota([2, 2, 2])''', (4, [2, 2])),
-                     ('''naj_vsota([1, 3, 1])''', (3, [3])),
-                     ('''naj_vsota([1, 3, 1, 4, 6])''', (9, [3, 6])),
-                     ('''naj_vsota([3, 2, 1, 4, 6])''', (10, [1, 3, 6])),
-                     ('''naj_vsota([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', (49, [7, 8, 10, 10, 14]))]
-            
-            for test in tests:
-                if not Check.equal(*test):
-                    break
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQyMn0:1glU0I:_fu9MPKEuMVhkw_B_wD0TdKmpyY'
-        try:
-            tests = [('''naj_vsota_kako([5, 6, 4, 8, 1, 2, 1, 1])''', (17, ['_', 6, '_', 8, '_', 2, '_', 1])),
-                     ('''naj_vsota_kako([2, 2, 2])''', (4, [2, '_', 2])),
-                     ('''naj_vsota_kako([1, 3, 1])''', (3, ['_', 3, '_'])),
-                     ('''naj_vsota_kako([1, 3, 1, 4, 6])''', (9, ['_', 3, '_', '_', 6])),
-                     ('''naj_vsota_kako([3, 2, 1, 4, 6])''', (10, [3, '_', 1, '_', 6])),
-                     ('''naj_vsota_kako([10, 2, 8, 16, 14, 2, 10, 4, 5, 7])''', (49, [10, '_', 8, '_', 14, '_', 10, '_', '_', 7]))]
+            tests = [('''tabele01(1)''', [[0], [1]]),
+                     ('''tabele01(3)''', [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]),
+                     ('''tabele01(5)''', [[0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [0, 0, 0, 1, 0], [0, 0, 0, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 1], 
+                        [0, 0, 1, 1, 0], [0, 0, 1, 1, 1], [0, 1, 0, 0, 0], [0, 1, 0, 0, 1], [0, 1, 0, 1, 0], [0, 1, 0, 1, 1], [0, 1, 1, 0, 0], 
+                        [0, 1, 1, 0, 1], [0, 1, 1, 1, 0], [0, 1, 1, 1, 1], [1, 0, 0, 0, 0], [1, 0, 0, 0, 1], [1, 0, 0, 1, 0], [1, 0, 0, 1, 1], 
+                        [1, 0, 1, 0, 0], [1, 0, 1, 0, 1], [1, 0, 1, 1, 0], [1, 0, 1, 1, 1], [1, 1, 0, 0, 0], [1, 1, 0, 0, 1], [1, 1, 0, 1, 0], 
+                        [1, 1, 0, 1, 1], [1, 1, 1, 0, 0], [1, 1, 1, 0, 1], [1, 1, 1, 1, 0], [1, 1, 1, 1, 1]])]
             
             for test in tests:
                 if not Check.equal(*test):
