@@ -19,28 +19,14 @@ def prazna_tabela(m):
 
 
 def money_matters(n,m,dolgovi,prijatelji):
+
+
         
-    for ind in range(len(prijatelji)):
-        enka = int(prijatelji[ind][0])
-        dvojka = int(prijatelji[ind][1])
-        if dolgovi[enka] > 0 and dolgovi[dvojka] < 0:
-            dolgovi[dvojka] = dolgovi[dvojka] + dolgovi[enka]
 
-            if dolgovi[dvojka] < 0:
-                prijatelji[ind].append(False)
-        elif dolgovi[enka] < 0 and dolgovi[dvojka] < 0:
-            pass
-        else:
-            dolgovi[enka] = dolgovi[enka] + dolgovi[dvojka]
+    #vsota vseh povezanih "prijateljev" mora biti 0, da je vračilo possible
 
-            if dolgovi[enka] < 0:
-                
-                prijatelji[ind].append(False)
-
-    for resnica in prijatelji:
-        if False in resnica:
-            return 'IMPOSSIBLE'
-    return 'POSSIBLE' 
+        
+    
 
 
             
@@ -48,6 +34,7 @@ def money_matters(n,m,dolgovi,prijatelji):
         
 
 # če je vsota tabele kombinacij vračil dolgov enaka 0, je možno vračilo
+
 
 
 
@@ -75,6 +62,10 @@ with open('besedilo.txt','r') as f:
         dolgovi.append(int(nista.pop(0)))
     for neki in nista:
         jao = neki.split()
+        a = int(jao[0])
+        b = int(jao[1])
+        jao = [a,b]
         prijatelji.append(jao)
+
 
 print(money_matters(n,m,dolgovi,prijatelji))   
