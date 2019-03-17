@@ -55,13 +55,19 @@ def nagrada(kovanci):
 #     [1, 2, 6, 8]
 # =============================================================================
 
+
 def kateri(kovanci):
-    '''vrne izbrane kovance, za najvecji zasluzek.'''
-    if kovanci == list():
-        return 0
-    elif len(kovanci) == 1:
-        return kovanci[0]
-    
+    n = len(kovanci)
+    if n == 0:
+        return []
+    if n == 1:
+        return [kovanci[0]]
+    zadnjega = [kovanci[-1]] + kateri(kovanci[:-2])
+    nezadnjega = kateri(kovanci[:-1])
+    if(sum(zadnjega) > sum(nezadnjega)):
+        return sorted(zadnjega)
+    else:
+        return sorted(nezadnjega)
     
 
 

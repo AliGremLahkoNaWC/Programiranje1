@@ -27,14 +27,20 @@
 # =============================================================================
 def podobna(beseda,tab_besed):
     
+    beseda = beseda.lower()
     mn_b = set(beseda)
     najB = ''
-    naj_sk_z = 0 
+    naj_sk_z = 0
+
     for elt in tab_besed:
-        if len(mn_b.intersection(elt)) > naj_sk_z:
+        if len(mn_b.intersection(elt.lower())) > naj_sk_z:
+            naj_sk_z = len(mn_b.intersection(elt.lower()))
             najB = elt
-            naj_sk_z = len(mn_b.intersection(elt))
-    return najB
+                
+    if naj_sk_z == 0:
+        return None
+    else:
+        return najB
             
 # =====================================================================@019333=
 # 2. podnaloga
