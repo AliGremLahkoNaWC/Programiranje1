@@ -1,121 +1,140 @@
 # =============================================================================
-# Rodovniki
+# Veliki šef in njegovi podrejeni
 #
-# Ukvarjali se bomo z rodovniki (Celjskih grofov in drugih).
-# Rodovnik imamo podan kot slovar, kjer je ključ ime "glave rodbine"
-# vrednost pa tabela imen otrok. Recimo:
+# V nekem uspešnem podjetju ima skoraj vsak zaposleni svojega šefa. Seveda
+# imajo tudi šefi svoje šefe in ti spet svoje šefe itn. Dobili smo podatke
+# o hierarhiji v podjetju in ugotovili, da velja naslednje:
 # 
-#     rodovnik =
-#      {'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-#       'Elizabeta II.': [], 'Viljem': ['Ana Poljska'], 'Elizabeta I.': [],
-#       'Ana Poljska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-#       'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-#       'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-#       'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-#       'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-#       'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
-#      rodovnik['Friderik II.']
+# * Vsaka oseba ima kvečjemu enega šefa.
+# * En šef ima lahko pod seboj več zaposlenih.
+# * Vsem, ki so nad nami (naš šef, šef našega šefa itd.), pravimo _nadrejeni_.
+# * Vsem, ki so pod nami (sami smo njihov šef, ali pa smo šef njihovega
+#   šefa itd.), pravimo _podrejeni_.
+# * Nihče ni sam svoj šef in nihče ni samemu sebi podrejen.
 # 
-# nam torej vrne
-# 
-#       ['Friderik III.', 'Ulrik II.']
-# =====================================================================@020194=
+# Napisali bomo nekaj funkcij, s katerimi bomo preučili razmere v podjetju.
+# =====================================================================@019542=
 # 1. podnaloga
-# Število otrok
+# Podatke smo dobili v obliki tabele parov oblike `(uslužbenec, šef)`.
+# Vsi uslužbenci so predstavljeni z nizi (ki so običajno njihova imena oz.
+# priimki). Zgled:
 # 
-# Sestavi funkcijo `koliko_otrok(ime, rodovnik)`, ki za dano ime in
-# rodovnik vrne število otrok te osebe, oz None, če osebe ni v rodovniku.
+#     [('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')]
+# 
+# Komentar: Tilen ima pod seboj dva podrejena (Andreja in Mojco), njegovi
+# šef pa je Zoran. Zoran nima šefa, vsi ostali pa so njegovi podrejeni.
+# 
+# Napišite funkcijo `slovar_sefov(tabela)`, ki bo iz zgoraj opisane
+# tabele zgradila slovar šefov. Ključi v slovarju naj bodo uslužbenci,
+# vrednosti pa njihovi šefi. Zgled:
+# 
+#     >>> slovar_sefov([('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')])
+#     {'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'}
 # =============================================================================
-def koliko_otrok(ime,rodovnik):
-    '''funkcija preveri koliko otrok pripada dani osebi, po rodovniku'''
-    otroci = 0
-    if ime in rodovnik:
-        otroci = len(rodovnik[ime])
-        return otroci
-    return None
-    
-# =====================================================================@020195=
+def slovar_sefov(tabela):
+    '''funkcija vrne slovar kdo je komu sef'''
+    slovar = dict()
+
+    for relacija in tabela:
+        slovar[relacija[0]] = relacija[1]
+    return slovar
+# =====================================================================@019543=
 # 2. podnaloga
-# Število potomcev
+# Napišite funkcijo `neposredno_podrejeni(tabela)`, ki bo iz zgoraj opisane
+# tabele sestavila slovar neposredno podrejenih. Vrednost pri vsakem
+# ključu naj bo _množica_ tistih uslužbencev, ki imajo le-ta ključ za svojega
+# šefa. Zgled:
 # 
-# Sestavi funkcijo `koliko_potomcev(ime, rodovnik)`, ki za dano `ime` in
-# `rodovnik` vrne število potomcev te osebe. Če osebe ni v rodovniku, vrni None
+#     >>> neposredno_podrejeni([('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')])
+#     {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}}
+# 
+# Zoranu je torej neposredno podrejen le Tilen, Tilnu pa sta podrejena tako Andrej kot Mojca.
 # =============================================================================
-def koliko_potomcev(ime,rodovnik):
-    '''funkcija šteje generacije potomcev za dano osebo'''
-    potomci = koliko_otrok(ime,rodovnik)
-    if potomci == None:
-        return None
-    for oseba in rodovnik[ime]:
-        potomci = potomci + koliko_potomcev(oseba,rodovnik)
-    return potomci
-# =====================================================================@020196=
+def neposredno_podrejeni(tabela):
+    ''' funkcija sestavi slovar sefov hierarhicno'''
+    slovar = slovar_sefov(tabela)
+    nov_slovar = dict()
+
+    for key, val in slovar.items():
+        if val not in nov_slovar:
+            nov_slovar[val] = {key}
+        elif val in nov_slovar:
+            nov_slovar[val].add(key)
+    return nov_slovar
+# =====================================================================@019544=
 # 3. podnaloga
-# Je v rodbini?
+# Sestavite funkcijo `veriga_nadrejenih(usluzbenec, slovar)`, ki kot prvi
+# argument dobi niz, ki predstavlja nekega uslužbenca, kot drugi argument
+# pa dobi slovar šefov (v obliki kot ga vrne funkcija `slovar_sefov`).
+# Funkcija naj sestavi tabelo, ki po vrsti vsebuje: šefa osebe `usluzbenec`,
+# šefa od njegovega šefa itn. (dokler končno ne pridemo do osebe, ki nima šefa).
+# Zgled:
 # 
-# Sestavi funkcijo `je_v_rodbini(ime, glava_rodbine, rodovnik)`, ki ugotovi, ali
-# je oseba z imenom `ime` v rodbini osebe `glava_rodbine`.
-# =============================================================================
-def je_v_rodbini(ime,glava_rodbine,rodovnik):
-    '''funkcija poizve ali je podana oseba v rodbini'''
-    if glava_rodbine not in rodovnik:
-        return False
-    if ime == glava_rodbine or ime in rodovnik[glava_rodbine]:
-        return True
-    for oseba in rodovnik[glava_rodbine]: 
-        if je_v_rodbini(ime,oseba,rodovnik):
-            return True
-    return False
-    
-# =====================================================================@020197=
-# 4. podnaloga
-# Kdo se podpisuje najdlje časa?
+#     >>> veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'})
+#     ['Tilen', 'Zoran']
 # 
-# Sestavi funkcijo `najdaljsi_podpis(glava_rodbine, rodovnik)`, ki ugotovi, kdo
-# v rodbini osebe `glava_rodbine` ima najdaljše ime za podpis (torej kompletno
-# ime).
+# Mojci je nadrejen Tilen, kateremu je nadrejen Zoran, torej sta Mojčina šefa
+# Tilen in Zoran.
 # =============================================================================
-def najdaljsi_podpis(glava_rodbine,rodovnik):
-    dol = len(glava_rodbine)
-    ime = glava_rodbine
+def veriga_nadrejenih(usluzbenec,slovar):
+    ''' funkcija vrne vse nadrejene usluzbenca'''
     tab = []
-    for oseba in rodovnik[glava_rodbine]:
-        if len(oseba) > dol:
-            dol = len(oseba)
-            ime = oseba
-            tab.append(oseba)
-        if len(oseba) < len(najdaljsi_podpis(oseba,rodovnik)):
-            dol = len(najdaljsi_podpis(oseba,rodovnik))
-            ime = najdaljsi_podpis(oseba,rodovnik)
-            tab.append(ime)
 
-    for oseba in tab:
-        if dol == len(oseba):
-            return oseba
-    return ime
-           
-# =====================================================================@020198=
+    for key, val in slovar.items():
+        if key == usluzbenec:
+            tab.append(val)
+            usluzbenec = val
+    return tab
+# =====================================================================@019545=
+# 4. podnaloga
+# Sestavite funkcijo `mnozica_podrejenih(usluzbenec, slovar)`, ki kot prvi
+# argument dobi ime uslužbenca, kot drugi argument pa slovar neposredno
+# podrejenih (v obliki kot ga vrne funkcija `neposredno_podrejeni`). Funkcija
+# naj sestavi in vrne _množico_ vseh tistih oseb, ki so (posredno ali
+# neposredno) podrejeni osebi `usluzbenec`. Zgled:
+# 
+#     >>> mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}, 'Mojca' : {'Urša'}})
+#     {'Andrej', 'Mojca', 'Tilen', 'Urša'}
+# 
+# Zoranju je neposredno podrejen Tilen, torej sta mu podrejena tudi Tilnova
+# podrejena Andrej in Mojca, ter Urša, ker je ta podrejena Mojci.
+# =============================================================================
+def mnozica_podrejenih(usluzbenec,slovar):
+    ''' funkcija vrne mnozico ljudi ki so podrejeni usluzbencu'''
+    podrejeni = set()
+    for key, val in slovar.items():
+        if key == usluzbenec:
+           for oseba in val:
+               podrejeni.add(oseba)
+        elif key in podrejeni:
+            for oseba in val:
+                podrejeni.add(oseba)
+    return podrejeni
+    
+
+# =====================================================================@019546=
 # 5. podnaloga
-# Kdo ima najkrajše ime?
+# Tistemu uslužbencu, za katerega velja:
 # 
-# Sestavi funkcijo `najkrajse_ime(glava_rodbine, rodovnik)`, ki ugotovi, kdo
-# v rodbini osebe `glava_rodbine` ima najkrajše ime.
-# (šteje samo krstno ime, brez "Ortenburga" in "Celja" ter brez številk)?
+# * da nima nadrejenih;
+# * je zadnji v verigi nadrejenih vseh ostalih uslužbencev (razen seveda
+#   samega sebe);
+# 
+# pravimo _big boss_. Sestavite funkcijo `big_boss(slovar)`, ki kot argument
+# dobi slovar nadrejenih in vrne ime osebe, ki je big boss v podjetju oz.
+# vrednost `None`, če to podjetje nima big boss-a. Zgled:
+# 
+#     >>> big_boss({'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'})
+#     'Zoran'
 # =============================================================================
+def big_boss(slovar):
+    ''' funkcija poizve kdo je glavni'''
+    veliki_sef = None
+    tab = []
 
-# =====================================================================@020199=
-# 6. podnaloga
-# Globina rodbine
-# 
-# "Globino" rodbine definiramo tako: če nekdo nima otrok, je globina njegove
-# rodbine 1. Če ima otroka, ta pa nima vnukov (ali celo več otrok, ti pa
-# nimajo vnukov), je globina rodbine 2. Če nekdo ima vnuke, vendar nobenega
-# pravnuka, je globina njegove rodbine 3.
-# 
-# Sestavi funkcijo `globina(glava_rodbine, rodovnik)`, ki vrne globino rodbine
-# osebe `glava_rodbine` v rodovniku `rodovnik`
-# =============================================================================
-
+    for key, val in slovar.items():
+        veliki_sef = val
+    return veliki_sef
 
 
 
@@ -641,175 +660,172 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJwYXJ0IjoyMDE5NCwidXNlciI6MzM2N30:1h4LN5:8LIesnz3RgsgFMt4eKwLUeqntD0'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTU0MiwidXNlciI6MzM2N30:1h6s8N:5Grza5SIJIULeg9p_jGiAYiEw_o'
         try:
-            rodovnikCG = {
-             'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-             'Elizabeta II.': [], 'Viljem': ['Ana Celjska'], 'Elizabeta I.': [],
-             'Ana Celjska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-             'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-             'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-             'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-             'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-             'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
+            # tests = [
+            #         ("slovar_sefov([('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')])",
+            #             {'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'}),
+            #         ("slovar_sefov([('Mojca', 'Tilen'), ('Tilen', 'Tilen'), ('Tilen', 'Zoran')])",
+            #             {'Mojca': 'Tilen', 'Tilen': 'Zoran'}),
+            #         ("slovar_sefov([('Mojca', ''), ('', 'Tilen')])",
+            #             {'': 'Tilen', 'Mojca': ''})
+            #         ]
             
-            tests = [
-                    ("koliko_otrok('Friderik I.', rodovnikCG)", 4, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_otrok('Matija I.', rodovnikCG)", None, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_otrok('Friderik II.', rodovnikCG)", 2, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_otrok('Ulrik I.', rodovnikCG)", 1, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_otrok('Hans', rodovnikCG)", 0, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_otrok('Herman II.', rodovnikCG)", 5, {'rodovnikCG': rodovnikCG})
+            # for test in tests:
+            #     if not Check.equal(*test):
+            #         break
+            
+            tests_secret = [
+                    slovar_sefov([('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')]),
+                    slovar_sefov([('Mojca', 'Tilen'), ('Tilen', 'Tilen'), ('Tilen', 'Zoran')]),
+                    slovar_sefov([('Mojca', ''), ('', 'Tilen')])
                     ]
             
-            for expression, result, env in tests:
-                if not Check.equal(expression, result, env=env):
+            for test in tests_secret:
+                if not Check.secret(test):
                     break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJwYXJ0IjoyMDE5NSwidXNlciI6MzM2N30:1h4LN5:OVN8fhCEBcuyjiW10t5zSOhzBPY'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTU0MywidXNlciI6MzM2N30:1h6s8N:0WywMAZ77xoCE6bWezwmNtTk5ds'
         try:
-            rodovnikCG = {
-             'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-             'Elizabeta II.': [], 'Viljem': ['Ana Celjska'], 'Elizabeta I.': [],
-             'Ana Celjska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-             'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-             'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-             'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-             'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-             'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
+            # tests = [
+            #         ("neposredno_podrejeni([('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')])",
+            #             {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}}),
+            #         ("neposredno_podrejeni([('Mojca', 'Tilen'), ('Tilen', 'Tilen'), ('Tilen', 'Zoran')])",
+            #             {'Zoran': set(['Tilen']), 'Tilen': set(['Mojca', 'Tilen'])}),
+            #         ("neposredno_podrejeni([('Mojca', ''), ('', 'Tilen')])",
+            #             {'': set(['Mojca']), 'Tilen': set([''])})
+            #         ]
+            # 
+            # for test in tests:
+            #     if not Check.equal(*test):
+            #         break
             
-            tests = [
-                    ("koliko_potomcev('Friderik I.', rodovnikCG)", 19, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_potomcev('Friderik II.', rodovnikCG)", 5, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_potomcev('Matija I.', rodovnikCG)", None, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_potomcev('Ulrik I.', rodovnikCG)", 2, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_potomcev('Hans', rodovnikCG)", 0, {'rodovnikCG': rodovnikCG}),
-                    ("koliko_potomcev('Herman II.', rodovnikCG)", 11, {'rodovnikCG': rodovnikCG})
+            tests_secret = [
+                    neposredno_podrejeni([('Mojca', 'Tilen'), ('Andrej', 'Tilen'), ('Tilen', 'Zoran')]),
+                    neposredno_podrejeni([('Mojca', 'Tilen'), ('Tilen', 'Tilen'), ('Tilen', 'Zoran')]),
+                    neposredno_podrejeni([('Mojca', ''), ('', 'Tilen')]),
                     ]
             
-            for expression, result, env in tests:
-                if not Check.equal(expression, result, env=env):
+            for test in tests_secret:
+                if not Check.secret(test):
                     break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJwYXJ0IjoyMDE5NiwidXNlciI6MzM2N30:1h4LN5:hzCL5CBWObueTwe2kw0XYxNtk6k'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTU0NCwidXNlciI6MzM2N30:1h6s8N:afwXCFcFeyIsDTASf2mBes90WEA'
         try:
-            rodovnikCG = {
-             'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-             'Elizabeta II.': [], 'Viljem': ['Ana Celjska'], 'Elizabeta I.': [],
-             'Ana Celjska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-             'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-             'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-             'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-             'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-             'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
+            # tests = [
+            #         ("veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'})", ['Tilen', 'Zoran']),
+            #         ("veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', 'Mojca': 'Tilen', '': 'Zoran'})",['Tilen']),
+            #         ("veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', '': 'Tilen', 'Tilen': 'Zoran'})",[]),
+            #         ("veriga_nadrejenih('Peter', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", ['Matija']),
+            #         ("veriga_nadrejenih('Mojca', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", ['Tilen', 'Zoran', 'Peter','Matija']),
+            #         ("veriga_nadrejenih('Sonja', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", ['Peter', 'Matija']),
+            #         ("veriga_nadrejenih('Andrej', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", ['Tilen', 'Zoran', 'Peter','Matija'])
+            #         ]
+            # 
+            # for test in tests:
+            #     if not Check.equal(*test):
+            #         break
             
-            tests = [
-                    ("je_v_rodbini('Friderik I.', 'Friderik I.', rodovnikCG)", True, {'rodovnikCG': rodovnikCG}),
-                    ("je_v_rodbini('Friderik II.', 'Friderik I.', rodovnikCG)", True, {'rodovnikCG': rodovnikCG}),
-                    ("je_v_rodbini('Friderik I.', 'Friderik II.', rodovnikCG)", False, {'rodovnikCG': rodovnikCG}),
-                    ("je_v_rodbini('Jurij', 'Herman II.', rodovnikCG)", True, {'rodovnikCG': rodovnikCG}),
-                    ("je_v_rodbini('Hans', 'Katarina', rodovnikCG)", False, {'rodovnikCG': rodovnikCG}),
-                    ("je_v_rodbini('Ludvik', 'Herman II.', rodovnikCG)", True, {'rodovnikCG': rodovnikCG}),
-                    ("je_v_rodbini('Ludvik', 'Ulrik I.', rodovnikCG)", False, {'rodovnikCG': rodovnikCG})
+            tests_secret = [
+                    veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'}),
+                    veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', 'Mojca': 'Tilen', '': 'Zoran'}),
+                    veriga_nadrejenih('Mojca', {'Andrej': 'Tilen', '': 'Tilen', 'Tilen': 'Zoran'}),
+                    veriga_nadrejenih('Peter', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
+                    veriga_nadrejenih('Mojca', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
+                    veriga_nadrejenih('Sonja', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
+                    veriga_nadrejenih('Andrej', {'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
                     ]
             
-            for expression, result, env in tests:
-                if not Check.equal(expression, result, env=env):
+            for test in tests_secret:
+                if not Check.secret(test):
                     break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJwYXJ0IjoyMDE5NywidXNlciI6MzM2N30:1h4LN5:WSPtPNFennpNCLrJmQrkBNLDiZU'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTU0NSwidXNlciI6MzM2N30:1h6s8N:wV-gkEDm_YN-u6mVK6z-Mkxu5r8'
         try:
-            rodovnikCG = {
-             'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-             'Elizabeta II.': [], 'Viljem': ['Ana Celjska'], 'Elizabeta I.': [],
-             'Ana Celjska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-             'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-             'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-             'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-             'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-             'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
+            # tests = [
+            #         ("mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}})", {'Andrej', 'Mojca', 'Tilen'}),
+            #         ("mnozica_podrejenih('Zoran', {'': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}})",set([])),
+            #         ("mnozica_podrejenih('Tilen', {'Tilen': {'Andrej', 'Mojca', 'A'}})",set(['Andrej', 'Mojca', 'A'])),
+            #         ("mnozica_podrejenih('T', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'W'}, 'B' : {'O'}})",set(['A', 'M', 'B','Q', 'W', 'O'])),
+            #         ("mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Zoran': {'Andrej', 'Mojca'}})",set(['Andrej', 'Mojca'])),
+            #         ("mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}, 'Mojca' : {'Urša'}})", {'Andrej', 'Mojca', 'Tilen', 'Urša'}),
+            #         ("mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca', 'Tim'}, 'Tim' : {'Jaka'},  'Mojca' : {'Urša'}})", {'Andrej', 'Mojca', 'Tilen', 'Urša', 'Tim', 'Jaka'}),
+            #         ("mnozica_podrejenih('Mojca', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca', 'Tim'}, 'Tim' : {'Jaka'},  'Mojca' : {'Urša'}})", {'Urša'}),
+            #         ("mnozica_podrejenih('A', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'W'}, 'B' : {'O'}})",set(['Q', 'W'])),
+            #         ("mnozica_podrejenih('B', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'W'}, 'B' : {'O'}})",set(['O'])),
+            #         ("mnozica_podrejenih('A', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'Z'}, 'Z' : {'O'}, 'O' : {'J'}})",set(['Q','Z','O','J']))
+            #         ]
+            # 
+            # for test in tests:
+            #     if not Check.equal(*test):
+            #         break
             
-            tests = [
-                    ("najdaljsi_podpis('Friderik I.', rodovnikCG)", 'Ana Ortenburška', {'rodovnikCG': rodovnikCG}),
-                    ("najdaljsi_podpis('Friderik II.', rodovnikCG)", 'Friderik III.', {'rodovnikCG': rodovnikCG}),
-                    ("najdaljsi_podpis('Jurij', rodovnikCG)", 'Jurij', {'rodovnikCG': rodovnikCG}),
-                    ("najdaljsi_podpis('Katarina', rodovnikCG)", 'Katarina', {'rodovnikCG': rodovnikCG}),
-                    ("najdaljsi_podpis('Herman II.', rodovnikCG)", 'Friderik III.', {'rodovnikCG': rodovnikCG}),
-                    ("najdaljsi_podpis('Ulrik I.', rodovnikCG)", 'Ana Celjska', {'rodovnikCG': rodovnikCG})
+            tests_secret = [
+                    mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}}),
+                    mnozica_podrejenih('Zoran', {'': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}}),
+                    mnozica_podrejenih('Tilen', {'Tilen': {'Andrej', 'Mojca', 'A'}}),
+                    mnozica_podrejenih('T', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'W'}, 'B' : {'O'}}),
+                    mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Zoran': {'Andrej', 'Mojca'}}),
+                    mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca'}, 'Mojca' : {'Urša'}}),
+                    mnozica_podrejenih('Zoran', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca', 'Tim'}, 'Tim' : {'Jaka'},  'Mojca' : {'Urša'}}), 
+                    mnozica_podrejenih('Mojca', {'Zoran': {'Tilen'}, 'Tilen': {'Andrej', 'Mojca', 'Tim'}, 'Tim' : {'Jaka'},  'Mojca' : {'Urša'}}),
+                    mnozica_podrejenih('A', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'W'}, 'B' : {'O'}}),
+                    mnozica_podrejenih('B', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'W'}, 'B' : {'O'}}),
+                    mnozica_podrejenih('A', {'T': {'A', 'M', 'B'}, 'A' : {'Q', 'Z'}, 'Z' : {'O'}, 'O' : {'J'}}),
                     ]
             
-            for expression, result, env in tests:
-                if not Check.equal(expression, result, env=env):
+            for test in tests_secret:
+                if not Check.secret(test):
                     break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJwYXJ0IjoyMDE5OCwidXNlciI6MzM2N30:1h4LN5:R6-btgSRjS6jESg4ojWRUHekzrU'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTU0NiwidXNlciI6MzM2N30:1h6s8N:ykf9R-NABQO2-h3-BritlkoZNSc'
         try:
-            rodovnikCG = {
-             'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-             'Elizabeta II.': [], 'Viljem': ['Ana Celjska'], 'Elizabeta I.': [],
-             'Ana Celjska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-             'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-             'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-             'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-             'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-             'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
+            # tests = [
+            #         ("big_boss({'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'})", 'Zoran'),
+            #         ("big_boss({'Andrej': 'Tilen', 'Mojca': 'Jan', 'Tilen': 'Zoran'})", None),
+            #         ("big_boss({'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", 'Zoran'),
+            #         ("big_boss({'Zoran' : 'Peter', 'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", 'Peter'),
+            #         ("big_boss({'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", 'Peter'),
+            #         ("big_boss({'Pavel' : 'Peter', 'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", None),
+            #         ("big_boss({})", None),
+            #         ("big_boss({'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", 'Matija'),
+            #         ("big_boss({'Matej' : 'Mojca', 'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'})", 'Matija')
+            #         ]
+            # 
+            # for test in tests:
+            #     if not Check.equal(*test):
+            #         break
             
-            tests = [
-                    ("najkrajse_ime('Friderik I.', rodovnikCG)", 'Ana', {'rodovnikCG': rodovnikCG}),
-                    ("najkrajse_ime('Friderik II.', rodovnikCG)", 'Ulrik', {'rodovnikCG': rodovnikCG}),
-                    ("najkrajse_ime('Jurij', rodovnikCG)", 'Jurij', {'rodovnikCG': rodovnikCG}),
-                    ("najkrajse_ime('Katarina', rodovnikCG)", 'Katarina', {'rodovnikCG': rodovnikCG}),
-                    ("najkrajse_ime('Herman II.', rodovnikCG)", 'Ulrik', {'rodovnikCG': rodovnikCG}),
-                    ("najkrajse_ime('Ulrik I.', rodovnikCG)", 'Ana', {'rodovnikCG': rodovnikCG})
+            tests_secret = [
+                    big_boss({'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran'}),
+                    big_boss({'Andrej': 'Tilen', 'Mojca': 'Jan', 'Tilen': 'Zoran'}),
+                    big_boss({'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}), 
+                    big_boss({'Zoran' : 'Peter', 'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}), 
+                    big_boss({'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
+                    big_boss({'Pavel' : 'Peter', 'Andrej': 'Tilen', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
+                    big_boss({}),
+                    big_boss({'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
+                    big_boss({'Matej' : 'Mojca', 'Zoran' : 'Peter', 'Juš' : 'Peter', 'Sonja' : 'Peter', 'Andrej': 'Tilen', 'Peter' : 'Matija', 'Mojca': 'Tilen', 'Tilen': 'Zoran', 'Jaka' : 'Jan', 'Jan' : 'Zoran'}),
                     ]
             
-            for expression, result, env in tests:
-                if not Check.equal(expression, result, env=env):
-                    break
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJwYXJ0IjoyMDE5OSwidXNlciI6MzM2N30:1h4LN5:buwaHttMGnKJxSN3x2kLtR2U3_c'
-        try:
-            rodovnikCG = {
-             'Ulrik I.': ['Viljem'], 'Margareta': [], 'Herman I.': ['Herman II.', 'Hans'],
-             'Elizabeta II.': [], 'Viljem': ['Ana Celjska'], 'Elizabeta I.': [],
-             'Ana Celjska': [], 'Herman III.': ['Margareta'], 'Ana Ortenburška': [],
-             'Barbara': [], 'Herman IV.': [], 'Katarina': [], 'Friderik III.': [],
-             'Herman II.': ['Ludvik', 'Friderik II.', 'Herman III.', 'Elizabeta I.', 'Barbara'],
-             'Ulrik II.': ['Herman IV.', 'Jurij', 'Elizabeta II.'], 'Hans': [], 'Ludvik': [],
-             'Friderik I.': ['Ulrik I.', 'Katarina', 'Herman I.', 'Ana Ortenburška'],
-             'Friderik II.': ['Friderik III.', 'Ulrik II.'], 'Jurij': []}
-            
-            tests = [
-                    ("globina('Friderik I.', rodovnikCG)", 6, {'rodovnikCG': rodovnikCG}),
-                    ("globina('Friderik II.', rodovnikCG)", 3, {'rodovnikCG': rodovnikCG}),
-                    ("globina('Jurij', rodovnikCG)", 1, {'rodovnikCG': rodovnikCG}),
-                    ("globina('Katarina', rodovnikCG)", 1, {'rodovnikCG': rodovnikCG}),
-                    ("globina('Herman II.', rodovnikCG)", 4, {'rodovnikCG': rodovnikCG}),
-                    ("globina('Ulrik I.', rodovnikCG)", 3, {'rodovnikCG': rodovnikCG})
-                    ]
-            
-            for expression, result, env in tests:
-                if not Check.equal(expression, result, env=env):
+            for test in tests_secret:
+                if not Check.secret(test):
                     break
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
