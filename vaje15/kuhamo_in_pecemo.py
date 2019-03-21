@@ -49,8 +49,14 @@ def potrebno_kupiti(recept,shramba):
     '''funkcija pove kaj moramo še kupiti, da bomo lahko delali po receptu'''
     if imamo_sestavine(recept,shramba):
         return {}
+    kosarica = dict()
     for key, val in recept.items():
-        
+        if key not in shramba:
+            kosarica[key] = val
+        elif key in shramba and val > shramba[key]:
+            razlika = abs(val - shramba[key])
+            kosarica[key] = razlika
+    return kosarica
 
 
 

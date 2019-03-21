@@ -29,21 +29,25 @@
 # =============================================================================
 def slovar_kock(skatla):
     '''funkcija sestavi slovar vsebovanih kock, urejen po tipih ter barvah'''
-    print(skatla)
+    
     if skatla == []:
         return []
+    slovar = {}
     for ind in range(len(skatla)):
         skatla[ind] = skatla[ind].split('.')
-    slovar = {}
-    for elt in skatla:
-        if elt[0] not in slovar:
-            slovar[elt[0]] = {elt[1]: 0}
-
-    for key, val in slovar.items():
-        for elt in skatla:
-            if elt[1] in val:
-                val[elt[1]] = val[elt[1]] + 1
-    print(slovar)
+    
+    for key, val in skatla:
+        if key in slovar and val in slovar[key]:
+            dic = slovar[key]
+            dic[val] = dic[val] + 1
+            slovar[key].update(dic)
+        elif key in slovar and val not in slovar[key]:
+            dic = {}
+            dic[val] = 1
+            slovar[key].update(dic)
+        elif key not in slovar:
+            slovar[key] = {val: 1}
+    
     return slovar
 # =====================================================================@020019=
 # 2. podnaloga

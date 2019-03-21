@@ -23,7 +23,39 @@
 # 
 # Namig: verjetno si lahko pomagaš tudi z rešitvijo naloge 0/1 tabela.
 # =============================================================================
-
+def zasluzek(opravila, cas):
+    novo=[]
+    kombinacije=[]
+    najbolje=[]
+    denar=[]
+    maximalno=0
+    for x in opravila:
+        caspoindeksih=[]
+        if x[0]<cas:
+            caspoindeksih.append(x[0])
+            caspoindeksih.append(x[1])
+            novo.append(caspoindeksih)
+    for x in novo:
+        for y in novo:
+            if y !=x:
+                cas1=x[0]+y[0]
+                denar=x[1]+y[1]
+                kombinacije.append([cas1,denar])
+    use=[]
+    for x in kombinacije:
+        if x[0]<=cas and x not in use:
+            use.append(x)
+    if len(use)==0:
+        for x in novo:
+            if x[1]>maximalno:
+                maximalno=x[1]
+        return maximalno
+    else:
+        for x in use:
+            if x[1]>maximalno:
+                maximalno=x[1]
+        return maximalno
+    
 # =====================================================================@019429=
 # 2. podnaloga
 # Poznavanje največjega možnega zaslužka nam ne koristi, če ne vemo pri
@@ -35,7 +67,53 @@
 #     >>>katera([(6, 300), (10, 440), (8, 310), (15, 900)], 22)
 #     [1, 0, 0, 1]
 # =============================================================================
-
+def katera(opravila, cas):
+    novo=[]
+    kombinacije=[]
+    najbolje=[]
+    denar=[]
+    maximalno=0
+    kajdelamo=[]
+    for x in opravila:
+        caspoindeksih=[]
+        if x[0]<cas:
+            caspoindeksih.append(x[0])
+            caspoindeksih.append(x[1])
+            novo.append(caspoindeksih)
+    for x in range(0,len(novo)):
+        for y in range(0,len(novo)):
+            if y !=x:
+                cas1=novo[x][0]+novo[y][0]
+                denar=novo[x][1]+novo[y][1]
+                kombinacije.append([cas1,denar,x,y])
+    use=[]
+    stevec=0
+    kajbo=[]
+    for x in kombinacije:
+        if x[0]<=cas and x not in use:
+            use.append(x)
+        stevec+=1
+    if len(use)==0:
+        for x in novo:
+            if x[1]>maximalno:
+                maximalno=x[1]
+        for x in range(0,len(opravila)):
+            if opravila[x][1]==maximalno:
+                kajbo.append(1)
+            else:
+                kajbo.append(0)
+        return kajbo
+    else:
+        for x in use:
+            if x[1]>maximalno:
+                maximalno=x[1]
+                kajdelamo=[x[2],x[3]]
+    for x in range(0,len(opravila)):
+        if x==kajdelamo[0] or x==kajdelamo[1]:
+            kajbo.append(1)
+        else:
+            kajbo.append(0)
+    return kajbo
 # =====================================================================@019430=
 # 3. podnaloga
 # Pregled vseh možnih kombinacij izbire opravil je zamuden postopek.

@@ -19,12 +19,28 @@
 #     >>>bin(10)
 #     '0b1010'
 # =============================================================================
+def rezi(niz):
+    tab = []
+    niz = niz[2:]
+    for x in niz:
+        tab.append(int(x))
+    return tab
 def tabele01(n):
     
-    for x in range(2**n):
-        print(bin(x)[2:])
-
-
+    if n == 0:
+        return [[]]
+    elif n == 1:
+        return [[0],[1]]
+    elif n == 2:
+        return [[0,0],[0,1],[1,0],[1,1]]
+    else:
+        tab1 = []
+        tab = tabele01(n-1)
+        for x in tab:
+            tab1.append(x + [0])
+            tab1.append(x + [1])
+        
+    return tab1
 
 
 

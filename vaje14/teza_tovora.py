@@ -89,9 +89,22 @@ def najdaljsi_opis(tovor):
 # Za slovar iz zgleda bi torej spet dobili `['zaboj piva']`, za prazen slovar
 # pa seveda vrnemo prazno tabelo.
 # =============================================================================
-def najlazji_predmet(tovor):
-    
+import collections
 
+def najlazji_predmet(tovor):
+    ''' funkcija vrne najlažje predmete, alfabetno urejene'''
+    urejen_tovor = {}
+    naj_m = 1029830183019283018203812038210983
+    for key, val in tovor.items():
+        if int(val) < naj_m:
+            naj_m = int(val)
+    for key, val in tovor.items():
+        if int(val) != naj_m:
+            pass
+        else:
+            urejen_tovor[key] = val
+    urejen_tovor = sorted(list(urejen_tovor))
+    return urejen_tovor
 
 
 
