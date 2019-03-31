@@ -1,127 +1,46 @@
 # =============================================================================
-# Delo z vrsticami
-# =====================================================================@019456=
+# Kalorije
+#
+# Tina za vsak obrok, ki ga poje, zapiše njegovo kalorično vrednost (celo
+# število). Vse te podatke hrani v datoteki: podatke vsakega dne zapiše v
+# svojo vrstico, znotraj vrstice pa jih loči z vejico.
+# =====================================================================@019461=
 # 1. podnaloga
-# Sestavi funkcijo `prestej_vrstice(datoteka)`, ki prešteje, koliko vrstic je na
-# dani znakovni datoteki. Funkcija naj za parameter dobi ime datoteke.
+# Sestavite funkcijo `kalorije_na_dan(datoteka)`, ki kot parameter dobi ime
+# vhodne datoteke in vrne seznam kalorij, ki jih je Tina dnevno zaužila.
+# 
+# Torej, za vsako vrstico v datoteki (ki predstavlja en dan) dodaj v seznam
+# eno število, ki naj bo enako vsoti kalorij za tisti dan.
 # =============================================================================
-def prestej_vrstice(datoteka):
-    '''presteje stevilo vrstic v datoteki'''
-    stev = 0
-    with open(datoteka, 'r') as dat:
-        for vrstica in dat:
-            stev += 1
-    return stev
-# =====================================================================@019457=
+def kalorije_na_dan(datoteka):
+    ''' vrne seznam kalorij, ki jih je tina dnevno zauzila'''
+    tab = []
+    for vrstica in open(datoteka):
+        vrstica = vrstica.split(',')
+        vsota = map(int,vrstica)
+        tab.append(sum(vsota))
+    return tab
+# =====================================================================@019462=
 # 2. podnaloga
-# Sestavi funkcijo `vrni_k_vrstico(datoteka, k)`, ki vrne k-to vrstico dane
-# znakovne datoteke. Vrednost k in ime datoteke naj funkcija dobi za parameter.
-# V primeru ko datoteka ne vsebuje dovolj vrstic, naj vrne prazen niz.
+# Sestavite funkcijo `vsota_kalorij(vhod, izhod)`, ki kot argumenta dobi
+# imeni dveh datotek: vhodno (ta vsebuje Tinine zapiske) in izhodno. Na
+# izhodno datoteko naj za vsako vrstico v vhodni datoteki zapiše vsoto
+# kaloričnih vrednosti zaužite hrane tistega dne. Vsako število v izhodni
+# datoteki naj bo v svoji vrstici.
 # =============================================================================
-def vrni_k_vrstico(datoteka, k):
-    '''vrne k-to vrstico'''
-    stev = 0
-    with open(datoteka, 'r') as dat:
-        for vrstica in dat:
-            stev += 1
-            if stev == k:
-                return vrstica
-    return ''
-# =====================================================================@019458=
+
+# =====================================================================@019463=
 # 3. podnaloga
-# Na datoteki je pesem zapisana po kiticah. 
-# To pomeni, da so med kiticami prazne vrstice. Sestavi
-# funkcijo `odstrani_prazne_vrstice(datotekaV, datotekaI)`, ki bo 
-# za dano ime datoteke `datotekaV` vse kitice združila in jih izpisala na
-# datoteko `datotekaI`.
-# <h5>datotekaV:</h5>
-# 
-#     Dekle je po vodo šlo
-#     na visoke planine.
-# 
-#     Vodo je zajemala,
-#     je ribico zajela.
-#     
-#     Ribica jo je prosila:
-#     oj, pusti me živeti.
-#     
-#     Dekle b'la je usmiljena,
-#     je ribico spustila.
-#     
-#     Ribica je zaplavala,
-#     je dekle poškropila.
-# 
-# <h5>DatotekaI:</h5>
-# 
-#     Dekle je po vodo šlo
-#     na visoke planine.
-#     Vodo je zajemala,
-#     je ribico zajela.
-#     Ribica jo je prosila:
-#     oj, pusti me živeti.
-#     Dekle b'la je usmiljena,
-#     je ribico spustila.
-#     Ribica je zaplavala,
-#     je dekle poškropila.
+# Sestavite funkcijo `povprecje_kalorij(vhod, izhod)`, ki kot argumenta dobi
+# imeni dveh datotek: vhodno in izhodno. Na izhodno datoteko naj za vsako
+# vrstico na vhodni datoteki zapiše zaporedno številko vrstice (vrstice se
+# začno šteti z ena) ter povprečno kalorično vrednost obrokov, ki jih je
+# Tina zaužila tisti dan, na dve decimalni mesti natančno. V zadnjo (dodatno)
+# vrstico pa naj funkcija zapiše dnevno povprečje zaužitih kalorij (prav
+# tako na dve decimalni mesti natančno).
 # =============================================================================
-def odstrani_prazne_vrstice(datotekaV,datotekaI):
-    '''odstrani presledke v pesmi'''
-    pisanje = open('datotekaI.txt','w+')
-    with open(datotekaV, 'r') as dat:
-        for vrstica in dat:
-            
-            if vrstica[0].isalpha():
-                print(vrstica,file=pisanje,end='\n')
-            else:
-                pass
-        pisanje.close()
-        
-    return pisanje
-# =====================================================================@019459=
-# 4. podnaloga
-# Direktor podjetja je dobil datoteko `priporocilo.txt` na kateri je pisalo:
-# Spoštovani gospod direktor,
-# 
-#     Janeza Novaka, mojega asistenta pri delu, vedno vidite, kako
-#     trdo dela v svoji mali pisarni. Janez dela neodvisno in ne
-#     lenari ali se pogovarja s sodelovci. Nikoli se ne zgodi, da bi
-#     zavrnil kakšnega sodelovca, ki potrebuje pomoc. Do sedaj je vedno
-#     koncal z delom pravocasno. Zelo pogosto si vzeme podaljšan
-#     delovni cas, da konca svoje delo, pri cemer vcasih preskoci
-#     odmor. Janez je takšen delavec, ko nima absolutno nobenega
-#     spodrslajaja pri opravljenih delih, ima visoke dosežke in je širokega
-#     znanja na njegovem podrocju. Moje mnenje je, da ga lahko takoj
-#     uvrstimo med tiste najbolj vzorne delovce, ki jih nikoli ne
-#     odpustimo. Prav tako vam vljudno predlagam, da je moj predlog
-#     o napredovanju tega izjemnega, vzornega in nepogrešljivega delavca
-#     izvršen kakor hitro je mogoce.
-#     
-#     Lep pozdrav!
-# 
-# <i>Že se je spravil pisati predlog za napredovanje, ko je po e-pošti prispel dopis:</i>
-# 
-#     Direktor!
-#     Ta idiot je stal za menoj, ko sem pisal prejšnje priporocilo.
-#     Prosim znova preberite vsako drugo vrstico tega pisma.
-# 
-# Direktor je sedaj povsem zmeden. Pomagaj mu in sestavi funkcijo
-# `izpisi_drugo(datotekaV, datotekaI)`, ki na `datotekoI` izpiše vsako drugo vrstico
-# vsebine datoteke `datotekaV`!
-# =============================================================================
-def izpisi_drugo(datotekaV,datotekaI):
-    '''funkcija prepiše vsako 2. vrstico iz prve datoteke v drugo'''
-    popravljeno = open('datotekaI.txt','w+')
-    with open(datotekaV, 'r') as dat:
-        i = 0
-        for vrstica in dat:
-            if i%2 == 0:
-                i += 1
-                pass
-            else:
-                print(vrstica,file=popravljeno,end='\n')
-                i += 1
-        popravljeno.close()
-    return datotekaI
+
+
 
 
 
@@ -646,232 +565,61 @@ def _validate_current_file():
     Check.initialize(file_parts)
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQ1Nn0:1h9Que:924X59XM6EIyt99uWbBiF9BeTEs'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTQ2MSwidXNlciI6MzM2N30:1hAe6A:-WDFn0AMBL9KhmTiKSfsAiciRYU'
         try:
-            with Check.in_file("priporocilo.txt",[
-            "Janeza Novaka, mojega asistenta pri delu, vedno vidite, kako",
-            "trdo dela v svoji mali pisarni. Janez dela neodvisno in ne",
-            "lenari ali se pogovarja s sodelovci. Nikoli se ne zgodi, da bi",
-            "zavrnil kakšnega sodelovca, ki potrebuje pomoc. Do sedaj je vedno",
-            "koncal z delom pravocasno. Zelo pogosto si vzeme podaljšan",
-            "delovni cas, da konca svoje delo, pri cemer vcasih preskoci",
-            "odmor. Janez je takšen delavec, ko nima absolutno nobenega",
-            "spodrslajaja pri opravljenih delih, ima visoke dosežke in je širokega",
-            "znanja na njegovem podrocju. Moje mnenje je, da ga lahko takoj",
-            "uvrstimo med tiste najbolj vzorne delovce, ki jih nikoli ne",
-            "odpustimo. Prav tako vam vljudno predlagam, da je moj predlog",
-            "o napredovanju tega izjemnega, vzornega in nepogrešljivega delavca",
-            "izvršen kakor hitro je mogoce.",
-            "",
-            "Lep pozdrav!"
+            with Check.in_file("kalorije_po_dneh.txt", [
+                "2,35,18,5,78",
+                "13,20",
+                "8",
+                "15,84,2,4,5,16,78,44,21",
+                "10,5,50,40",
             ]):
-                Check.equal('prestej_vrstice("priporocilo.txt")', 15)
+                Check.equal('kalorije_na_dan("kalorije_po_dneh.txt")', [138, 33, 8, 269, 105])
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQ1N30:1h9Que:aRLvWCquYgfmV8isgFhcDUX09xg'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTQ2MiwidXNlciI6MzM2N30:1hAe6A:dmU8F8r-gj7PdyNzcxDou5H0Y6s'
         try:
-            with open("priporocilo.txt", "w") as test_f:
-                for vr in [
-                    "Janeza Novaka, mojega asistenta pri delu, vedno vidite, kako",
-                    "trdo dela v svoji mali pisarni. Janez dela neodvisno in ne",
-                    "lenari ali se pogovarja s sodelovci. Nikoli se ne zgodi, da bi",
-                    "zavrnil kakšnega sodelovca, ki potrebuje pomoc. Do sedaj je vedno",
-                    "koncal z delom pravocasno. Zelo pogosto si vzeme podaljšan",
-                    "delovni cas, da konca svoje delo, pri cemer vcasih preskoci",
-                    "odmor. Janez je takšen delavec, ko nima absolutno nobenega",
-                    "spodrslajaja pri opravljenih delih, ima visoke dosežke in je širokega",
-                    "znanja na njegovem podrocju. Moje mnenje je, da ga lahko takoj",
-                    "uvrstimo med tiste najbolj vzorne delovce, ki jih nikoli ne",
-                    "odpustimo. Prav tako vam vljudno predlagam, da je moj predlog",
-                    "o napredovanju tega izjemnega, vzornega in nepogrešljivega delavca",
-                    "izvršen kakor hitro je mogoce.",
-                    "",
-                    "Lep pozdrav!"]:
-                    print(vr, file=test_f)
-            Check.equal('vrni_k_vrstico("priporocilo.txt",4)', "zavrnil kakšnega sodelovca, ki potrebuje pomoc. Do sedaj je vedno\n")
-            Check.equal('vrni_k_vrstico("priporocilo.txt",50)', "")
-            Check.equal('vrni_k_vrstico("priporocilo.txt",15)', "Lep pozdrav!\n")
+            with Check.in_file("kalorije_po_dneh.txt", [
+                "2,35,18,5,78",
+                "13,20",
+                "8",
+                "15,84,2,4,5,16,78,44,21",
+                "10,5,50,40",
+            ]):
+                vsota_kalorij("kalorije_po_dneh.txt", "skupne_kalorije.txt")
+                Check.out_file("skupne_kalorije.txt", [
+                    "138",
+                    "33",
+                    "8",
+                    "269",
+                    "105",
+                ])
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQ1OH0:1h9Que:K7xguU8ysIzwPl0gNWnD4PLW-uk'
+        Check.current_part['token'] = 'eyJwYXJ0IjoxOTQ2MywidXNlciI6MzM2N30:1hAe6A:5q_XISJ6scM6ur51-buotktk1l0'
         try:
-            with Check.in_file("dekle.txt", [
-                    "Dekle je po vodo šlo",
-                    "na visoke planine.",
-                    "",
-                    "Vodo je zajemala,",
-                    "je ribico zajela. ",
-                    "",  
-                    "Ribica jo je prosila:",
-                    "oj, pusti me živeti.",
-                    "",
-                    "Dekle b'la je usmiljena,",
-                    "je ribico spustila.",
-                    "",
-                    "Ribica je zaplavala,",
-                    "je dekle poškropila.",
-                    "",
-                    "",
-                    ""
-                    ]):
-                odstrani_prazne_vrstice("dekle.txt", "dekle_out.txt")
-                Check.out_file("dekle_out.txt", [
-                    "Dekle je po vodo šlo",
-                    "na visoke planine.",
-                    "Vodo je zajemala,",
-                    "je ribico zajela. ",
-                    "Ribica jo je prosila:",
-                    "oj, pusti me živeti.",
-                    "Dekle b'la je usmiljena,",
-                    "je ribico spustila.",
-                    "Ribica je zaplavala,",
-                    "je dekle poškropila."
-                    ])
-                
-            with Check.in_file("dekle1.txt", [
-                    "",
-                    "",
-                    "Dekle je po vodo šlo",
-                    "na visoke planine.",
-                    "",
-                    "Vodo je zajemala,",
-                    "je ribico zajela. ",
-                    "",  
-                    "Ribica jo je prosila:",
-                    "oj, pusti me živeti.",
-                    "",
-                    "Dekle b'la je usmiljena,",
-                    "je ribico spustila.",
-                    "",
-                    "Ribica je zaplavala,",
-                    "je dekle poškropila.",
-                    "",
-                    "",
-                    ""
-                    ]):
-                odstrani_prazne_vrstice("dekle1.txt", "dekle_out1.txt")
-                Check.out_file("dekle_out1.txt", [
-                    "Dekle je po vodo šlo",
-                    "na visoke planine.",
-                    "Vodo je zajemala,",
-                    "je ribico zajela. ",
-                    "Ribica jo je prosila:",
-                    "oj, pusti me živeti.",
-                    "Dekle b'la je usmiljena,",
-                    "je ribico spustila.",
-                    "Ribica je zaplavala,",
-                    "je dekle poškropila."
-                    ])
-            with Check.in_file("dekle2.txt", [
-                    "",
-                    "",
-                    "Dekle je po vodo šlo",
-                    "na visoke planine.",
-                    "",
-                    "Vodo je zajemala,",
-                    "je ribico zajela. ",
-                    "",
-                    ""
-                    "Ribica jo je prosila:",
-                    "oj, pusti me živeti.",
-                    "",
-                    "Dekle b'la je usmiljena,",
-                    "je ribico spustila.",
-                    "",
-                    "",
-                    "Ribica je zaplavala,",
-                    "je dekle poškropila.",
-                    "",
-                    "",
-                    ""
-                    ]):
-                odstrani_prazne_vrstice("dekle2.txt", "dekle_out2.txt")
-                Check.out_file("dekle_out2.txt", [
-                    "Dekle je po vodo šlo",
-                    "na visoke planine.",
-                    "Vodo je zajemala,",
-                    "je ribico zajela. ",
-                    "Ribica jo je prosila:",
-                    "oj, pusti me živeti.",
-                    "Dekle b'la je usmiljena,",
-                    "je ribico spustila.",
-                    "Ribica je zaplavala,",
-                    "je dekle poškropila."
-                    ])
-        except:
-            Check.error("Testi sprožijo izjemo\n  {0}",
-                        "\n  ".join(traceback.format_exc().split("\n"))[:-2])
-
-    if Check.part():
-        Check.current_part['token'] = 'eyJ1c2VyIjozMzY3LCJwYXJ0IjoxOTQ1OX0:1h9Que:rXcsHQkt_Nh8Tooj_sdSTCs5Cck'
-        try:
-            with Check.in_file("izp2.txt", [
-                    "Janeza Novaka, mojega asistenta pri delu, vedno vidite, kako",
-                    "trdo dela v svoji mali pisarni. Janez dela neodvisno in ne",
-                    "lenari ali se pogovarja s sodelovci. Nikoli se ne zgodi, da bi",
-                    "zavrnil kakšnega sodelovca, ki potrebuje pomoc. Do sedaj je vedno",
-                    "koncal z delom pravocasno. Zelo pogosto si vzeme podaljšan",
-                    "delovni cas, da konca svoje delo, pri cemer vcasih preskoci",
-                    "odmor. Janez je takšen delavec, ko nima absolutno nobenega",
-                    "spodrslajaja pri opravljenih delih, ima visoke dosežke in je širokega",
-                    "znanja na njegovem podrocju. Moje mnenje je, da ga lahko takoj",
-                    "uvrstimo med tiste najbolj vzorne delovce, ki jih nikoli ne",
-                    "odpustimo. Prav tako vam vljudno predlagam, da je moj predlog",
-                    "o napredovanju tega izjemnega, vzornega in nepogrešljivega delavca",
-                    "izvršen kakor hitro je mogoce.",
-                    "",
-                    "Lep pozdrav!"]):
-                    izpisi_drugo("izp2.txt", "izp2-rez.txt")
-                    Check.out_file("izp2-rez.txt", [
-                    "Janeza Novaka, mojega asistenta pri delu, vedno vidite, kako",
-                    "lenari ali se pogovarja s sodelovci. Nikoli se ne zgodi, da bi",
-                    "koncal z delom pravocasno. Zelo pogosto si vzeme podaljšan",
-                    "odmor. Janez je takšen delavec, ko nima absolutno nobenega",
-                    "znanja na njegovem podrocju. Moje mnenje je, da ga lahko takoj",
-                    "odpustimo. Prav tako vam vljudno predlagam, da je moj predlog",
-                    "izvršen kakor hitro je mogoce.",
-                    "Lep pozdrav!"])
-            
-            
-            with Check.in_file("izp1.txt", [
-                    "12",
-                    "2",
-                    "3"]):
-                    izpisi_drugo("izp1.txt", "izp1-rez.txt")
-                    Check.out_file("izp1-rez.txt", [
-                    "12",
-                    "3"])
-            
-            with Check.in_file("izp3.txt", [
-                    "12",
-                    "3"]):
-                    izpisi_drugo("izp3.txt", "izp3-rez.txt")
-                    Check.out_file("izp3-rez.txt", [
-                    "12"])
-                    
-            with Check.in_file("izp4.txt", [
-                    "12",
-                    "",
-                    "",
-                    "",
-                    "333",
-                    "1",
-                    "2",
-                    "2",
-                    "3"]):
-                    izpisi_drugo("izp4.txt", "izp4-rez.txt")
-                    Check.out_file("izp4-rez.txt", [
-                    "12",
-                    "",
-                    "333",
-                    "2",
-                    "3"])
+            with Check.in_file("kalorije_po_dneh.txt", [
+                "2,35,18,5,78",
+                "13,20",
+                "8",
+                "15,84,2,4,5,16,78,44,21",
+                "10,5,50,40",
+            ]):
+                povprecje_kalorij("kalorije_po_dneh.txt", "povprecne_kalorije.txt")
+                Check.out_file("povprecne_kalorije.txt", [
+                    "1 27.60",
+                    "2 16.50",
+                    "3 8.00",
+                    "4 29.89",
+                    "5 26.25",
+                    "110.60",
+                ])
         except:
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
