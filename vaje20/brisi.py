@@ -21,14 +21,22 @@ def izbrisi_prazne_mape(pot_do_mape):
     
     dat = 0
     mapa = 0
-    stvar = os.path.getsize(pot_do_mape)
-    pot = os.listdir(pot_do_mape)
-    print(stvar, pot)
-    if stvar == 0:
-        return (0, 1)
-    with os.scandir(pot_do_mape) as vhod:
-        for vh in vhod:
-            print(vh.name)
+    if not os.path.isdir(pot_do_mape):
+        return None
+    
+    for stvar in os.listdir(pot_do_mape):
+        if os.path.isfile(pot_do_mape + '\\' + stvar) and os.path.getsize(pot_do_mape + '\\' + stvar) == 0:
+            os.remove(pot_do_mape + '\\' + stvar)
+            dat += 1
+        elif os.path.isdir(pot_do_mape + '\\' + stvar):
+            rek = izbrisi_prazne_mape(pot_do_mape + '\\' + stvar)
+            dat += rek[0]
+            mapa += rek[1]
+    if len(os.listdir(pot_do_mape)) == 0:
+        os.rmdir(pot_do_mape)
+        mapa += 1
+
+    return dat, mapa
     
 
 
