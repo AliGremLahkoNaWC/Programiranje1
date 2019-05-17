@@ -41,7 +41,10 @@ class Ulomek:
 
     def __init__(self, toJeStevec, toJeImenovalec):
         import math
-        if toJeImenovalec == 0:
+        if toJeImenovalec == 0 and toJeStevec == 0:
+            self.st = toJeStevec
+            self.im = toJeImenovalec
+        elif toJeImenovalec == 0:
             raise ZeroDivisionError
         gcd = math.gcd(toJeStevec, toJeImenovalec)
         toJeStevec, toJeImenovalec = toJeStevec // gcd, toJeImenovalec // gcd
@@ -210,13 +213,11 @@ class Ulomek(Ulomek):
 # =============================================================================
 def priblizek(n):
     '''vrne vsoto ulomkov s faktorialnimi imenovalci'''
-    i = 0
-    while i <= n
-
-
-
-
-
+    import math
+    vrednost = Ulomek(1, 1)
+    for i in range(1, n + 1):
+        vrednost += Ulomek(1, math.factorial(i))
+    return vrednost
 
 
 
